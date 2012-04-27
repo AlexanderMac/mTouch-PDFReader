@@ -2,7 +2,7 @@ mTouch-PDFReader is a Monotouch library to display PDF documents on iPad. With h
 
 mTouch-PDFReader official site: http://mTouch-PDFReader.com
 
-![mTouch-PDFReader](http://mTouch-PDFReader.com/content/images/logo-vert-big.png)
+![mTouch-PDFReader](http://mTouch-PDFReader.com/Content/images/panel-with-text.gif)
 
 Features
 --------
