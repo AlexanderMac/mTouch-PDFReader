@@ -1,0 +1,46 @@
+"Background"="Фон";
+"Bookmarks"="Закладки";
+"Bookmark {0}"="Закладка {0}";
+"Button 'Bookmarks'"="Кнопка 'Закладки'";
+"Button 'Note'"="Кнопка 'Заметка'";
+"Button 'Thumbs'"="Кнопка 'Миниатюры'";
+
+"Color"="Цвет";
+
+"Delete bookmark?"="Удалить закладку?";
+
+"Error"="Ошибка";
+
+"Go..."="Перейти...";
+
+"Horz."="Гор.";
+
+"Invalid page number"="Неверный номер страницы";
+
+"Library information"="Информация о библиотеке";
+
+"No"="Нет";
+"Note"="Заметка";
+
+"Page {0}"="Страница {0}";
+"Page number"="Номер страницы";
+
+"Release date"="Дата релиза";
+
+"Scale"="Масштабирование";
+"Scale by double click"="Масштабирование по двойному клику";
+"Status"="Статус";
+
+"Thumbs"="Миниатюры";
+"Thumbs buffer size"="Размер буфера миниатюр";
+"Thumbs size"="Размер миниатюры";
+"Turning"="Перелистывание";
+"Type"="Тип";
+
+"Version"="Версия";
+"Vert."="Верт.";
+"Visibility"="Видимость";
+
+"Yes"="Да";
+
+"Zoom scale levels"="Количество уровней масштабирования";

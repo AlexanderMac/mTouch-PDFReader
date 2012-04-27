@@ -1,0 +1,36 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Demo", "Demo\mTouchPDFReader_Demo.csproj", "{2070FC24-3BB7-4747-99FC-6D314234C3DE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Library", "Library\mTouchPDFReader_Library.csproj", "{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|iPhoneSimulator = Debug|iPhoneSimulator
+		Release|iPhoneSimulator = Release|iPhoneSimulator
+		Debug|iPhone = Debug|iPhone
+		Release|iPhone = Release|iPhone
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhone.Build.0 = Debug|iPhone
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhone.ActiveCfg = Release|iPhone
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhone.Build.0 = Release|iPhone
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhone.Build.0 = Debug|iPhone
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhone.ActiveCfg = Release|iPhone
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhone.Build.0 = Release|iPhone
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+	EndGlobalSection
+	GlobalSection(MonoDevelopProperties) = preSolution
+		StartupItem = Demo\mTouchPDFReader_Demo.csproj
+	EndGlobalSection
+EndGlobal
