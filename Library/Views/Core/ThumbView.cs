@@ -95,29 +95,15 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Calc page view size
 			var pageSize = PageContentView.GetPageViewSize(pageNumber);
-			
-			// Calc scale factor to fit page on thumb image
-			float scaleByWidth = (thumbContentSize / pageSize.Width);
-			float scaleByHeight = (thumbContentSize / pageSize.Height);
-			float scale = 0.0f;
-			if (pageSize.Height > pageSize.Width) {
-				// For Portrait
-				scale = scaleByHeight;
-			} else {
-				// For Landscape
-				scale = scaleByWidth;
+			if (pageSize.Width % 2 > 0) {
+				pageSize.Width--;
+			}
+			if (pageSize.Height % 2 > 0) {
+				pageSize.Height--;
 			}
 			
 			// Calc target size	
-			var targetSize = new Size((int)(pageSize.Width * scale), (int)(pageSize.Height * scale));
-			if (targetSize.Width % 2 > 0) {
-				targetSize.Width--;
-			}
-			if (targetSize.Height % 2 > 0) {
-				targetSize.Height--;
-			}
-			targetSize.Width *= (int)UIScreen.MainScreen.Scale;
-			targetSize.Height *= (int)UIScreen.MainScreen.Scale;
+			var targetSize = new Size((int)pageSize.Width, (int)pageSize.Height);
 			
 			// Draw page on CGImage
 			CGImage pageImage;
