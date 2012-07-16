@@ -227,7 +227,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				UpdateScrollViewContentSize();
 				UpdateScrollViewContentOffset();
 				UpdatePageViewsFrame();
-				ResetContentViewsZoomScale();
+				ResetPageViewsZoomScale();
 			}
 			mOldDeviceOrientation = newOrientation; 
 		}
@@ -399,9 +399,38 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Resets content views zoom scale 
+		/// Calculates the default page view content offset
 		/// </summary>
-		private void ResetContentViewsZoomScale()
+		private PointF CalcDefaultPageViewContentOffset()
+		{
+			if (mCurrentPageView == null)
+			{
+				return new PointF(0, 0);
+			}
+			return OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal
+				? new PointF(0.0f, mCurrentPageView.ContentOffset.Y)
+				: new PointF(mCurrentPageView.ContentOffset.X, 0.0f);
+		}
+
+		/// <summary>
+		/// Sets equal zoomScale for all pages
+		/// </summary>
+		private void SetPagesEqualZoomScale(PageView pageView, float zoomScale)
+		{
+			foreach (var view in mPageViews) {
+				if (view != pageView) {
+					// Set equal zoomScale from all pageViews 
+					view.ZoomScale = zoomScale;
+					// Offset pageView, to it don't overlapped
+					view.ContentOffset = CalcDefaultPageViewContentOffset();
+				}
+			}
+		}
+
+		/// <summary>
+		/// Resets page views zoomScale 
+		/// </summary>
+		private void ResetPageViewsZoomScale()
 		{
 			foreach (var view in mPageViews) {
 				view.UpdateMinimumMaximumZoom();
@@ -634,12 +663,16 @@ namespace mTouchPDFReader.Library.Views.Core
 					PageView pageView = mPageViews.FirstOrDefault(v => v.PageNumber == i);
 					if (pageView == null) {
 						pageView = new PageView(viewRect, i);
+						pageView.ZoomScale = mCurrentPageView != null ? mCurrentPageView.ZoomScale : pageView.MinimumZoomScale;
+						pageView.ContentOffset = CalcDefaultPageViewContentOffset();
+						pageView.ZoomingEnded += delegate(object sender, ZoomingEndedEventArgs e) {
+							SetPagesEqualZoomScale((PageView)sender, e.AtScale);
+						};
 						mScrollView.AddSubview(pageView);
 						mPageViews.Add(pageView);
 					} else {
 						pageView.Frame = viewRect;
 						pageView.PageNumber = i;
-						pageView.ZoomReset();
 						unusedPageViews.Remove(pageView);
 					}
 					viewRect = CalcFrameForNextPage(viewRect);
