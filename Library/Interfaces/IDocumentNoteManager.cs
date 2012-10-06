@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// MyObjectsCreator.cs (DObjects activator)
+//   IDocumentNoteManager.cs
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,32 +22,24 @@
 //
 
 using System;
-using mTouchPDFReader.Library.Data;
-using mTouchPDFReader.Library.Data.Managers;
+using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Demo.DataObjects
+namespace mTouchPDFReader.Library.Interfaces
 {
-	public class MyObjectsActivator : ObjectsActivator
+	public interface IDocumentNoteManager
 	{
-		#region Logic			
 		/// <summary>
-		/// Returns DocumentNoteManager instance
+		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
 		/// </summary>
-		/// <returns></returns>
-		protected override DocumentNoteManager CreateDocumentNoteManager()
-		{
-			return new MyDocumentNoteManager();
-		}
+		/// <param name="docId">The PDF document Id.</param>
+		/// <returns>The <see cref="DocumentNote"/> object.</returns>
+		DocumentNote Load(int docId);
 		
 		/// <summary>
-		/// Returns DocumentBookmarkManager instance
+		/// Saves the see cref="T"/> object.
 		/// </summary>
-		/// <returns></returns>
-		protected override DocumentBookmarkManager CreateDocumentBookmarkManager()
-		{
-			return new MyDocumentBookmarkManager();
-		}		
-		#endregion
+		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
+		void Save(DocumentNote note);
 	}
 }
 

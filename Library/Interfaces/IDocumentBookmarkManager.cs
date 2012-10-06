@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// DocumentBookmarkManager.cs (Document bookmarks manager)
+//   IBookmarkManager.cs
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -23,55 +23,30 @@
 
 using System;
 using System.Collections.Generic;
-using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Library.Data.Managers
+namespace mTouchPDFReader.Library.Interfaces
 {
-	public class DocumentBookmarkManager : IDocumentBookmarkManager
+	public interface IDocumentBookmarkManager
 	{
-		#region Logic	
-		/// <summary>
-		/// Hidden constructor to create instance only from RC.
-		/// </summary>
-		protected DocumentBookmarkManager()	{}
-
-		/// <summary>
-		/// Gets the new bookmark identifier.
-		/// </summary>
-		/// <returns>The new bookmark identifier.</returns>
-		protected virtual int GetNewId()
-		{
-			return 0;
-		}
-		
 		/// <summary>
 		/// Gets the <see cref="DocumentBookmark"/> bookmarks collection by the <see cref="docId"/>.
 		/// </summary>
 		/// <param name="docId">The PDF document Id.</param>
 		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>
-		public virtual List<DocumentBookmark> LoadList(int docId)
-		{
-			return new List<DocumentBookmark>();
-		}
+		List<DocumentBookmark> LoadList(int docId);
 		
 		/// <summary>
 		/// Saves the <see cref="DocumentBookmark"/> object. 
 		/// </summary>
 		/// <param name="bookmark">The bookmark object.</param>
-		public virtual void Save(DocumentBookmark bookmark)
-		{
-			// Noting
-		}	
+		void Save(DocumentBookmark bookmark);
 		
 		/// <summary>
 		/// Deletes the <see cref="DocumentBookmark"/> object by <see cref="bookmarkId"/>.
 		/// </summary>
 		/// <param name="bookmarkId">The bookmark id.</param>
-		public virtual void Delete(int bookmarkId)
-		{
-			// Nothing
-		}		
-		#endregion
+		void Delete(int bookmarkId);
 	}
 }
+

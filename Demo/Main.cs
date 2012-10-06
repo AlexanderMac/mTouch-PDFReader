@@ -23,10 +23,14 @@
 
 using System;
 using System.Collections.Generic;
-using System.Linq;using MonoTouch.Foundation;
+using System.Linq;
+using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Demo.DataObjects;
+using mTouchPDFReader.Library.Utils;
+using mTouchPDFReader.Library.Interfaces;
+using mTouchPDFReader.Library.Data.Managers;
 using mTouchPDFReader.Library.Views.Core;
+using mTouchPDFReader.Demo.DataObjects;
 
 namespace mTouchPDFReader.Demo
 {
@@ -46,7 +50,9 @@ namespace mTouchPDFReader.Demo
 		{
 			window.AddSubview(mainTabbarController.View);
 			window.MakeKeyAndVisible();
-			new MyObjectsActivator().CreateObjects(); 
+			RC.RegisterReference<IDocumentBookmarkManager, MyDocumentBookmarkManager>();
+			RC.RegisterReference<IDocumentNoteManager, MyDocumentNoteManager>();
+			RC.RegisterReference<IOptionsManager, OptionsManager>();
 			return true;
 		}
 		

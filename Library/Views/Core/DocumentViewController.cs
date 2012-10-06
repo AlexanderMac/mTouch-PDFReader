@@ -28,6 +28,8 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Utils;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Data.Enums;
 using mTouchPDFReader.Library.Data.Managers;
@@ -159,7 +161,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			View.BackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
 	
 			// Create toolbar
-			if (OptionsManager.Instance.Options.ToolbarVisible) {
+			if (RC.Get<IOptionsManager>().Options.ToolbarVisible) {
 				_Toolbar = CreateToolbar();
 				if (_Toolbar != null) {
 					View.AddSubview(_Toolbar);
@@ -167,7 +169,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 			
 			// Create bottom bar (with slider)
-			if (OptionsManager.Instance.Options.BottombarVisible) {
+			if (RC.Get<IOptionsManager>().Options.BottombarVisible) {
 				_BottomBar = CreateBottomBar();
 				if (_BottomBar != null) {
 					View.AddSubview(_BottomBar);
@@ -248,9 +250,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void ScrollViewDecelerationEnded(object sender, EventArgs args)
 		{
 			int pageNumber = 0;
-			float contentOffset = (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) ? _ScrollView.ContentOffset.X : _ScrollView.ContentOffset.Y;
+			float contentOffset = (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) ? _ScrollView.ContentOffset.X : _ScrollView.ContentOffset.Y;
 			foreach (var view in _PageViews) {
-				bool found = (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) ? (contentOffset == view.Frame.X) : (contentOffset == view.Frame.Y);
+				bool found = (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) ? (contentOffset == view.Frame.X) : (contentOffset == view.Frame.Y);
 				if (found) {
 					pageNumber = view.PageNumber;
 					break;
@@ -332,7 +334,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			// Calc the content width and height
 			float contentWidth;
 			float contentHeight;
-			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+			if (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) {
 				contentWidth = _ScrollView.Frame.Size.Width * viewPagesCount;
 				contentHeight = _ScrollView.Frame.Size.Height;
 			} else {
@@ -351,7 +353,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			PointF contentOffset = PointF.Empty;
 			RectangleF viewRect = RectangleF.Empty;
 			viewRect.Size = _ScrollView.Bounds.Size;
-			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+			if (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) {
 				float viewWidthX1 = viewRect.Width;
 				float viewWidthX2 = viewWidthX1 * 2.0f;				
 				if (PDFDocument.PageCount >= MaxPageViewsCount) {
@@ -401,7 +403,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				return new PointF(0, 0);
 			}
 			bool pageIsAfterCurrent = pageNumber > _CurrentPageView.PageNumber;
-			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+			if (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) {
 				var left = pageIsAfterCurrent ? 0.0f : _CurrentPageView.Bounds.Width;
 				return new PointF(left, _CurrentPageView.ContentOffset.Y);
 			} else {
@@ -457,7 +459,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>Frame rect for next page</returns>
 		private RectangleF CalcFrameForNextPage(RectangleF viewRect)
 		{
-			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+			if (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) {
 				viewRect.X += viewRect.Size.Width;
 			} else {
 				viewRect.Y += viewRect.Size.Height;
@@ -515,22 +517,22 @@ namespace mTouchPDFReader.Library.Views.Core
 			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", delegate {
 				ZoomIn(); 
 			});
-			if (OptionsManager.Instance.Options.NoteBtnVisible) {
+			if (RC.Get<IOptionsManager>().Options.NoteBtnVisible) {
 				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
-					var note = DocumentNoteManager.Instance.LoadNote(_DocumentId);
+					var note = RC.Get<IDocumentNoteManager>().Load(_DocumentId);
 					var view = new NoteViewController(note, p => { /* Noting */ });
 					PresentPopover(view, _BtnNote.Frame);
 				});
 			}
-			if (OptionsManager.Instance.Options.BookmarksBtnVisible) {
+			if (RC.Get<IOptionsManager>().Options.BookmarksBtnVisible) {
 				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
-					var bookmarks = DocumentBookmarkManager.Instance.LoadBookmarks(_DocumentId);
+					var bookmarks = RC.Get<IDocumentBookmarkManager>().LoadList(_DocumentId);
 					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => {
 						OpenDocumentPage((int)p); });
 					PresentPopover(view, _BtnBookmarksList.Frame);
 				});
 			}
-			if (OptionsManager.Instance.Options.ThumbsBtnVisible) {
+			if (RC.Get<IOptionsManager>().Options.ThumbsBtnVisible) {
 				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs32.png", delegate {
 					var view = new ThumbsViewController(View.Bounds.Width, p => {
 						OpenDocumentPage((int)p); });
@@ -578,7 +580,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Create slider
 			float sliderWidth = bottomBarFrame.Width - 15;
-			if (OptionsManager.Instance.Options.PageNumberVisible) {
+			if (RC.Get<IOptionsManager>().Options.PageNumberVisible) {
 				sliderWidth -= PageNumberLabelSize.Width;
 			}
 			var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
@@ -589,9 +591,9 @@ namespace mTouchPDFReader.Library.Views.Core
 				OpenDocumentPage((int)_Slider.Value);
 			};
 			bottomBar.AddSubview(_Slider);
-			
+
 			// Create page number view		
-			if (OptionsManager.Instance.Options.PageNumberVisible) {
+			if (RC.Get<IOptionsManager>().Options.PageNumberVisible) {
 				var pageNumberViewFrame = new RectangleF(pageSliderFrame.Width + 10, 5, PageNumberLabelSize.Width, PageNumberLabelSize.Height);
 				var pageNumberView = new UIView(pageNumberViewFrame);
 				pageNumberView.AutosizesSubviews = false;

@@ -22,55 +22,43 @@
 //
 
 using System;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Data.Managers
 {
-	public class DocumentNoteManager
+	public class DocumentNoteManager : IDocumentNoteManager
 	{
-		#region Fields
+		#region Logic	
 		/// <summary>
-		/// Single manager instance 
+		/// Hidden constructor to create instance only from RC.
 		/// </summary>
-		public static DocumentNoteManager Instance {
-			get {
-				return _Instance;
-			}
-			internal set {
-				_Instance = value;
-			}
-		}	
-		private static DocumentNoteManager _Instance;
-		#endregion
-		
-		#region Logic		
+		protected DocumentNoteManager()	{}
+
 		/// <summary>
-		/// Returns a new id for a new note, it is may be a database id record, for example 
+		/// Gets the new bookmark identifier.
 		/// </summary>
-		/// <returns>New note id</returns>
-		/// <remarks>No logic implemented, should be inherited in childs</remarks>
+		/// <returns>The new bookmark identifier.</returns>
 		protected virtual int GetNewId()
 		{
 			return 0;
 		}
 
 		/// <summary>
-		/// Loads a document note by a document id
+		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
 		/// </summary>
-		/// <param name="docId">PDF document Id</param>
-		/// <returns>Note</returns>
-		/// <remarks>No logic implemented, should be inherited in childs</remarks>
-		public virtual DocumentNote LoadNote(int docId)
+		/// <param name="docId">The PDF document Id.</param>
+		/// <returns>The <see cref="DocumentNote"/> object.</returns>
+		public virtual DocumentNote Load(int docId)
 		{
 			return new DocumentNote(docId, -1, string.Empty);
 		}
 
 		/// <summary>
-		/// Saves a document note
+		/// Saves the see cref="DocumentNote"/> object.
 		/// </summary>
-		/// <param name="note">Note</param>
-		/// <remarks>No logic implemented, should be inherited in childs</remarks>
-		public virtual void SaveNote(DocumentNote note)
+		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
+		public virtual void Save(DocumentNote note)
 		{
 			// Noting
 		}		

@@ -31,6 +31,7 @@
         <Command type="AfterBuild" command="../Tools/autoinc_vnumber.sh" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -124,7 +125,6 @@
     <Compile Include="DataObjects\PDFFile.cs" />
     <Compile Include="DataObjects\MyDocumentBookmarkManager.cs" />
     <Compile Include="DataObjects\MyDocumentNoteManager.cs" />
-    <Compile Include="DataObjects\MyObjectsCreator.cs" />
     <Compile Include="Main.cs" />
   </ItemGroup>
   <ItemGroup>

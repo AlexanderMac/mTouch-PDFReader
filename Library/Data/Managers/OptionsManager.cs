@@ -24,36 +24,24 @@
 using System;
 using System.Xml;
 using System.IO;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Enums;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Data.Managers
 {
-	public class OptionsManager
+	public class OptionsManager : IOptionsManager
 	{		
 		#region Constants		
 		/// <summary>
-		/// Options file name 
+		/// The options file name. 
 		/// </summary>
 		private const string OptionsFileName = "mTouchPDFReader.Options.xml";		
 		#endregion
 		
-		#region Fields		
+		#region Fields					
 		/// <summary>
-		/// Single manager instance 
-		/// </summary>
-		public static OptionsManager Instance {
-			get {
-				return _Instance;
-			}
-			internal set {
-				_Instance = value;
-			}
-		}
-		private static OptionsManager _Instance;
-				
-		/// <summary>
-		/// Options 
+		/// Gets the options. 
 		/// </summary>
 		public Options Options {
 			get {
@@ -72,7 +60,12 @@ namespace mTouchPDFReader.Library.Data.Managers
 		private bool _Initialized;		
 		#endregion
 		
-		#region Logic		
+		#region Logic
+		/// <summary>
+		/// Hidden constructor to create instance only from RC.
+		/// </summary>
+		protected OptionsManager()	{}
+
 		/// <summary>
 		/// Loads options 
 		/// </summary>

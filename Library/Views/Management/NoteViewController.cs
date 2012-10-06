@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Utils;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Data.Managers;
 using mTouchPDFReader.Library.XViews;
@@ -78,7 +80,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
 				_Note.Note = _NoteTxt.Text;
-				DocumentNoteManager.Instance.SaveNote(_Note);
+				RC.Get<IDocumentNoteManager>().Save(_Note);
 				CallbackAction(_NoteTxt);
 				_PopoverController.Dismiss(true);
 			};

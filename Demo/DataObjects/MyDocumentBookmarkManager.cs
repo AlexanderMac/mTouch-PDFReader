@@ -38,9 +38,14 @@ namespace mTouchPDFReader.Demo.DataObjects
 		private static List<DocumentBookmark> _AllBookmarks;		
 		#endregion
 		
-		#region Logic		
+		#region Logic	
 		/// <summary>
-		/// Static constructor
+		/// Hidden constructor to create instance only from RC.
+		/// </summary>
+		protected MyDocumentBookmarkManager() {}
+
+		/// <summary>
+		/// Static.
 		/// </summary>
 		static MyDocumentBookmarkManager()
 		{
@@ -48,30 +53,30 @@ namespace mTouchPDFReader.Demo.DataObjects
 		}
 		
 		/// <summary>
-		/// Returns new id for new bookmark, it may be database id record, for example 
+		/// Gets the new bookmark identifier.
 		/// </summary>
-		/// <returns>New bookmark id</returns>
+		/// <returns>The new bookmark identifier.</returns>
 		protected override int GetNewId()
 		{
 			return _AllBookmarks.Count + 1;
 		}
 
 		/// <summary>
-		/// Loads document bookmarks list by document id
+		/// Gets the <see cref="DocumentBookmark"/> bookmarks collection by the <see cref="docId"/>.
 		/// </summary>
-		/// <param name="docId">PDF document Id</param>
-		/// <returns>Bookmarks list</returns>
-		public override List<DocumentBookmark> LoadBookmarks(int docId)
+		/// <param name="docId">The PDF document Id.</param>
+		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>
+		public override List<DocumentBookmark> LoadList(int docId)
 		{
 			var retValue = _AllBookmarks.Where(d => d.DocId == docId).ToList();
 			return retValue;
 		}
 		
 		/// <summary>
-		/// Saves bookmark 
+		/// Saves the <see cref="DocumentBookmark"/> object. 
 		/// </summary>
-		/// <param name="bookmark">Bookmark</param>
-		public override void SaveBookmark(DocumentBookmark bookmark)
+		/// <param name="bookmark">The bookmark object.</param>
+		public override void Save(DocumentBookmark bookmark)
 		{
 			if (!_AllBookmarks.Contains(bookmark)) {
 				bookmark.Id = GetNewId();
@@ -80,10 +85,9 @@ namespace mTouchPDFReader.Demo.DataObjects
 		}	
 		
 		/// <summary>
-		/// Deletes bookmark by bookmark id 
+		/// Deletes the <see cref="DocumentBookmark"/> object by <see cref="bookmarkId"/>.
 		/// </summary>
-		/// <param name="bookmarkId">Bookmark id</param>
-		public override void DeleteBookmark(int bookmarkId)
+		public override void Delete(int bookmarkId)
 		{
 			var bookmark = _AllBookmarks.First(d => d.Id == bookmarkId);
 			if (bookmark != null) {

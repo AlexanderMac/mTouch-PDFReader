@@ -38,9 +38,14 @@ namespace mTouchPDFReader.Demo.DataObjects
 		private static List<DocumentNote> _AllNotes;		
 		#endregion
 		
-		#region Logic		
+		#region Logic
 		/// <summary>
-		/// Static constructor
+		/// Hidden constructor to create instance only from RC.
+		/// </summary>
+		protected MyDocumentNoteManager() {}
+
+		/// <summary>
+		/// Static.
 		/// </summary>
 		static MyDocumentNoteManager()
 		{
@@ -48,20 +53,20 @@ namespace mTouchPDFReader.Demo.DataObjects
 		}
 		
 		/// <summary>
-		/// Returns new id for new note, it may be database id record, for example 
+		/// Gets the new bookmark identifier.
 		/// </summary>
-		/// <returns>New note id</returns>
+		/// <returns>The new bookmark identifier.</returns>
 		protected override int GetNewId()
 		{
 			return _AllNotes.Count + 1;
 		}
 		
 		/// <summary>
-		/// Loads document note by document id
+		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
 		/// </summary>
-		/// <param name="docId">PDF document Id</param>
-		/// <returns>Note</returns>
-		public override DocumentNote LoadNote(int docId)
+		/// <param name="docId">The PDF document Id.</param>
+		/// <returns>The <see cref="DocumentNote"/> object.</returns>
+		public override DocumentNote Load(int docId)
 		{
 			var note = _AllNotes.FirstOrDefault(n => n.DocId == docId);
 			if (note == null) {
@@ -71,11 +76,10 @@ namespace mTouchPDFReader.Demo.DataObjects
 		}
 
 		/// <summary>
-		/// Saves document note for document id
+		/// Saves the see cref="DocumentNote"/> object.
 		/// </summary>
-		/// <param name="docId">PDF document Id</param>
-		/// <param name="note">Note</param>
-		public override void SaveNote(DocumentNote note)
+		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
+		public override void Save(DocumentNote note)
 		{
 			if (!_AllNotes.Contains(note)) {
 				note.Id = GetNewId();

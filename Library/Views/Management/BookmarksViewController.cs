@@ -26,6 +26,8 @@ using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Utils;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Data.Managers;
 using mTouchPDFReader.Library.XViews;
@@ -211,7 +213,7 @@ namespace mTouchPDFReader.Library.Views.Management
 				tableView.BeginUpdates();
 				var newIndexPath = NSIndexPath.FromRowSection(indexPath.Row + _Controller._Bookmarks.Count + 1, 0);
 				var newBookmark = new DocumentBookmark(_Controller._DocumentId, -1, bookmakrName, _Controller._CurrentPageNumber);
-				DocumentBookmarkManager.Instance.SaveBookmark(newBookmark);
+				RC.Get<IDocumentBookmarkManager>().Save(newBookmark);
 				_Controller._Bookmarks.Add(newBookmark);
 				_Controller._BookmarksTable.InsertRows(new NSIndexPath[] { newIndexPath }, UITableViewRowAnimation.Fade);
 				tableView.EndUpdates();
@@ -223,7 +225,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			private void DeleteRow(UITableView tableView, NSIndexPath indexPath)
 			{
-				DocumentBookmarkManager.Instance.DeleteBookmark(_Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].Id);
+				RC.Get<IDocumentBookmarkManager>().Delete(_Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].Id);
 				_Controller._Bookmarks.RemoveAt(indexPath.Row);
 				tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
 				_Controller.SetEditingMode(UITableViewCellEditingStyle.None);

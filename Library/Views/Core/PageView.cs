@@ -26,6 +26,8 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
+using mTouchPDFReader.Library.Utils;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Managers;
 
 namespace mTouchPDFReader.Library.Views.Core
@@ -162,7 +164,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			base.TouchesBegan(touches, evt);
 			
-			if (OptionsManager.Instance.Options.AllowZoomByDoubleTouch) {
+			if (RC.Get<IOptionsManager>().Options.AllowZoomByDoubleTouch) {
 				var touch = touches.AnyObject as UITouch; 
 				if (touch.TapCount == 2) { 
 					ZoomIncrement(); 
@@ -193,8 +195,8 @@ namespace mTouchPDFReader.Library.Views.Core
 			RectangleF targetRect = RectangleFExtensions.Inset(Bounds, ContentViewPadding, ContentViewPadding);
 			float zoomScale = GetZoomScaleThatFits(targetRect.Size, _PageContentView.Bounds.Size);
 			MinimumZoomScale = zoomScale; 	
-			MaximumZoomScale = zoomScale * OptionsManager.Instance.Options.ZoomScaleLevels; 
-			_ZoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / OptionsManager.Instance.Options.ZoomScaleLevels;
+			MaximumZoomScale = zoomScale * RC.Get<IOptionsManager>().Options.ZoomScaleLevels; 
+			_ZoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / RC.Get<IOptionsManager>().Options.ZoomScaleLevels;
 		}
 		
 		/// <summary>
