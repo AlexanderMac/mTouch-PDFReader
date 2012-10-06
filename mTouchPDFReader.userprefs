@@ -1,25 +1,20 @@
 ﻿<Properties>
   <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/PageContentView.cs">
+  <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/PageView.cs">
     <Files>
-      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="394" Column="54" />
-      <File FileName="Library/Views/Core/PageView.cs" Line="90" Column="1" />
-      <File FileName="Library/Views/Core/PageContentView.cs" Line="114" Column="4" />
+      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="8" Column="28" />
+      <File FileName="Library/Views/Core/PageView.cs" Line="87" Column="30" />
+      <File FileName="Library/Views/Core/PageContentTile.cs" Line="1" Column="1" />
+      <File FileName="Library/Views/Core/PageContentView.cs" Line="1" Column="1" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="mTouchPDFReader_Demo" expanded="True" selected="True" />
           <Node name="mTouchPDFReader_Library" expanded="True">
-            <Node name="Data" expanded="True">
-              <Node name="Enums" expanded="True" />
-              <Node name="Managers" expanded="True" />
-              <Node name="Objects" expanded="True" />
-            </Node>
             <Node name="Views" expanded="True">
-              <Node name="Core" expanded="True" />
-              <Node name="Management" expanded="True" />
-              <Node name="XViews" expanded="True" />
+              <Node name="Core" expanded="True">
+                <Node name="PageView.cs" selected="True" />
+              </Node>
             </Node>
           </Node>
         </State>
@@ -35,13 +30,18 @@
           <Value>uri</Value>
         </State>
       </Pad>
+      <Pad Id="ConnectionManagerPad">
+        <State selected="True">
+          <Option id="ShowSystemObjects" value="True" />
+          <Option id="ShowDatabaseName" value="True" />
+        </State>
+      </Pad>
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore>
-      <Breakpoint file="/Users/amac/Projects/OpenSource/mTouch-PDFReader/Library/Views/Core/DocumentViewController.cs" line="226" />
-      <Breakpoint file="/Users/amac/Projects/OpenSource/mTouch-PDFReader/Library/Views/Core/DocumentViewController.cs" line="667" />
-    </BreakpointStore>
+    <BreakpointStore />
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
-  <MonoDevelop.Ide.DebuggingService.PinnedWatches />
+  <MonoDevelop.Ide.DebuggingService.PinnedWatches>
+    <Watch file="Library/Views/Core/DocumentViewController.cs" line="439" offsetX="547" offsetY="6570" expression="currentPageView.Bounds" liveUpdate="False" />
+  </MonoDevelop.Ide.DebuggingService.PinnedWatches>
 </Properties>

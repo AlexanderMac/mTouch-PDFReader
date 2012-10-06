@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Note view controller
+// NoteViewController.cs (Note view controller)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -21,27 +34,26 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class NoteViewController : UIViewControllerWithPopover
 	{				
-		#region Fields
+		#region Fields		
+		/// <summary>
+		/// The editing note.
+		/// </summary>
+		private DocumentNote _Note;
 		
 		/// <summary>
-		/// Editing note
+		/// The note text view.
 		/// </summary>
-		private DocumentNote mNote;
-		
-		/// <summary>
-		/// Note text view
-		/// </summary>
-		private UITextView mNoteTxt;
-		
+		private UITextView _NoteTxt;		
 		#endregion
 
 		#region Constructors
-		
+		/// <summary>
+		/// Working.
+		/// </summary>
 		public NoteViewController(DocumentNote note, Action<object> callbackAction) : base(null, null, callbackAction)
 		{
-			mNote = note;
+			_Note = note;
 		}
-
 		#endregion
 
 		/// <summary>
@@ -65,21 +77,21 @@ namespace mTouchPDFReader.Library.Views.Management
 			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
-				mNote.Note = mNoteTxt.Text;
-				DocumentNoteManager.Instance.SaveNote(mNote);
-				CallbackAction(mNoteTxt);
-				mPopoverController.Dismiss(true);
+				_Note.Note = _NoteTxt.Text;
+				DocumentNoteManager.Instance.SaveNote(_Note);
+				CallbackAction(_NoteTxt);
+				_PopoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
 			// Create text note
-			mNoteTxt = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
-			mNoteTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
-			mNoteTxt.Font = UIFont.SystemFontOfSize(17.0f);
-			mNoteTxt.Text = mNote.Note;
-			View.AddSubview(mNoteTxt);
+			_NoteTxt = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
+			_NoteTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
+			_NoteTxt.Font = UIFont.SystemFontOfSize(17.0f);
+			_NoteTxt.Text = _Note.Note;
+			View.AddSubview(_NoteTxt);
 		}
 		
 		/// <summary>

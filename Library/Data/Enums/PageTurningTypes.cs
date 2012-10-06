@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// MyObjectsCreator.cs (DObjects activator)
+// PageTurningType.cs (Page turning types)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,32 +22,12 @@
 //
 
 using System;
-using mTouchPDFReader.Library.Data;
-using mTouchPDFReader.Library.Data.Managers;
 
-namespace mTouchPDFReader.Demo.DataObjects
+namespace mTouchPDFReader.Library.Data.Enums
 {
-	public class MyObjectsActivator : ObjectsActivator
-	{
-		#region Logic			
-		/// <summary>
-		/// Returns DocumentNoteManager instance
-		/// </summary>
-		/// <returns></returns>
-		protected override DocumentNoteManager CreateDocumentNoteManager()
-		{
-			return new MyDocumentNoteManager();
-		}
-		
-		/// <summary>
-		/// Returns DocumentBookmarkManager instance
-		/// </summary>
-		/// <returns></returns>
-		protected override DocumentBookmarkManager CreateDocumentBookmarkManager()
-		{
-			return new MyDocumentBookmarkManager();
-		}		
-		#endregion
+	public enum PageTurningTypes {
+		Horizontal,
+		Vertical			
 	}
 }
 

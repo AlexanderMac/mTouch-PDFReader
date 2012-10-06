@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Document view controller
+// DocumentViewController.cs (Document view controller implementation)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Linq;
@@ -25,104 +38,91 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class DocumentViewController : UIViewController
 	{			
-		#region Constants
-		
+		#region Constants		
 		private const int MaxPageViewsCount = 3;
-		
 		private const float BarPaddingH = 5.0f;
-		
 		private const float BarPaddingV = 5.0f;
-		
 		private const float ToolbarHeight = 50.0f;
-		
 		private const float BottombarHeight = 45.0f;
-		
 		private const float FirstToolButtonLeft = 20.0f;
-		
 		private const float FirstToolButtonTop = 7.0f;
-		
-		private const float ToolButtonSize = 36.0f;	
-		
-		private readonly SizeF PageNumberLabelSize = new SizeF(75.0f, 35.0f);
-		
+		private const float ToolButtonSize = 36.0f;
+		private readonly SizeF PageNumberLabelSize = new SizeF(75.0f, 35.0f);		
 		#endregion
 		
-		#region Fields	
-		
+		#region Fields			
 		/// <summary>
-		/// Loaded document id 
+		/// The document id.
 		/// </summary>
-		private int mDocumentId;
+		private int _DocumentId;
 			
 		/// <summary>
-		/// Main scroll view
+		/// The main scroll view.
 		/// </summary>
-		private UIScrollView mScrollView;
+		private UIScrollView _ScrollView;
 		
 		/// <summary>
-		/// Toolbar view
+		/// The toolbar view.
 		/// </summary>
-		private UIView mToolbar;
+		private UIView _Toolbar;
 		
 		/// <summary>
-		/// Open navigate to page button
+		/// The open page button.
 		/// </summary>
-		private UIButton mBtnNavigateToPage;
+		private UIButton _BtnNavigateToPage;
 			
 		/// <summary>
-		/// Open Note view button 
+		/// The open note view button. 
 		/// </summary>
-		private UIButton mBtnNote;
+		private UIButton _BtnNote;
 		
 		/// <summary>
-		/// Open bookmarsks list view button
+		/// The open bookmarsks list view button.
 		/// </summary>
-		private UIButton mBtnBookmarksList;
+		private UIButton _BtnBookmarksList;
 		
 		/// <summary>
-		/// Open Thumbs view button
+		/// The open thumbs view button.
 		/// </summary>
-		private UIButton mBtnThumbs;
+		private UIButton _BtnThumbs;
 		
 		/// <summary>
-		/// Bottom bar view
+		/// The bottom bar view.
 		/// </summary>
-		private UIView mBottomBar;
+		private UIView _BottomBar;
 		
 		/// <summary>
-		/// Slider view
+		/// The slider view.
 		/// </summary>
-		private UISlider mSlider;
+		private UISlider _Slider;
 		
 		/// <summary>
-		/// Page number label
+		/// The page number label.
 		/// </summary>
-		private UILabel mPageNumberLabel;
+		private UILabel _PageNumberLabel;
 		
 		/// <summary>
-		/// List of page views
+		/// The list of the page views.
 		/// </summary>
-		private List<PageView> mPageViews;
+		private List<PageView> _PageViews;
 		
 		/// <summary>
-		/// Current page view
+		/// The current page view.
 		/// </summary>
-		private PageView mCurrentPageView;
+		private PageView _CurrentPageView;
 		
 		/// <summary>
-		/// Notification observers
+		/// The notification observers.
 		/// </summary>
-		private List<NSObject> mNotificationObservers; 
+		private List<NSObject> _NotificationObservers; 
 		
 		/// <summary>
-		/// Old device orientation
+		/// The old device orientation.
 		/// </summary>
-		private UIInterfaceOrientation mOldDeviceOrientation;
-		
+		private UIInterfaceOrientation _OldDeviceOrientation;		
 		#endregion
 			
 		#region Constructors
-
 		public DocumentViewController(IntPtr handle) : base(handle)
 		{
 			Initialize();
@@ -141,71 +141,69 @@ namespace mTouchPDFReader.Library.Views.Core
 
 		void Initialize()
 		{
-			mNotificationObservers = new List<NSObject>();
-			mPageViews = new List<PageView>();
-		}
-		
+			_NotificationObservers = new List<NSObject>();
+			_PageViews = new List<PageView>();
+		}		
 		#endregion
 		
-		#region UIViewController methods
-		
+		#region UIViewController methods	
 		/// <summary>
 		/// Calls when view has loaded
 		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			mOldDeviceOrientation = GetDeviceOrientation();
+			_OldDeviceOrientation = GetDeviceOrientation();
 			
 			// Init View			
 			View.BackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
 	
 			// Create toolbar
 			if (OptionsManager.Instance.Options.ToolbarVisible) {
-				mToolbar = CreateToolbar();
-				if (mToolbar != null) {
-					View.AddSubview(mToolbar);
+				_Toolbar = CreateToolbar();
+				if (_Toolbar != null) {
+					View.AddSubview(_Toolbar);
 				}
 			}
 			
 			// Create bottom bar (with slider)
 			if (OptionsManager.Instance.Options.BottombarVisible) {
-				mBottomBar = CreateBottomBar();
-				if (mBottomBar != null) {
-					View.AddSubview(mBottomBar);
+				_BottomBar = CreateBottomBar();
+				if (_BottomBar != null) {
+					View.AddSubview(_BottomBar);
 				} else {
-					if (mSlider != null) {
-						mSlider.RemoveFromSuperview();
-						mSlider.Dispose();
+					if (_Slider != null) {
+						_Slider.RemoveFromSuperview();
+						_Slider.Dispose();
 					}
-					if (mPageNumberLabel != null) {
-						mPageNumberLabel.RemoveFromSuperview();
-						mPageNumberLabel.Dispose();
+					if (_PageNumberLabel != null) {
+						_PageNumberLabel.RemoveFromSuperview();
+						_PageNumberLabel.Dispose();
 					}
 				}
 			}
 			
 			// Create pages view - Scrollview
-			mScrollView = new UIScrollView(GetScrollViewFrame());
-			mScrollView.ScrollsToTop = false;
-			mScrollView.PagingEnabled = true;
-			mScrollView.DelaysContentTouches = false;
-			mScrollView.ShowsVerticalScrollIndicator = false;
-			mScrollView.ShowsHorizontalScrollIndicator = false;
-			mScrollView.ContentMode = UIViewContentMode.Redraw;
-			mScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			mScrollView.BackgroundColor = UIColor.Clear;
-			mScrollView.UserInteractionEnabled = true;
-			mScrollView.AutosizesSubviews = false;
-			mScrollView.DecelerationEnded += ScrollViewDecelerationEnded;
+			_ScrollView = new UIScrollView(GetScrollViewFrame());
+			_ScrollView.ScrollsToTop = false;
+			_ScrollView.PagingEnabled = true;
+			_ScrollView.DelaysContentTouches = false;
+			_ScrollView.ShowsVerticalScrollIndicator = false;
+			_ScrollView.ShowsHorizontalScrollIndicator = false;
+			_ScrollView.ContentMode = UIViewContentMode.Redraw;
+			_ScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			_ScrollView.BackgroundColor = UIColor.Clear;
+			_ScrollView.UserInteractionEnabled = true;
+			_ScrollView.AutosizesSubviews = false;
+			_ScrollView.DecelerationEnded += ScrollViewDecelerationEnded;
 			
 			// Add root scroll view to parent
-			View.AddSubview(mScrollView);
+			View.AddSubview(_ScrollView);
 			
 			// Subscribe notifications
 			NSString notificationObserverDeviceRotated = new NSString("UIDeviceOrientationDidChangeNotification");
 			var deviceRotated = NSNotificationCenter.DefaultCenter.AddObserver(notificationObserverDeviceRotated, DeviceRotated);
-			mNotificationObservers.Add(deviceRotated);
+			_NotificationObservers.Add(deviceRotated);
 		}
 		
 		/// <summary>
@@ -223,13 +221,13 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void DeviceRotated(NSNotification notification)
 		{
 			UIInterfaceOrientation newOrientation = GetDeviceOrientation();
-			if (newOrientation != mOldDeviceOrientation) {
+			if (newOrientation != _OldDeviceOrientation) {
 				UpdateScrollViewContentSize();
 				UpdateScrollViewContentOffset();
 				UpdatePageViewsFrame();
 				ResetPageViewsZoomScale();
 			}
-			mOldDeviceOrientation = newOrientation; 
+			_OldDeviceOrientation = newOrientation; 
 		}
 		
 		/// <summary>
@@ -238,23 +236,21 @@ namespace mTouchPDFReader.Library.Views.Core
 		protected override void Dispose(bool disposing)
 		{
 			PDFDocument.CloseDocument();
-			NSNotificationCenter.DefaultCenter.RemoveObservers(mNotificationObservers);
+			NSNotificationCenter.DefaultCenter.RemoveObservers(_NotificationObservers);
 			base.Dispose(disposing);
-		}
-		
+		}		
 		#endregion
 		
-		#region UIScrollViewDelegate methods
-		
+		#region UIScrollViewDelegate methods		
 		/// <summary>
 		/// Calls when scrollView deceleration has ended
 		/// </summary>
 		private void ScrollViewDecelerationEnded(object sender, EventArgs args)
 		{
 			int pageNumber = 0;
-			float contentOffset = (OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal) ? mScrollView.ContentOffset.X : mScrollView.ContentOffset.Y;
-			foreach (var view in mPageViews) {
-				bool found = (OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal) ? (contentOffset == view.Frame.X) : (contentOffset == view.Frame.Y);
+			float contentOffset = (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) ? _ScrollView.ContentOffset.X : _ScrollView.ContentOffset.Y;
+			foreach (var view in _PageViews) {
+				bool found = (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) ? (contentOffset == view.Frame.X) : (contentOffset == view.Frame.Y);
 				if (found) {
 					pageNumber = view.PageNumber;
 					break;
@@ -263,12 +259,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (pageNumber != 0) {
 				OpenDocumentPage(pageNumber);
 			}
-		}
-		
+		}		
 		#endregion
 				
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Presents popover
 		/// </summary>
@@ -305,12 +299,12 @@ namespace mTouchPDFReader.Library.Views.Core
 		private RectangleF GetScrollViewFrame()
 		{
 			var retValue = View.Bounds;
-			if (mToolbar != null) {
-				retValue.Y = mToolbar.Frame.Bottom;
-				retValue.Height -= mToolbar.Bounds.Height + BarPaddingV;
+			if (_Toolbar != null) {
+				retValue.Y = _Toolbar.Frame.Bottom;
+				retValue.Height -= _Toolbar.Bounds.Height + BarPaddingV;
 			}
-			if (mBottomBar != null) {
-				retValue.Height -= mBottomBar.Bounds.Height + BarPaddingV;
+			if (_BottomBar != null) {
+				retValue.Height -= _BottomBar.Bounds.Height + BarPaddingV;
 			}
 			return retValue;
 		}
@@ -322,7 +316,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private RectangleF GetScrollViewSubViewFrame()
 		{
 			var retValue = RectangleF.Empty;
-			retValue.Size = mScrollView.Bounds.Size;
+			retValue.Size = _ScrollView.Bounds.Size;
 			return retValue;
 		}
 		
@@ -338,14 +332,14 @@ namespace mTouchPDFReader.Library.Views.Core
 			// Calc the content width and height
 			float contentWidth;
 			float contentHeight;
-			if (OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal) {
-				contentWidth = mScrollView.Frame.Size.Width * viewPagesCount;
-				contentHeight = mScrollView.Frame.Size.Height;
+			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+				contentWidth = _ScrollView.Frame.Size.Width * viewPagesCount;
+				contentHeight = _ScrollView.Frame.Size.Height;
 			} else {
-				contentWidth = mScrollView.Frame.Size.Width;
-				contentHeight = mScrollView.Frame.Size.Height * viewPagesCount;
+				contentWidth = _ScrollView.Frame.Size.Width;
+				contentHeight = _ScrollView.Frame.Size.Height * viewPagesCount;
 			}
-			mScrollView.ContentSize = new SizeF(contentWidth, contentHeight);
+			_ScrollView.ContentSize = new SizeF(contentWidth, contentHeight);
 		}
 
 		/// <summary>
@@ -356,8 +350,8 @@ namespace mTouchPDFReader.Library.Views.Core
 			// Calc new contentOffset position
 			PointF contentOffset = PointF.Empty;
 			RectangleF viewRect = RectangleF.Empty;
-			viewRect.Size = mScrollView.Bounds.Size;
-			if (OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal) {
+			viewRect.Size = _ScrollView.Bounds.Size;
+			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
 				float viewWidthX1 = viewRect.Width;
 				float viewWidthX2 = viewWidthX1 * 2.0f;				
 				if (PDFDocument.PageCount >= MaxPageViewsCount) {
@@ -383,7 +377,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				}
 			}
 			// Move scrollView contentOffset to show left, middle or right view
-			mScrollView.ContentOffset = contentOffset;
+			_ScrollView.ContentOffset = contentOffset;
 		}
 
 		/// <summary>
@@ -392,7 +386,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void UpdatePageViewsFrame()
 		{
 			RectangleF viewRect = GetScrollViewSubViewFrame();
-			foreach (var view in mPageViews) {
+			foreach (var view in _PageViews) {
 				view.Frame = viewRect;
 				viewRect = CalcFrameForNextPage(viewRect);
 			}
@@ -401,28 +395,46 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <summary>
 		/// Calculates the default page view content offset
 		/// </summary>
-		private PointF CalcDefaultPageViewContentOffset()
+		private PointF CalcDefaultPageViewContentOffset(int pageNumber)
 		{
-			if (mCurrentPageView == null)
-			{
+			if (_CurrentPageView == null) {
 				return new PointF(0, 0);
 			}
-			return OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal
-				? new PointF(0.0f, mCurrentPageView.ContentOffset.Y)
-				: new PointF(mCurrentPageView.ContentOffset.X, 0.0f);
+			bool pageIsAfterCurrent = pageNumber > _CurrentPageView.PageNumber;
+			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
+				var left = pageIsAfterCurrent ? 0.0f : _CurrentPageView.Bounds.Width;
+				return new PointF(left, _CurrentPageView.ContentOffset.Y);
+			} else {
+				var top = pageIsAfterCurrent ? 0.0f : _CurrentPageView.Bounds.Height;
+				return new PointF(_CurrentPageView.ContentOffset.X, top);
+			}
 		}
 
 		/// <summary>
 		/// Sets equal zoomScale for all pages
 		/// </summary>
-		private void SetPagesEqualZoomScale(PageView pageView, float zoomScale)
+		private void SetPagesEqualZoomScale(PageView currentPageView, float zoomScale)
 		{
-			foreach (var view in mPageViews) {
-				if (view != pageView) {
+			for (int i = 0; i < _PageViews.Count; i++) {
+				var view = _PageViews [i];
+				if (view != currentPageView) {
 					// Set equal zoomScale from all pageViews 
 					view.ZoomScale = zoomScale;
 					// Offset pageView, to it don't overlapped
-					view.ContentOffset = CalcDefaultPageViewContentOffset();
+					view.ContentOffset = CalcDefaultPageViewContentOffset(view.PageNumber);
+				}
+			}
+		}
+
+		/// <summary>
+		/// Sets equal offset for all pages
+		/// </summary>
+		private void SetPagesEqualOffset(PageView currentPageView)
+		{
+			for (int i = 0; i < _PageViews.Count; i++) {
+				var view = _PageViews [i];
+				if (view != currentPageView) {
+					view.ContentOffset = CalcDefaultPageViewContentOffset(view.PageNumber);
 				}
 			}
 		}
@@ -432,7 +444,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void ResetPageViewsZoomScale()
 		{
-			foreach (var view in mPageViews) {
+			foreach (var view in _PageViews) {
 				view.UpdateMinimumMaximumZoom();
 				view.ZoomReset();
 			}
@@ -445,7 +457,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>Frame rect for next page</returns>
 		private RectangleF CalcFrameForNextPage(RectangleF viewRect)
 		{
-			if (OptionsManager.Instance.Options.pPageTurningType == PageTurningType.Horizontal) {
+			if (OptionsManager.Instance.Options.PageTurningType == PageTurningTypes.Horizontal) {
 				viewRect.X += viewRect.Size.Width;
 			} else {
 				viewRect.Y += viewRect.Size.Height;
@@ -458,8 +470,8 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void UpdateSliderMaxValue()
 		{
-			if (mSlider != null) {
-				mSlider.MaxValue = PDFDocument.PageCount;
+			if (_Slider != null) {
+				_Slider.MaxValue = PDFDocument.PageCount;
 			}
 		}		
 		
@@ -486,9 +498,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", delegate {
 				OpenPriorPage();
 			});
-			mBtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", delegate {
-				var view = new GotoPageViewController(p => { OpenDocumentPage((int)p); });
-				PresentPopover(view, mBtnNavigateToPage.Frame);
+			_BtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", delegate {
+				var view = new GotoPageViewController(p => {
+					OpenDocumentPage((int)p); });
+				PresentPopover(view, _BtnNavigateToPage.Frame);
 			});
 			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", delegate {
 				OpenNextPage();
@@ -503,23 +516,25 @@ namespace mTouchPDFReader.Library.Views.Core
 				ZoomIn(); 
 			});
 			if (OptionsManager.Instance.Options.NoteBtnVisible) {
-				mBtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
-					var note = DocumentNoteManager.Instance.LoadNote(mDocumentId);
+				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
+					var note = DocumentNoteManager.Instance.LoadNote(_DocumentId);
 					var view = new NoteViewController(note, p => { /* Noting */ });
-					PresentPopover(view, mBtnNote.Frame);
+					PresentPopover(view, _BtnNote.Frame);
 				});
 			}
 			if (OptionsManager.Instance.Options.BookmarksBtnVisible) {
-				mBtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
-					var bookmarks = DocumentBookmarkManager.Instance.LoadBookmarks(mDocumentId);
-					var view = new BookmarksViewController(mDocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => { OpenDocumentPage((int)p); });
-					PresentPopover(view, mBtnBookmarksList.Frame);
+				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
+					var bookmarks = DocumentBookmarkManager.Instance.LoadBookmarks(_DocumentId);
+					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => {
+						OpenDocumentPage((int)p); });
+					PresentPopover(view, _BtnBookmarksList.Frame);
 				});
 			}
 			if (OptionsManager.Instance.Options.ThumbsBtnVisible) {
-				mBtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs32.png", delegate {
-					var view = new ThumbsViewController(View.Bounds.Width, p => { OpenDocumentPage((int)p); });
-					PresentPopover(view, mBtnThumbs.Frame);
+				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs32.png", delegate {
+					var view = new ThumbsViewController(View.Bounds.Width, p => {
+						OpenDocumentPage((int)p); });
+					PresentPopover(view, _BtnThumbs.Frame);
 					view.InitThumbs();
 				});
 			}
@@ -567,13 +582,13 @@ namespace mTouchPDFReader.Library.Views.Core
 				sliderWidth -= PageNumberLabelSize.Width;
 			}
 			var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
-			mSlider = new UISlider(pageSliderFrame);
-			mSlider.MinValue = 1;
-			mSlider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			mSlider.ValueChanged += delegate { 
-				OpenDocumentPage((int)mSlider.Value);
+			_Slider = new UISlider(pageSliderFrame);
+			_Slider.MinValue = 1;
+			_Slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			_Slider.ValueChanged += delegate { 
+				OpenDocumentPage((int)_Slider.Value);
 			};
-			bottomBar.AddSubview(mSlider);
+			bottomBar.AddSubview(_Slider);
 			
 			// Create page number view		
 			if (OptionsManager.Instance.Options.PageNumberVisible) {
@@ -590,18 +605,18 @@ namespace mTouchPDFReader.Library.Views.Core
 				pageNumberView.Layer.ShadowOpacity = 1.0f;
 				// Create page number label
 				var pageNumberLabelFrame = RectangleFExtensions.Inset(pageNumberView.Bounds, 4.0f, 2.0f);
-				mPageNumberLabel = new UILabel(pageNumberLabelFrame);
-				mPageNumberLabel.AutosizesSubviews = false;
-				mPageNumberLabel.AutoresizingMask = UIViewAutoresizing.None;
-				mPageNumberLabel.TextAlignment = UITextAlignment.Center;
-				mPageNumberLabel.BackgroundColor = UIColor.Clear;
-				mPageNumberLabel.TextColor = UIColor.White;
-				mPageNumberLabel.Font = UIFont.SystemFontOfSize(16.0f);
-				mPageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
-				mPageNumberLabel.ShadowColor = UIColor.Black;
-				mPageNumberLabel.AdjustsFontSizeToFitWidth = true;
-				mPageNumberLabel.MinimumFontSize = 12.0f;
-				pageNumberView.AddSubview(mPageNumberLabel);
+				_PageNumberLabel = new UILabel(pageNumberLabelFrame);
+				_PageNumberLabel.AutosizesSubviews = false;
+				_PageNumberLabel.AutoresizingMask = UIViewAutoresizing.None;
+				_PageNumberLabel.TextAlignment = UITextAlignment.Center;
+				_PageNumberLabel.BackgroundColor = UIColor.Clear;
+				_PageNumberLabel.TextColor = UIColor.White;
+				_PageNumberLabel.Font = UIFont.SystemFontOfSize(16.0f);
+				_PageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
+				_PageNumberLabel.ShadowColor = UIColor.Black;
+				_PageNumberLabel.AdjustsFontSizeToFitWidth = true;
+				_PageNumberLabel.MinimumFontSize = 12.0f;
+				pageNumberView.AddSubview(_PageNumberLabel);
 				bottomBar.AddSubview(pageNumberView);
 			}			
 			return bottomBar;
@@ -615,7 +630,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <param name="docPath">Document file path</param>
 		public virtual void OpenDocument(int docId, string docName, string docPath)
 		{
-			mDocumentId = docId;
+			_DocumentId = docId;
 			Title = docName;
 			PDFDocument.OpenDocument(docName, docPath);
 			UpdateScrollViewContentSize();
@@ -657,19 +672,24 @@ namespace mTouchPDFReader.Library.Views.Core
 				}
 				
 				// Create/update page views for displayed pages				
-				var unusedPageViews = new List<PageView>(mPageViews);
+				var unusedPageViews = new List<PageView>(_PageViews);
 				RectangleF viewRect = GetScrollViewSubViewFrame();
 				for (int i = minValue, j = 0; i <= maxValue; i++,j++) {
-					PageView pageView = mPageViews.FirstOrDefault(v => v.PageNumber == i);
+					PageView pageView = _PageViews.FirstOrDefault(v => v.PageNumber == i);
 					if (pageView == null) {
 						pageView = new PageView(viewRect, i);
-						pageView.ZoomScale = mCurrentPageView != null ? mCurrentPageView.ZoomScale : pageView.MinimumZoomScale;
-						pageView.ContentOffset = CalcDefaultPageViewContentOffset();
+						pageView.ZoomScale = _CurrentPageView != null ? _CurrentPageView.ZoomScale : pageView.MinimumZoomScale;
+						pageView.ContentOffset = CalcDefaultPageViewContentOffset(i);
 						pageView.ZoomingEnded += delegate(object sender, ZoomingEndedEventArgs e) {
-							SetPagesEqualZoomScale((PageView)sender, e.AtScale);
-						};
-						mScrollView.AddSubview(pageView);
-						mPageViews.Add(pageView);
+							var view = (PageView)sender;
+							SetPagesEqualZoomScale(view, view.ZoomScale);
+						};/*
+						pageView.DecelerationEnded += delegate(object sender, EventArgs e) {
+							var view = (PageView)sender;
+							SetPagesEqualOffset(view);
+						};*/
+						_ScrollView.AddSubview(pageView);
+						_PageViews.Add(pageView);
 					} else {
 						pageView.Frame = viewRect;
 						pageView.PageNumber = i;
@@ -677,34 +697,32 @@ namespace mTouchPDFReader.Library.Views.Core
 					}
 					viewRect = CalcFrameForNextPage(viewRect);
 					if (i == PDFDocument.CurrentPageNumber) {
-						mCurrentPageView = pageView;
+						_CurrentPageView = pageView;
 					}
 				}
 				// Clear unused page views
 				foreach (var view in unusedPageViews) {
 					view.RemoveFromSuperview();
-					mPageViews.Remove(view);					
+					_PageViews.Remove(view);					
 				}
 		
 				// Update scroll view content offset
 				UpdateScrollViewContentOffset();
 				
 				// Update PageNumber label
-				if (mPageNumberLabel != null) {
-					mPageNumberLabel.Text = string.Format(@"{0}/{1}", PDFDocument.CurrentPageNumber, PDFDocument.PageCount);
+				if (_PageNumberLabel != null) {
+					_PageNumberLabel.Text = string.Format(@"{0}/{1}", PDFDocument.CurrentPageNumber, PDFDocument.PageCount);
 				}
 				
 				// Update slider position
-				if (mSlider != null) {
-					mSlider.Value = PDFDocument.CurrentPageNumber;
+				if (_Slider != null) {
+					_Slider.Value = PDFDocument.CurrentPageNumber;
 				}
 			}
-		}
-		
+		}		
 		#endregion
 		
-		#region Events
-			
+		#region Events			
 		/// <summary>
 		/// Opens first page of the document
 		/// </summary>
@@ -743,7 +761,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		protected virtual void ZoomOut()
 		{
 			if (PDFDocument.DocumentHasLoaded) {
-				mCurrentPageView.ZoomDecrement();
+				_CurrentPageView.ZoomDecrement();
 			}
 		}
 		
@@ -753,10 +771,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		protected virtual void ZoomIn()
 		{
 			if (PDFDocument.DocumentHasLoaded) {
-				mCurrentPageView.ZoomIncrement();
+				_CurrentPageView.ZoomIncrement();
 			}
-		}
-		
+		}		
 		#endregion
 	}
 }

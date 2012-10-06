@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Thumbs view controller
+// ThumbsViewController.cs (Thumbs view controller)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Linq;
@@ -24,97 +37,89 @@ namespace mTouchPDFReader.Library.Views.Core
 	{		
 		#if DEBUG
 		/// <summary>
-		/// Writes message to debug log
+		/// Writes the message to the log.
 		/// </summary>
 		private static void WriteMessageToDebugLog(string method, string message)
 		{
 			Console.WriteLine(string.Format("{0} {1}", method, message));
-		}
-		
+		}		
 		#endif
 		
-		#region Constants		
-		
+		#region Constants			
 		/// <summary>
 		/// Thumb padding
 		/// </summary>
-		private const int ThumbPadding = 20;
-		
+		private const int ThumbPadding = 20;		
 		#endregion
 		
-		#region Fields	
+		#region Fields			
+		/// <summary>
+		/// Indicates, that the controller has initialized. 
+		/// </summary>
+		private bool _Initializing;
 		
 		/// <summary>
-		/// Flag, indicates, that controller is initializing 
+		/// The parent view width.
 		/// </summary>
-		private bool mInitializing;
+		private float _ParentViewWidth;
 		
 		/// <summary>
-		/// Parent view width
+		/// The action called when the page opened.
 		/// </summary>
-		private float mParentViewWidth;
+		private Action<object> _OpenPageCallback;
 		
 		/// <summary>
-		/// Callback to open page
+		/// The main scroll view.
 		/// </summary>
-		private Action<object> mOpenPageCallback;
+		private UIScrollView _ScrollView;
 		
 		/// <summary>
-		/// Main scroll view
+		/// The list of thumb views.
 		/// </summary>
-		private UIScrollView mScrollView;
-		
-		/// <summary>
-		/// List of thumb views
-		/// </summary>
-		private List<ThumbWithPageNumberView> mThumbViews;
+		private List<ThumbWithPageNumberView> _ThumbViews;
 	
 		/// <summary>
-		/// Current thumb view (selected)
+		/// The current thumb view (selected).
 		/// </summary>
-		private ThumbWithPageNumberView mCurrentThumbView;
+		private ThumbWithPageNumberView _CurrentThumbView;
 		
 		/// <summary>
-		/// Maximum visible thumbs count
+		/// The maximum visible thumbs count.
 		/// </summary>
-		private int mMaxVisibleThumbsCount;
+		private int _MaxVisibleThumbsCount;
 		
 		/// <summary>
 		/// First visible thumb number 
 		/// </summary>
-		private int mFirstVisibleThumbNumber;
+		private int _FirstVisibleThumbNumber;
 		
 		/// <summary>
-		/// Current scrollview content offset by X
+		/// The current scrollview content offset by X.
 		/// </summary>
-		private float mCurrentContentOffsetX;
+		private float _CurrentContentOffsetX;
 		
 		/// <summary>
-		/// Scroll direction 
+		/// The scroll direction. 
 		/// </summary>
-		private int mScrollDirection;
-		
+		private int _ScrollDirection;		
 		#endregion
 			
-		#region Constructors
-		
+		#region Constructors		
 		/// <summary>
-		/// Work constuctor
+		/// Working.
 		/// </summary>
 		public ThumbsViewController(float parentViewWidth, Action<object> callbackAction) 
 			: base(null, null, callbackAction)
 		{
-			mInitializing = false;
-			mParentViewWidth = parentViewWidth;
-			mOpenPageCallback = callbackAction; 
-			mThumbViews = new List<ThumbWithPageNumberView>();
-			mThumbViews.Capacity = OptionsManager.Instance.Options.ThumbsBufferSize;					
-		}		
-		
+			_Initializing = false;
+			_ParentViewWidth = parentViewWidth;
+			_OpenPageCallback = callbackAction; 
+			_ThumbViews = new List<ThumbWithPageNumberView>();
+			_ThumbViews.Capacity = OptionsManager.Instance.Options.ThumbsBufferSize;					
+		}				
 		#endregion
 		
-		#region UIViewController methods	
-		
+		#region UIViewController methods		
 		/// <summary>
 		/// Calls when view has loaded
 		/// </summary>
@@ -123,24 +128,24 @@ namespace mTouchPDFReader.Library.Views.Core
 			base.ViewDidLoad();
 			
 			// Init View	
-			View.Frame = new RectangleF(View.Frame.Left, View.Frame.Top, mParentViewWidth, View.Frame.Height);
+			View.Frame = new RectangleF(View.Frame.Left, View.Frame.Top, _ParentViewWidth, View.Frame.Height);
 			View.BackgroundColor = UIColor.Clear;
 			
 			// Create thumbs srollview
-			mScrollView = new UIScrollView(View.Bounds);
-			mScrollView.ScrollsToTop = false;
-			mScrollView.DelaysContentTouches = false;
-			mScrollView.ShowsVerticalScrollIndicator = false;
-			mScrollView.ShowsHorizontalScrollIndicator = true;
-			mScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			mScrollView.ContentMode = UIViewContentMode.Redraw;
-			mScrollView.BackgroundColor = UIColor.Clear;
-			mScrollView.UserInteractionEnabled = true;
-			mScrollView.AutosizesSubviews = false;
-			mScrollView.Scrolled += ScrollViewScrolled;
+			_ScrollView = new UIScrollView(View.Bounds);
+			_ScrollView.ScrollsToTop = false;
+			_ScrollView.DelaysContentTouches = false;
+			_ScrollView.ShowsVerticalScrollIndicator = false;
+			_ScrollView.ShowsHorizontalScrollIndicator = true;
+			_ScrollView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			_ScrollView.ContentMode = UIViewContentMode.Redraw;
+			_ScrollView.BackgroundColor = UIColor.Clear;
+			_ScrollView.UserInteractionEnabled = true;
+			_ScrollView.AutosizesSubviews = false;
+			_ScrollView.Scrolled += ScrollViewScrolled;
 			
 			// Add thumbs scroll view to parent
-			View.AddSubview(mScrollView);
+			View.AddSubview(_ScrollView);
 		}
 		
 		/// <summary>
@@ -149,7 +154,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>Popover size</returns>
 		protected override SizeF GetPopoverSize()
 		{
-			return new SizeF(mParentViewWidth - 20, ThumbPadding * 2 + OptionsManager.Instance.Options.ThumbSize);
+			return new SizeF(_ParentViewWidth - 20, ThumbPadding * 2 + OptionsManager.Instance.Options.ThumbSize);
 		}
 
 		/// <summary>
@@ -158,63 +163,59 @@ namespace mTouchPDFReader.Library.Views.Core
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
-		}		
-		
+		}			
 		#endregion
 		
-		#region UIScrollViewDelegate methods
-		
+		#region UIScrollViewDelegate methods		
 		/// <summary>
 		/// Calls when scrollView scrolled
 		/// </summary>
 		private void ScrollViewScrolled(object sender, EventArgs args)
 		{
-			if (mInitializing) {
+			if (_Initializing) {
 				return;
 			}
 			
 			// If content offset isn't changed or it's out from content size - exit
 			#if DEBUG
 			WriteMessageToDebugLog("ScrollViewScrolled", 
-				string.Format("mScrollView [ContentOffset={0}, Bounds={1}, ContentSize={2}]", mScrollView.ContentOffset.X, mScrollView.Bounds, mScrollView.ContentSize));
+				string.Format("mScrollView [ContentOffset={0}, Bounds={1}, ContentSize={2}]", _ScrollView.ContentOffset.X, _ScrollView.Bounds, _ScrollView.ContentSize));
 			#endif
-			if (mScrollView.ContentOffset.X == mCurrentContentOffsetX) {
+			if (_ScrollView.ContentOffset.X == _CurrentContentOffsetX) {
 				#if DEBUG
 				WriteMessageToDebugLog("ScrollViewScrolled", "1");
 				#endif
 				return;
 			}
-			if ((mScrollView.ContentOffset.X < 0) || (mScrollView.ContentOffset.X > mScrollView.ContentSize.Width - mScrollView.Bounds.Width + 2)) {
+			if ((_ScrollView.ContentOffset.X < 0) || (_ScrollView.ContentOffset.X > _ScrollView.ContentSize.Width - _ScrollView.Bounds.Width + 2)) {
 				#if DEBUG
 				WriteMessageToDebugLog("ScrollViewScrolled", "2");
 				#endif
 				return;
 			}
 			// If the first visible thumb number isn't changed - exit
-			int newThumbNumber = GetThumbNumberByX(mScrollView.ContentOffset.X);
+			int newThumbNumber = GetThumbNumberByX(_ScrollView.ContentOffset.X);
 			#if DEBUG
-			WriteMessageToDebugLog("ScrollViewScrolled", string.Format("mFirstVisibleThumbNumber={0}, newThumbNumber={1}", mFirstVisibleThumbNumber, newThumbNumber));
+			WriteMessageToDebugLog("ScrollViewScrolled", string.Format("mFirstVisibleThumbNumber={0}, newThumbNumber={1}", _FirstVisibleThumbNumber, newThumbNumber));
 			#endif
 			if (newThumbNumber == -1) {
 				return;
 			}
-			if (mFirstVisibleThumbNumber == newThumbNumber) {
+			if (_FirstVisibleThumbNumber == newThumbNumber) {
 				return;
 			}			
 			
 			// Store scroll direction, current offset and first visible thumb number
-			mScrollDirection = (newThumbNumber < mFirstVisibleThumbNumber) ? -1 : 1;
-			mCurrentContentOffsetX = mScrollView.ContentOffset.X;
-			mFirstVisibleThumbNumber = newThumbNumber;
+			_ScrollDirection = (newThumbNumber < _FirstVisibleThumbNumber) ? -1 : 1;
+			_CurrentContentOffsetX = _ScrollView.ContentOffset.X;
+			_FirstVisibleThumbNumber = newThumbNumber;
 			
 			// Create thumbs for displayed rect
 			CreateThumbs();
-		}		
-			
+		}				
 		#endregion
 				
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Returns thumb number by X 
 		/// </summary>
@@ -222,7 +223,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>Thumb number</returns>
 		private int GetThumbNumberByX(float x)
 		{
-			if ((x < 0) || (x > mScrollView.ContentSize.Width - ThumbPadding)) {
+			if ((x < 0) || (x > _ScrollView.ContentSize.Width - ThumbPadding)) {
 				return -1;
 			}
 			int retValue = (int)(x / (float)(OptionsManager.Instance.Options.ThumbSize + ThumbPadding)) + 1;
@@ -253,7 +254,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void CreateThumbs()
 		{
 			// Check existing thumbs in visible rectangle, create thumbs if needed
-			for (int i = mFirstVisibleThumbNumber; i <= mFirstVisibleThumbNumber + mMaxVisibleThumbsCount; i++) {
+			for (int i = _FirstVisibleThumbNumber; i <= _FirstVisibleThumbNumber + _MaxVisibleThumbsCount; i++) {
 				ThumbWithPageNumberView thumb = CreateThumbForPageIfNotExists(i);
 				#if DEBUG
 				if (thumb != null) {
@@ -277,7 +278,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 			
 			// Checks thumb existing 
-			foreach (var thumbView in mThumbViews) {
+			foreach (var thumbView in _ThumbViews) {
 				if (thumbView.PageNumber == pageNumber) {
 					return thumbView;
 				}
@@ -287,33 +288,33 @@ namespace mTouchPDFReader.Library.Views.Core
 			RectangleF viewRect = GetThumbFrameByPage(pageNumber);
 			var newThumbView = new ThumbWithPageNumberView(viewRect, pageNumber, ThumbSelected);
 			if (pageNumber == PDFDocument.CurrentPageNumber) {
-				mCurrentThumbView = newThumbView;
+				_CurrentThumbView = newThumbView;
 				newThumbView.SetAsSelected();
 			}
 			// Insert view to first or last position of the list (according direction)
-			mScrollView.AddSubview(newThumbView);
-			if (mScrollDirection > 0) {
-				mThumbViews.Add(newThumbView);
+			_ScrollView.AddSubview(newThumbView);
+			if (_ScrollDirection > 0) {
+				_ThumbViews.Add(newThumbView);
 			} else {
-				mThumbViews.Insert(0, newThumbView);
+				_ThumbViews.Insert(0, newThumbView);
 			}
 			#if DEBUG
 			WriteMessageToDebugLog("CreateThumb", string.Format("page={0}, viewRect={1}", pageNumber, viewRect));
 			#endif
 			
 			// Pack thumbs size to ThumbsBufferSize (only one extra item can be created - remove it)
-			if (mThumbViews.Count > OptionsManager.Instance.Options.ThumbsBufferSize) {
+			if (_ThumbViews.Count > OptionsManager.Instance.Options.ThumbsBufferSize) {
 				// Remove view from first or last position of the list (according direction)
-				if (mScrollDirection > 0) {
-					mThumbViews[0].RemoveFromSuperview();
-					mThumbViews.RemoveAt(0);
+				if (_ScrollDirection > 0) {
+					_ThumbViews [0].RemoveFromSuperview();
+					_ThumbViews.RemoveAt(0);
 				} else {
-					mThumbViews[mThumbViews.Count - 1].RemoveFromSuperview();
-					mThumbViews.RemoveAt(mThumbViews.Count - 1);
+					_ThumbViews [_ThumbViews.Count - 1].RemoveFromSuperview();
+					_ThumbViews.RemoveAt(_ThumbViews.Count - 1);
 				}
 			}
 			#if DEBUG
-			WriteMessageToDebugLog("CreateThumb", string.Format("currentBufferSize={0}", mThumbViews.Count));
+			WriteMessageToDebugLog("CreateThumb", string.Format("currentBufferSize={0}", _ThumbViews.Count));
 			#endif
 			return newThumbView;
 		}
@@ -324,8 +325,8 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void UpdateScrollViewContentSize()
 		{
 			float contentWidth = (ThumbPadding + OptionsManager.Instance.Options.ThumbSize) * PDFDocument.PageCount + ThumbPadding;
-			float contentHeight = mScrollView.Frame.Size.Height;
-			mScrollView.ContentSize = new SizeF(contentWidth, contentHeight);
+			float contentHeight = _ScrollView.Frame.Size.Height;
+			_ScrollView.ContentSize = new SizeF(contentWidth, contentHeight);
 		}
 
 		/// <summary>
@@ -342,44 +343,44 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void CalcParameters()
 		{
-			mInitializing = true;
+			_Initializing = true;
 			
 			// Calc maximum visible thumbs count 
-			mMaxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)OptionsManager.Instance.Options.ThumbSize);
-			if (mMaxVisibleThumbsCount > PDFDocument.PageCount) {
-				mMaxVisibleThumbsCount = PDFDocument.PageCount;
+			_MaxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)OptionsManager.Instance.Options.ThumbSize);
+			if (_MaxVisibleThumbsCount > PDFDocument.PageCount) {
+				_MaxVisibleThumbsCount = PDFDocument.PageCount;
 			}
 			
 			// Calc first visible thumb
-			if (mMaxVisibleThumbsCount == PDFDocument.PageCount) {
-				mFirstVisibleThumbNumber = 1;
+			if (_MaxVisibleThumbsCount == PDFDocument.PageCount) {
+				_FirstVisibleThumbNumber = 1;
 			} else {
-				int maxThumb = PDFDocument.CurrentPageNumber + mMaxVisibleThumbsCount - 1;
+				int maxThumb = PDFDocument.CurrentPageNumber + _MaxVisibleThumbsCount - 1;
 				if (maxThumb <= PDFDocument.PageCount) {
-					mFirstVisibleThumbNumber = PDFDocument.CurrentPageNumber;
+					_FirstVisibleThumbNumber = PDFDocument.CurrentPageNumber;
 				} else {
-					mFirstVisibleThumbNumber = PDFDocument.PageCount - mMaxVisibleThumbsCount + 2;
+					_FirstVisibleThumbNumber = PDFDocument.PageCount - _MaxVisibleThumbsCount + 2;
 				}
 			}
 			#if DEBUG
-			WriteMessageToDebugLog("CalcParameters", string.Format("mVisibleThumbsMaxCount={0}, mFirstVisibleThumbNumber={1}", mMaxVisibleThumbsCount, mFirstVisibleThumbNumber));
+			WriteMessageToDebugLog("CalcParameters", string.Format("mVisibleThumbsMaxCount={0}, mFirstVisibleThumbNumber={1}", _MaxVisibleThumbsCount, _FirstVisibleThumbNumber));
 			#endif
 			
 			// Set default scroll direction equal as 1
-			mScrollDirection = 1;
+			_ScrollDirection = 1;
 			
 			// Set scrollview content offset on the first displayed thumb
-			RectangleF viewRect = GetThumbFrameByPage(mFirstVisibleThumbNumber);
-			mScrollView.ContentOffset = new PointF(viewRect.X - ThumbPadding , mScrollView.ContentOffset.Y);
-			mCurrentContentOffsetX = mScrollView.ContentOffset.X;
+			RectangleF viewRect = GetThumbFrameByPage(_FirstVisibleThumbNumber);
+			_ScrollView.ContentOffset = new PointF(viewRect.X - ThumbPadding, _ScrollView.ContentOffset.Y);
+			_CurrentContentOffsetX = _ScrollView.ContentOffset.X;
 			#if DEBUG
-			WriteMessageToDebugLog("CalcParameters", string.Format("mScrollView.ContentOffset.X={0}", mScrollView.ContentOffset.X));
+			WriteMessageToDebugLog("CalcParameters", string.Format("mScrollView.ContentOffset.X={0}", _ScrollView.ContentOffset.X));
 			#endif
 			
 			// Create thumbs for displayed rect
 			CreateThumbs();
 			
-			mInitializing = false;
+			_Initializing = false;
 		}
 				
 		/// <summary>
@@ -388,19 +389,18 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <param name="thumbView">Clicked thumb</param>
 		private void ThumbSelected(ThumbWithPageNumberView thumbView)
 		{
-			if (thumbView != mCurrentThumbView) {
+			if (thumbView != _CurrentThumbView) {
 				// Unselect old thumb
-				if (mCurrentThumbView != null) {
-					mCurrentThumbView.SetAsUnselected();
+				if (_CurrentThumbView != null) {
+					_CurrentThumbView.SetAsUnselected();
 				}
 				// Select and store current thumb
-				mCurrentThumbView = thumbView;
-				mCurrentThumbView.SetAsSelected();
+				_CurrentThumbView = thumbView;
+				_CurrentThumbView.SetAsSelected();
 				// Open selected page
-				mOpenPageCallback(mCurrentThumbView.PageNumber);
+				_OpenPageCallback(_CurrentThumbView.PageNumber);
 			}
-		}		
-		
+		}			
 		#endregion
 	}
 }

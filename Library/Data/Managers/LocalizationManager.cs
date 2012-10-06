@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// MyObjectsCreator.cs (DObjects activator)
+// LocalizationManager.cs (Localization manager)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,32 +22,20 @@
 //
 
 using System;
-using mTouchPDFReader.Library.Data;
-using mTouchPDFReader.Library.Data.Managers;
+using MonoTouch.Foundation;
 
-namespace mTouchPDFReader.Demo.DataObjects
+namespace mTouchPDFReader.Library.Data.Managers
 {
-	public class MyObjectsActivator : ObjectsActivator
+	public static class LocalizationManager
 	{
-		#region Logic			
 		/// <summary>
-		/// Returns DocumentNoteManager instance
+		/// Gets the translated string by the <see cref="key"/>.
 		/// </summary>
-		/// <returns></returns>
-		protected override DocumentNoteManager CreateDocumentNoteManager()
+		/// <param name='key'>The key.</param>
+		public static string t(this string key)
 		{
-			return new MyDocumentNoteManager();
-		}
-		
-		/// <summary>
-		/// Returns DocumentBookmarkManager instance
-		/// </summary>
-		/// <returns></returns>
-		protected override DocumentBookmarkManager CreateDocumentBookmarkManager()
-		{
-			return new MyDocumentBookmarkManager();
+			return NSBundle.MainBundle.LocalizedString(key, "", "");
 		}		
-		#endregion
 	}
 }
 

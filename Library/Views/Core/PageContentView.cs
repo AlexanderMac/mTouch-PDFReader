@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Page content View 
+// PageContentView.cs (Page content View )
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Text;
@@ -20,10 +33,9 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class PageContentView : UIView
 	{			
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
-		/// Instruct that needed a CAGradientLayer (not the default CALayer) for the Layer property 
+		/// Gets the layer class.
 		/// </summary>
 		[Export("layerClass")]
 		public static Class LayerClass()
@@ -32,28 +44,26 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Page number displayed in view
+		/// Gets or sets the opened page number.
 		/// </summary>
-		private int mPageNumber;
 		public int PageNumber {
 			get { 
-				return mPageNumber; 
+				return _PageNumber; 
 			}
 			set {
-				mPageNumber = value;
+				_PageNumber = value;
 			}
-		}
-		
+		}	
+		private int _PageNumber;
 		#endregion
 		
-		#region UIView methods
-		
+		#region UIView methods		
 		/// <summary>
-		/// Work constructor
+		/// Working.
 		/// </summary>
 		public PageContentView(RectangleF frame, int pageNumber) : base(frame)
 		{
-			mPageNumber = pageNumber;
+			_PageNumber = pageNumber;
 			AutosizesSubviews = false;
 			UserInteractionEnabled = false;
 			ClearsContextBeforeDrawing = false;
@@ -64,10 +74,10 @@ namespace mTouchPDFReader.Library.Views.Core
 		}		
 		
 		/// <summary>
-		/// Gets view size to contain page 
+		/// Gets the view size for the opened PDF page.
 		/// </summary>
-		/// <param name="pageNumber">Page number</param>
-		/// <returns>Page rect/returns>
+		/// <param name="pageNumber">The page number,</param>
+		/// <returns>The page view rect.</returns>
 		public static RectangleF GetPageViewSize(int pageNumber)
 		{
 			RectangleF pageRect = RectangleF.Empty;
@@ -114,7 +124,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Draws the document page
+		/// Draws the page.
 		/// </summary>		
 		private void Draw(CGContext context)
 		{
@@ -124,7 +134,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Draw page
 			context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
-			using (CGPDFPage pdfPage = PDFDocument.GetPage(mPageNumber)) {
+			using (CGPDFPage pdfPage = PDFDocument.GetPage(_PageNumber)) {
 				context.TranslateCTM(0, Bounds.Height);
 				context.ScaleCTM(1.0f, -1.0f);
 				context.ConcatCTM(pdfPage.GetDrawingTransform(CGPDFBox.Crop, Bounds, 0, true));
@@ -132,8 +142,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				context.InterpolationQuality = CGInterpolationQuality.Default;
 				context.DrawPDFPage(pdfPage);
 			}
-		}		
-		
+		}			
 		#endregion
 	}
 }

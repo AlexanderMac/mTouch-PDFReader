@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader demo
-// Simple document bookmarks manager
+// MyDocumentBookmarkManager.cs (Simple document bookmarks manager)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -18,23 +31,20 @@ namespace mTouchPDFReader.Demo.DataObjects
 {
 	public class MyDocumentBookmarkManager : DocumentBookmarkManager
 	{
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
-		/// List of the all document bookmarks
+		/// The document bookmarks list.
 		/// </summary>
-		private static List<DocumentBookmark> mAllBookmarks;
-		
+		private static List<DocumentBookmark> _AllBookmarks;		
 		#endregion
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Static constructor
 		/// </summary>
 		static MyDocumentBookmarkManager()
 		{
-			mAllBookmarks = new List<DocumentBookmark>();
+			_AllBookmarks = new List<DocumentBookmark>();
 		}
 		
 		/// <summary>
@@ -43,7 +53,7 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <returns>New bookmark id</returns>
 		protected override int GetNewId()
 		{
-			return mAllBookmarks.Count + 1;
+			return _AllBookmarks.Count + 1;
 		}
 
 		/// <summary>
@@ -53,7 +63,7 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <returns>Bookmarks list</returns>
 		public override List<DocumentBookmark> LoadBookmarks(int docId)
 		{
-			var retValue = mAllBookmarks.Where(d => d.DocId == docId).ToList();
+			var retValue = _AllBookmarks.Where(d => d.DocId == docId).ToList();
 			return retValue;
 		}
 		
@@ -63,9 +73,9 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <param name="bookmark">Bookmark</param>
 		public override void SaveBookmark(DocumentBookmark bookmark)
 		{
-			if (!mAllBookmarks.Contains(bookmark)) {
+			if (!_AllBookmarks.Contains(bookmark)) {
 				bookmark.Id = GetNewId();
-				mAllBookmarks.Add(bookmark);
+				_AllBookmarks.Add(bookmark);
 			}
 		}	
 		
@@ -75,12 +85,11 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <param name="bookmarkId">Bookmark id</param>
 		public override void DeleteBookmark(int bookmarkId)
 		{
-			var bookmark = mAllBookmarks.First(d => d.Id == bookmarkId);
+			var bookmark = _AllBookmarks.First(d => d.Id == bookmarkId);
 			if (bookmark != null) {
-				mAllBookmarks.Remove(bookmark);
+				_AllBookmarks.Remove(bookmark);
 			}
-		}
-		
+		}		
 		#endregion
 	}
 }

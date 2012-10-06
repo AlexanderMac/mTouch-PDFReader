@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Options table view controller
+// OptionsTableViewController.cs (Options table view controller)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -21,41 +34,35 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class OptionsTableViewController : UITableViewController
 	{
-		#region Constants
-		
+		#region Constants		
 		private const int DefaultCellWidth = 600;
-		
-		private const int DefaultCellHeight = 50;
-		
+		private const int DefaultCellHeight = 50;		
 		#endregion
 		
-		#region Fields
-		
+		#region Fields		
 		// Page turning
-		private UITableViewCell mPageTurningTypeCell;
-        // Visibility
-        private UITableViewCell mToolbarVisibilityCell; 
-        private UITableViewCell mBottombarVisibilityCell; 
-        private UITableViewCell mPageNumberVisibilityCell; 
-        private UITableViewCell mNoteBtnVisibilityCell; 
-        private UITableViewCell mBookmarksBtnVisibilityCell;
-        private UITableViewCell mThumbsBtnVisibilityCell; 
-        // Colors
-        private UITableViewCell mBackgroundColorCell; 
-        // Zoom
-		private UITableViewCell mZoomScaleLevelsCell;
-		private UITableViewCell mZoomByDoubleTouchCell;
+		private UITableViewCell _PageTurningTypeCell;
+		// Visibility
+		private UITableViewCell _ToolbarVisibilityCell;
+		private UITableViewCell _BottombarVisibilityCell;
+		private UITableViewCell _PageNumberVisibilityCell;
+		private UITableViewCell _NoteBtnVisibilityCell;
+		private UITableViewCell _BookmarksBtnVisibilityCell;
+		private UITableViewCell _ThumbsBtnVisibilityCell; 
+		// Colors
+		private UITableViewCell _BackgroundColorCell; 
+		// Zoom
+		private UITableViewCell _ZoomScaleLevelsCell;
+		private UITableViewCell _ZoomByDoubleTouchCell;
 		// Thumbs
-        private UITableViewCell mThumbsBufferSizeCell; 
-        private UITableViewCell mThumbSizeCell;
-        // Library info
-        private UITableViewCell mLibraryReleaseDateCell;
-        private UITableViewCell mLibraryVersionCell;
-		
+		private UITableViewCell _ThumbsBufferSizeCell;
+		private UITableViewCell _ThumbSizeCell;
+		// Library info
+		private UITableViewCell _LibraryReleaseDateCell;
+		private UITableViewCell _LibraryVersionCell;		
 		#endregion
 		
-		#region Constructors
-		
+		#region Constructors		
 		public OptionsTableViewController(IntPtr handle) : base(handle)
 		{
 			Initialize();
@@ -80,34 +87,34 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// <summary>
 		/// Calls when view has loaded
 		/// </summary>
-        public override void ViewDidLoad()
-        {
-        	base.ViewDidLoad();
+		public override void ViewDidLoad()
+		{
+			base.ViewDidLoad();
    
-        	// Page turning type
-        	mPageTurningTypeCell = CreateTurningTypeCell();
-        	// Visibility
-        	mToolbarVisibilityCell = CreateToolbarVisibilityCell();
-        	mBottombarVisibilityCell = CreateBottombarVisibilityCell();
-        	mPageNumberVisibilityCell = CreatePageNumberVisibilityCell();
-        	mNoteBtnVisibilityCell = CreateNoteBtnVisibilityCell();
-        	mBookmarksBtnVisibilityCell = CreateBookmarksBtnVisibilityCell();
-        	mThumbsBtnVisibilityCell = CreateThumbsBtnVisibilityCell();
-        	// Colors
-        	mBackgroundColorCell = CreateBackgroundColorCell();
-        	// Zoom
-        	mZoomScaleLevelsCell = CreateZoomScaleLevelsCell();
-        	mZoomByDoubleTouchCell = CreatemZoomByDoubleTouchCell();
-        	// Thumbs
-        	mThumbsBufferSizeCell = CreateThumbsBufferSizeCell();
-        	mThumbSizeCell = CreateThumbSizeCell();
-        	// Library info
-        	mLibraryReleaseDateCell = CreateLibraryReleaseDateCell();
-        	mLibraryVersionCell = CreateLibraryVersionCell();
+			// Page turning type
+			_PageTurningTypeCell = CreateTurningTypeCell();
+			// Visibility
+			_ToolbarVisibilityCell = CreateToolbarVisibilityCell();
+			_BottombarVisibilityCell = CreateBottombarVisibilityCell();
+			_PageNumberVisibilityCell = CreatePageNumberVisibilityCell();
+			_NoteBtnVisibilityCell = CreateNoteBtnVisibilityCell();
+			_BookmarksBtnVisibilityCell = CreateBookmarksBtnVisibilityCell();
+			_ThumbsBtnVisibilityCell = CreateThumbsBtnVisibilityCell();
+			// Colors
+			_BackgroundColorCell = CreateBackgroundColorCell();
+			// Zoom
+			_ZoomScaleLevelsCell = CreateZoomScaleLevelsCell();
+			_ZoomByDoubleTouchCell = CreatemZoomByDoubleTouchCell();
+			// Thumbs
+			_ThumbsBufferSizeCell = CreateThumbsBufferSizeCell();
+			_ThumbSizeCell = CreateThumbSizeCell();
+			// Library info
+			_LibraryReleaseDateCell = CreateLibraryReleaseDateCell();
+			_LibraryVersionCell = CreateLibraryVersionCell();
 			
 			TableView = new UITableView(View.Bounds, UITableViewStyle.Grouped);
 			TableView.Source = new DataSource(this);        	
-        }
+		}
 		
 		/// <summary>
 		/// Called when permission is shought to rotate
@@ -117,8 +124,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return true;
 		}
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Creates table cell 
 		/// </summary>
@@ -175,7 +181,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			var seg = new UISegmentedControl(new RectangleF(DefaultCellWidth - width - 60, 10, width, 30));
 			seg.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
 			for (int i = 0; i < values.Length; i++) {
-				seg.InsertSegment(values[i], i, false);
+				seg.InsertSegment(values [i], i, false);
 			}
 			return seg;
 		}
@@ -219,9 +225,9 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = CreateCell("PageTurningTypeCell");
 			var label = CreateTitleLabelControl("Type".t());
 			var seg = CreateSegmentControl(new string[] { "Horz.".t(),	"Vert.".t() }, 150);
-			seg.SelectedSegment = (int)OptionsManager.Instance.Options.pPageTurningType;
+			seg.SelectedSegment = (int)OptionsManager.Instance.Options.PageTurningType;
 			seg.ValueChanged += delegate {
-				OptionsManager.Instance.Options.pPageTurningType = (PageTurningType)seg.SelectedSegment;
+				OptionsManager.Instance.Options.PageTurningType = (PageTurningTypes)seg.SelectedSegment;
 				OptionsManager.Instance.Save();
 			};
 			cell.AddSubview(label);
@@ -267,7 +273,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates page number visibility cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -286,7 +292,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates note button visibility cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -305,7 +311,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates bookmarks button visibility cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -324,7 +330,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates thumbs button visibility cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -343,7 +349,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates background color cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -393,7 +399,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates thumbs buffer size cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -431,7 +437,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates library release date cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -445,7 +451,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-        /// <summary>
+		/// <summary>
 		/// Creates library version cell 
 		/// </summary>
 		/// <returns>Table cell</returns>
@@ -457,8 +463,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			cell.AddSubview(label);
 			cell.AddSubview(labelInfo);
 			return cell;
-		}
-		
+		}		
 		#endregion
 		
 		/// <summary>
@@ -467,22 +472,20 @@ namespace mTouchPDFReader.Library.Views.Management
 		class DataSource : UITableViewSource
 		{
 			private const int SectionsCount = 6;
-			
-			private readonly int [] RowsInSections = new int[] { 1, 6, 1, 2, 2, 2 }; 
-			
+			private readonly int[] RowsInSections = new int[] { 1, 6, 1, 2, 2, 2 };
 			private readonly string[] SectionTitles = new string[] { "Turning".t(), "Visibility".t(), "Color".t(), "Scale".t(), "Thumbs".t(), "Library information".t() };
 			
 			/// <summary>
 			/// Parent table controller
 			/// </summary>
-			private OptionsTableViewController mController;
+			private OptionsTableViewController _Controller;
 
 			/// <summary>
 			/// Work constructor
 			/// </summary>
 			public DataSource(OptionsTableViewController controller)
 			{
-				mController = controller;
+				_Controller = controller;
 			}
 		
 			/// <summary>
@@ -498,7 +501,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			public override int RowsInSection(UITableView tableview, int section)
 			{
-				return RowsInSections[section];
+				return RowsInSections [section];
 			}
 			
 			/// <summary>
@@ -506,7 +509,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			public override string TitleForHeader(UITableView tableView, int section)
 			{
-				return SectionTitles[section];
+				return SectionTitles [section];
 			}
 
 			/// <summary>
@@ -514,68 +517,53 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			public override UITableViewCell GetCell(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
-				switch (indexPath.Section) 
-				{
+				switch (indexPath.Section) {
 					case 0:
-						return mController.mPageTurningTypeCell;
+						return _Controller._PageTurningTypeCell;
 					case 1:
 						switch (indexPath.Row) {
 							case 0:
-								return mController.mToolbarVisibilityCell;
+								return _Controller._ToolbarVisibilityCell;
 							case 1:
-								return mController.mBottombarVisibilityCell;
+								return _Controller._BottombarVisibilityCell;
 							case 2:
-								return mController.mPageNumberVisibilityCell;
+								return _Controller._PageNumberVisibilityCell;
 							case 3:
-								return mController.mNoteBtnVisibilityCell;
+								return _Controller._NoteBtnVisibilityCell;
 							case 4:
-								return mController.mBookmarksBtnVisibilityCell;
+								return _Controller._BookmarksBtnVisibilityCell;
 							case 5:
-								return mController.mThumbsBtnVisibilityCell;
+								return _Controller._ThumbsBtnVisibilityCell;
 						}
 						break;
 					case 2:
-						return mController.mBackgroundColorCell;
+						return _Controller._BackgroundColorCell;
 					case 3:
 						switch (indexPath.Row) {
 							case 0:
-								return mController.mZoomScaleLevelsCell;
+								return _Controller._ZoomScaleLevelsCell;
 							case 1:
-								return mController.mZoomByDoubleTouchCell;
+								return _Controller._ZoomByDoubleTouchCell;
 						}
 						break;
 					case 4:
 						switch (indexPath.Row) {
 							case 0:
-								return mController.mThumbsBufferSizeCell;
+								return _Controller._ThumbsBufferSizeCell;
 							case 1:
-								return mController.mThumbSizeCell;
+								return _Controller._ThumbSizeCell;
 						}
 						break;
 					case 5:
 						switch (indexPath.Row) {
 							case 0:
-								return mController.mLibraryReleaseDateCell;
+								return _Controller._LibraryReleaseDateCell;
 							case 1:
-								return mController.mLibraryVersionCell;
+								return _Controller._LibraryVersionCell;
 						}
 						break;
 				}
 				return null;
-			}
-
-			/// <summary>
-			/// Selects theme when user clicked by row
-			/// </summary>
-			public override void RowSelected(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
-			{
-			}
-
-			/// <summary>
-			/// Selectes theme when user clicked by accessory button
-			/// </summary>
-			public override void AccessoryButtonTapped(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
-			{
 			}
 		}
 	}

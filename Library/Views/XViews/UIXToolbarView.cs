@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Extended gradient toolbar with shadow
+// UIXToolbarView.cs (Extended gradient toolbar with shadow)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Drawing;
@@ -18,15 +31,15 @@ using MonoTouch.UIKit;
 
 namespace mTouchPDFReader.Library.XViews
 {
-    public class UIXToolbarView : UIView
-    {	
+	public class UIXToolbarView : UIView
+	{	
 		/// <summary>
-		/// Width of the toolbar 
+		/// The width of the toolbar. 
 		/// </summary>
-		private int mToolbarWidth;
+		private int _ToolbarWidth;
 		
 		/// <summary>
-		/// Instruct that needed a CAGradientLayer (not the default CALayer) for the Layer property 
+		/// Gets the layer class.
 		/// </summary>
 		[Export("layerClass")]
 		public static Class LayerClass()
@@ -35,42 +48,38 @@ namespace mTouchPDFReader.Library.XViews
 		}
 		
 		/// <summary>
-		/// Work constructor
+		/// Working.
 		/// </summary>
-		/// <param name="frame">Toolbar frame</param>
-		/// <param name="fromWhite">From white index</param>
-		/// <param name="toWhite">To white index</param>
-		/// <param name="alpha">Alpha channel</param>
-        public UIXToolbarView(RectangleF frame, float fromWhite, float toWhite, float alpha) : base(frame)
-        {
-        	mToolbarWidth = -1;
-        	AutosizesSubviews = true;
-        	UserInteractionEnabled = true;
-        	ContentMode = UIViewContentMode.Redraw;
-        	AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-        	BackgroundColor = UIColor.Clear;
-        	CAGradientLayer layer = (CAGradientLayer)this.Layer;
-        	layer.Colors = new CGColor[] {
+		public UIXToolbarView(RectangleF frame, float fromWhite, float toWhite, float alpha) : base(frame)
+		{
+			_ToolbarWidth = -1;
+			AutosizesSubviews = true;
+			UserInteractionEnabled = true;
+			ContentMode = UIViewContentMode.Redraw;
+			AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			BackgroundColor = UIColor.Clear;
+			CAGradientLayer layer = (CAGradientLayer)this.Layer;
+			layer.Colors = new CGColor[] {
         		UIColor.FromWhiteAlpha(fromWhite, alpha).CGColor,
         		UIColor.FromWhiteAlpha(toWhite, alpha).CGColor
         	};
-        	layer.CornerRadius = 5;
-        	layer.ShadowOffset = new SizeF(2.0f, 2.0f);
-        	layer.ShadowRadius = 4.0f;
-        	layer.ShadowOpacity = 1.0f;
-        	layer.ShadowPath = UIBezierPath.FromRect(Bounds).CGPath;
-        }
+			layer.CornerRadius = 5;
+			layer.ShadowOffset = new SizeF(2.0f, 2.0f);
+			layer.ShadowRadius = 4.0f;
+			layer.ShadowOpacity = 1.0f;
+			layer.ShadowPath = UIBezierPath.FromRect(Bounds).CGPath;
+		}
 		
 		/// <summary>
-		/// Calls when view is drawing
+		/// Draws view.
 		/// </summary>
 		public override void Draw(RectangleF rect)
 		{
 			base.Draw(rect);
 			// Recalc size of the layer shadow, if the toolbar width was changed
-			if (mToolbarWidth != rect.Width) {
+			if (_ToolbarWidth != rect.Width) {
 				Layer.ShadowPath = UIBezierPath.FromRect(Bounds).CGPath;
 			}
-        }
-    }
+		}
+	}
 }

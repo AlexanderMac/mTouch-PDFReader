@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Extended View with popover showing support
+// UIViewControllerWithPopover.cs (Extended View with popover showing support)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Drawing;
@@ -18,25 +31,26 @@ namespace mTouchPDFReader.Library.XViews
 	public abstract class UIViewControllerWithPopover : UIViewController
 	{
 		/// <summary>
-		/// Callback action 
+		/// The callback action. 
 		/// </summary>
-		private Action<object> mCallbackAction;
 		protected Action<object> CallbackAction {
 			get {
-				return mCallbackAction;
+				return _CallbackAction;
 			}
 		}
+		private Action<object> _CallbackAction;
 		
 		/// <summary>
-		/// PopoverController 
+		/// The Popover controller.
 		/// </summary>
-		protected UIPopoverController mPopoverController;
 		public UIPopoverController PopoverController {
-			set { mPopoverController = value; }
+			set {
+				_PopoverController = value;
+			}
 		}
+		protected UIPopoverController _PopoverController;
 		
-		#region Constructors
-		
+		#region Constructors		
 		public UIViewControllerWithPopover(IntPtr handle) : base(handle)
 		{
 		}
@@ -49,9 +63,8 @@ namespace mTouchPDFReader.Library.XViews
 		public UIViewControllerWithPopover(string nibName, NSBundle bundle, Action<object> callbackAction) 
 			: base(nibName, bundle)
 		{
-			mCallbackAction = callbackAction;	
-		}
-		
+			_CallbackAction = callbackAction;	
+		}		
 		#endregion
 		
 		/// <summary>

@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Page content thumb View 
+// ThumbView.cs (Page content thumb View)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Drawing;
@@ -18,45 +31,42 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class ThumbView : UIView
 	{							
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
-		/// Page number displayed in thumb
+		/// Gets or sets the thumb page.
 		/// </summary>
-		private int mPageNumber;
 		public int PageNumber {
 			get { 
-				return mPageNumber; 
+				return _PageNumber; 
 			}
 			set {
-				if (value != mPageNumber) {
-					mPageNumber = value;
-					mImageView.Image = GetThumbImage(mThumbContentSize, mPageNumber);
+				if (value != _PageNumber) {
+					_PageNumber = value;
+					_ImageView.Image = GetThumbImage(_ThumbContentSize, _PageNumber);
 				}
 			}
 		}
+		private int _PageNumber;
 		
 		/// <summary>
-		/// Thumb content size
+		/// The thumb content size.
 		/// </summary>
-		private float mThumbContentSize;
+		private float _ThumbContentSize;
 		
 		/// <summary>
-		/// Thumb image view
+		/// The thumb image view.
 		/// </summary>
-		private UIImageView mImageView;
-		
+		private UIImageView _ImageView;		
 		#endregion
 		
-		#region UIView methods
-		
+		#region UIView methods		
 		/// <summary>
-		/// Work constructor
+		/// Working.
 		/// </summary>
 		public ThumbView(RectangleF frame, float thumbContentSize, int pageNumber) : base(frame)
 		{
-			mPageNumber = pageNumber;			
-			mThumbContentSize = thumbContentSize;
+			_PageNumber = pageNumber;			
+			_ThumbContentSize = thumbContentSize;
 			
 			AutosizesSubviews = false;
 			UserInteractionEnabled = false;
@@ -65,22 +75,20 @@ namespace mTouchPDFReader.Library.Views.Core
 			BackgroundColor = UIColor.Clear;
 			
 			// Create and init thumb image view
-			mImageView = new UIImageView(Bounds);
-			mImageView.AutosizesSubviews = false;
-			mImageView.UserInteractionEnabled = false;
-			mImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-			mImageView.AutoresizingMask = UIViewAutoresizing.None;
-			mImageView.BackgroundColor = UIColor.Clear;
-			mImageView.ClipsToBounds = true;
-			mImageView.Image = GetThumbImage(mThumbContentSize, mPageNumber);
+			_ImageView = new UIImageView(Bounds);
+			_ImageView.AutosizesSubviews = false;
+			_ImageView.UserInteractionEnabled = false;
+			_ImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+			_ImageView.AutoresizingMask = UIViewAutoresizing.None;
+			_ImageView.BackgroundColor = UIColor.Clear;
+			_ImageView.ClipsToBounds = true;
+			_ImageView.Image = GetThumbImage(_ThumbContentSize, _PageNumber);
 
-			AddSubview(mImageView);
-		}		
-		
+			AddSubview(_ImageView);
+		}				
 		#endregion
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Returns thumb image object for page 
 		/// </summary>
@@ -124,8 +132,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				}
 			}			
 			return UIImage.FromImage(pageImage);			
-		}
-		
+		}		
 		#endregion
 	}
 }

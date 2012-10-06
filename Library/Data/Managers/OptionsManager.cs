@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Options manager
+// OptionsManager.cs (Options manager)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Xml;
@@ -18,62 +31,57 @@ namespace mTouchPDFReader.Library.Data.Managers
 {
 	public class OptionsManager
 	{		
-		#region Constants
-		
+		#region Constants		
 		/// <summary>
 		/// Options file name 
 		/// </summary>
-		private const string OptionsFileName = "mTouchPDFReader.Options.xml";
-		
+		private const string OptionsFileName = "mTouchPDFReader.Options.xml";		
 		#endregion
 		
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
 		/// Single manager instance 
 		/// </summary>
-		private static OptionsManager mInstance;
 		public static OptionsManager Instance {
 			get {
-				return mInstance;
+				return _Instance;
 			}
 			internal set {
-				mInstance = value;
+				_Instance = value;
 			}
 		}
+		private static OptionsManager _Instance;
 				
 		/// <summary>
 		/// Options 
 		/// </summary>
-		private Options mOptions;
 		public Options Options {
 			get {
-				if (mOptions == null) {
-					mOptions = new Options();
+				if (_Options == null) {
+					_Options = new Options();
 					Load();
 				}
-				return mOptions;
+				return _Options;
 			}
 		}
+		private Options _Options;
 		
 		/// <summary>
 		/// Initialized flag 
 		/// </summary>
-		private bool mInitialized;
-		
+		private bool _Initialized;		
 		#endregion
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Loads options 
 		/// </summary>
 		public void Load()
 		{
-			if (mInitialized) {
+			if (_Initialized) {
 				return;
 			}
-			mInitialized = true;
+			_Initialized = true;
 			
 			var optionsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), OptionsFileName);
 			try {
@@ -81,53 +89,53 @@ namespace mTouchPDFReader.Library.Data.Managers
 				optionsXmlDoc.Load(optionsFullFileName);
 				object val = GetNodeValue(optionsXmlDoc, "/Options/PageTurningType", typeof(int));
 				if (val != null) {
-					mOptions.pPageTurningType = (PageTurningType)Convert.ToInt32(val);
+					_Options.PageTurningType = (PageTurningTypes)Convert.ToInt32(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", typeof(bool));
 				if (val != null) {
-					mOptions.ToolbarVisible = Convert.ToBoolean(val);
+					_Options.ToolbarVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/BottombarVisible", typeof(bool));
 				if (val != null) {
-					mOptions.BottombarVisible = Convert.ToBoolean(val);
+					_Options.BottombarVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", typeof(bool));
 				if (val != null) {
-					mOptions.PageNumberVisible = Convert.ToBoolean(val);
+					_Options.PageNumberVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/NoteBtnVisible", typeof(bool));
 				if (val != null) {
-					mOptions.NoteBtnVisible = Convert.ToBoolean(val);
+					_Options.NoteBtnVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/BookmarksBtnVisible", typeof(bool));
 				if (val != null) {
-					mOptions.BookmarksBtnVisible = Convert.ToBoolean(val);
+					_Options.BookmarksBtnVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", typeof(bool));
 				if (val != null) {
-					mOptions.ThumbsBtnVisible = Convert.ToBoolean(val);
+					_Options.ThumbsBtnVisible = Convert.ToBoolean(val);
 				}
 				/*
 				object val = GetNodeValue(optionsXmlDoc, "/Options/BackgroundColor", typeof(byte));
 				if (val != null) {
-					mOptions.BackgroundColor = DefaultBackgroundColor;
+					_Options.BackgroundColor = DefaultBackgroundColor;
 				}
 				*/			
 				val = GetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", typeof(bool));
 				if (val != null) {
-					mOptions.AllowZoomByDoubleTouch = Convert.ToBoolean(val);
+					_Options.AllowZoomByDoubleTouch = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", typeof(int));
 				if (val != null) {
-					mOptions.ZoomScaleLevels = Convert.ToInt32(val);	
+					_Options.ZoomScaleLevels = Convert.ToInt32(val);	
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ThumbsBufferSize", typeof(int));
 				if (val != null) {
-					mOptions.ThumbsBufferSize = Convert.ToInt32(val);
+					_Options.ThumbsBufferSize = Convert.ToInt32(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ThumbSize", typeof(int));
 				if (val != null) {
-					mOptions.ThumbSize = Convert.ToInt32(val);
+					_Options.ThumbSize = Convert.ToInt32(val);
 				}
 			} catch (Exception) {
 				// Nothing
@@ -139,41 +147,41 @@ namespace mTouchPDFReader.Library.Data.Managers
 		/// </summary>
 		public void Save()
 		{
-			if (!mInitialized) {
+			if (!_Initialized) {
 				return;
 			}
 			
 			var optionsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), OptionsFileName);
 			try {
 				string xmlRow = 
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +						
-"<Options>" + 
-"	<PageTurningType>" + (int)mOptions.pPageTurningType + "</PageTurningType>" +
-"	<ToolbarVisible>" + mOptions.ToolbarVisible + "</ToolbarVisible>" +
-"	<BottombarVisible>" + mOptions.BottombarVisible + "</BottombarVisible>" + 
-"	<PageNumberVisible>" + mOptions.PageNumberVisible + "</PageNumberVisible>" +
-"	<NoteBtnVisible>" + mOptions.NoteBtnVisible + "</NoteBtnVisible>" +
-"	<BookmarksBtnVisible>" + mOptions.BookmarksBtnVisible + "</BookmarksBtnVisible>" +
-"	<ThumbsBtnVisible>" + mOptions.ThumbsBtnVisible + "</ThumbsBtnVisible>" +
-"	<AllowZoomByDoubleTouch>" + mOptions.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
-"	<ZoomScaleLevels>" + mOptions.ZoomScaleLevels + "</ZoomScaleLevels>" +
-"	<ThumbsBufferSize>" + mOptions.ThumbsBufferSize + "</ThumbsBufferSize>" +
-"	<ThumbSize>" + mOptions.ThumbSize + "</ThumbSize>" +
-"</Options>";
+"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+					"<Options>" + 
+					"	<PageTurningType>" + (int)_Options.PageTurningType + "</PageTurningType>" +
+					"	<ToolbarVisible>" + _Options.ToolbarVisible + "</ToolbarVisible>" +
+					"	<BottombarVisible>" + _Options.BottombarVisible + "</BottombarVisible>" + 
+					"	<PageNumberVisible>" + _Options.PageNumberVisible + "</PageNumberVisible>" +
+					"	<NoteBtnVisible>" + _Options.NoteBtnVisible + "</NoteBtnVisible>" +
+					"	<BookmarksBtnVisible>" + _Options.BookmarksBtnVisible + "</BookmarksBtnVisible>" +
+					"	<ThumbsBtnVisible>" + _Options.ThumbsBtnVisible + "</ThumbsBtnVisible>" +
+					"	<AllowZoomByDoubleTouch>" + _Options.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
+					"	<ZoomScaleLevels>" + _Options.ZoomScaleLevels + "</ZoomScaleLevels>" +
+					"	<ThumbsBufferSize>" + _Options.ThumbsBufferSize + "</ThumbsBufferSize>" +
+					"	<ThumbSize>" + _Options.ThumbSize + "</ThumbSize>" +
+					"</Options>";
 				
 				/*
-				SetNodeValue(optionsXmlDoc, "/Options/PageTurningType", mOptions.pPageTurningType);
-				SetNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", mOptions.ToolbarVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/StatusbarVisible", mOptions.StatusbarVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", mOptions.PageNumberVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/NoteBtnVisible", mOptions.NoteBtnVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/BookmarksBtnVisible", mOptions.BookmarksBtnVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", mOptions.ThumbsBtnVisible);				
-				//SetNodeValue(optionsXmlDoc, "/Options/BackgroundColor", mOptions.BackgroundColor);
-				SetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", mOptions.AllowZoomByDoubleTouch);
-				SetNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", mOptions.ZoomScaleLevels);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBufferSize", mOptions.ThumbsBufferSize);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbSize", mOptions.ThumbSize);
+				SetNodeValue(optionsXmlDoc, "/Options/PageTurningType", _Options.pPageTurningType);
+				SetNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", _Options.ToolbarVisible);
+				SetNodeValue(optionsXmlDoc, "/Options/StatusbarVisible", _Options.StatusbarVisible);
+				SetNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", _Options.PageNumberVisible);
+				SetNodeValue(optionsXmlDoc, "/Options/NoteBtnVisible", _Options.NoteBtnVisible);
+				SetNodeValue(optionsXmlDoc, "/Options/BookmarksBtnVisible", _Options.BookmarksBtnVisible);
+				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", _Options.ThumbsBtnVisible);				
+				//SetNodeValue(optionsXmlDoc, "/Options/BackgroundColor", _Options.BackgroundColor);
+				SetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", _Options.AllowZoomByDoubleTouch);
+				SetNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", _Options.ZoomScaleLevels);
+				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBufferSize", _Options.ThumbsBufferSize);
+				SetNodeValue(optionsXmlDoc, "/Options/ThumbSize", _Options.ThumbSize);
 				*/
 				var optionsXmlDoc = new XmlDocument();
 				optionsXmlDoc.LoadXml(xmlRow);

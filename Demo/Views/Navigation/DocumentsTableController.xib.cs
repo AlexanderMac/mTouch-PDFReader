@@ -1,11 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader demo
+// DocumentsTableController.cs
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -69,14 +83,14 @@ namespace mTouchPDFReader.Demo
 			/// <summary>
 			/// Parent table controller
 			/// </summary>
-			private DocumentsTableController mController;
+			private DocumentsTableController _Controller;
 
 			/// <summary>
 			/// Work constructor
 			/// </summary>
 			public DataSource(DocumentsTableController controller)
 			{
-				mController = controller;
+				_Controller = controller;
 			}
 
 			/// <summary>
@@ -85,8 +99,8 @@ namespace mTouchPDFReader.Demo
 			private void OpenDocument(int rowId)
 			{				
 				var docViewController = new DocumentViewController();
-				mController.NavigationController.PushViewController(docViewController, true);
-				docViewController.OpenDocument(PDFFile.PDFFiles[rowId].Id, PDFFile.PDFFiles[rowId].Name, PDFFile.PDFFiles[rowId].FilePath);
+				_Controller.NavigationController.PushViewController(docViewController, true);
+				docViewController.OpenDocument(PDFFile.PDFFiles [rowId].Id, PDFFile.PDFFiles [rowId].Name, PDFFile.PDFFiles [rowId].FilePath);
 			}
 
 			/// <summary>
@@ -107,8 +121,8 @@ namespace mTouchPDFReader.Demo
 				if (cell == null) {
 					cell = new UITableViewCell(UITableViewCellStyle.Subtitle, DefaultCellIdentifier);
 				}
-				cell.TextLabel.Text = PDFFile.PDFFiles[indexPath.Row].Name;
-				cell.DetailTextLabel.Text = string.Format("Size: {0:f} Mb", PDFFile.PDFFiles[indexPath.Row].FileSizeMb);
+				cell.TextLabel.Text = PDFFile.PDFFiles [indexPath.Row].Name;
+				cell.DetailTextLabel.Text = string.Format("Size: {0:f} Mb", PDFFile.PDFFiles [indexPath.Row].FileSizeMb);
 				cell.Accessory = UITableViewCellAccessory.DetailDisclosureButton;
 				return cell;
 			}

@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Bookmarks view controller
+// BookmarksViewController.cs (Bookmarks view controller)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -21,55 +34,54 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class BookmarksViewController : UIViewControllerWithPopover
 	{		
-		#region Fields
+		#region Fields		
+		/// <summary>
+		/// The opened document id. 
+		/// </summary>
+		private int _DocumentId;
 		
 		/// <summary>
-		/// Loaded document id 
+		/// The bookmarks list.
 		/// </summary>
-		private int mDocumentId;
-		
-		/// <summary>
-		/// Current document page
-		/// </summary>
-		private List<DocumentBookmark> mBookmarks;
+		private List<DocumentBookmark> _Bookmarks;
 
 		/// <summary>
-		/// Current document page
+		/// The opened document page number. 
 		/// </summary>
-		private int mCurrentPageNumber;
+		private int _CurrentPageNumber;
 		
 		/// <summary>
-		/// Bookmarks table view
+		/// The bookmarks table view.
 		/// </summary>
-		private UITableView mBookmarksTable;
+		private UITableView _BookmarksTable;
 		
 		/// <summary>
-		/// New bookmarks cell view
+		/// The new bookmarks cell view.
 		/// </summary>
-		private UITableViewCell mNewBookmarkCell;
+		private UITableViewCell _NewBookmarkCell;
 		
 		/// <summary>
-		/// New bookmark name text view
+		/// The new bookmark name text view.
 		/// </summary>
-		private UITextField mNewBookmarkNameTxt;
+		private UITextField _NewBookmarkNameTxt;
 		
 		/// <summary>
-		/// TableView edit mode
+		/// The tableView edit mode.
 		/// </summary>
-		private UITableViewCellEditingStyle mEditMode;
-		
+		private UITableViewCellEditingStyle _EditMode;		
 		#endregion
 
-		#region Constructors
-		
+		#region Constructors	
+		/// <summary>
+		/// Working.
+		/// </summary>
 		public BookmarksViewController(int docId, List<DocumentBookmark> bookmarks, int currentPageNumber, Action<object> callbackAction) : base(null, null, callbackAction)
 		{
-			mDocumentId = docId;
-			mBookmarks = bookmarks;
-			mCurrentPageNumber = currentPageNumber;
-			mEditMode = UITableViewCellEditingStyle.None;
+			_DocumentId = docId;
+			_Bookmarks = bookmarks;
+			_CurrentPageNumber = currentPageNumber;
+			_EditMode = UITableViewCellEditingStyle.None;
 		}
-
 		#endregion
 
 		/// <summary>
@@ -106,21 +118,21 @@ namespace mTouchPDFReader.Library.Views.Management
 			View.AddSubview(toolBar);
 			
 			// Create bookmarks table
-			mBookmarksTable = new UITableView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height), UITableViewStyle.Plain);
-			mBookmarksTable.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			mBookmarksTable.RowHeight = 55;
-			mBookmarksTable.Source = new DataSource(this);
-			View.AddSubview(mBookmarksTable);
+			_BookmarksTable = new UITableView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height), UITableViewStyle.Plain);
+			_BookmarksTable.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
+			_BookmarksTable.RowHeight = 55;
+			_BookmarksTable.Source = new DataSource(this);
+			View.AddSubview(_BookmarksTable);
 			
 			// Create bookmark cell and text field
-			mNewBookmarkCell = new UITableViewCell(UITableViewCellStyle.Default, null);
-			mNewBookmarkCell.AutoresizingMask = UIViewAutoresizing.FlexibleRightMargin;
-			mNewBookmarkCell.Frame = new RectangleF(0, 0, View.Bounds.Width, 55);
-			mNewBookmarkNameTxt = new UITextField(new RectangleF(40, 12, View.Bounds.Width - 45, 31));
-			mNewBookmarkNameTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			mNewBookmarkNameTxt.BorderStyle = UITextBorderStyle.RoundedRect;
-			mNewBookmarkNameTxt.Font = UIFont.SystemFontOfSize(16.0f);
-			mNewBookmarkCell.AddSubview(mNewBookmarkNameTxt);
+			_NewBookmarkCell = new UITableViewCell(UITableViewCellStyle.Default, null);
+			_NewBookmarkCell.AutoresizingMask = UIViewAutoresizing.FlexibleRightMargin;
+			_NewBookmarkCell.Frame = new RectangleF(0, 0, View.Bounds.Width, 55);
+			_NewBookmarkNameTxt = new UITextField(new RectangleF(40, 12, View.Bounds.Width - 45, 31));
+			_NewBookmarkNameTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			_NewBookmarkNameTxt.BorderStyle = UITextBorderStyle.RoundedRect;
+			_NewBookmarkNameTxt.Font = UIFont.SystemFontOfSize(16.0f);
+			_NewBookmarkCell.AddSubview(_NewBookmarkNameTxt);
 		}
 		
 		/// <summary>
@@ -148,20 +160,20 @@ namespace mTouchPDFReader.Library.Views.Management
 			bool editing;
 			switch (mode) {
 				case UITableViewCellEditingStyle.Insert:
-					mEditMode = UITableViewCellEditingStyle.Insert;
+					_EditMode = UITableViewCellEditingStyle.Insert;
 					editing = true;
 					break;
 				case UITableViewCellEditingStyle.Delete:
-					mEditMode = UITableViewCellEditingStyle.Delete;
+					_EditMode = UITableViewCellEditingStyle.Delete;
 					editing = true;
 					break;
 				default:
-					mEditMode = UITableViewCellEditingStyle.None;
+					_EditMode = UITableViewCellEditingStyle.None;
 					editing = false;
 					break;
 			}
-			mBookmarksTable.SetEditing(editing, true);
-			mBookmarksTable.ReloadData();
+			_BookmarksTable.SetEditing(editing, true);
+			_BookmarksTable.ReloadData();
 		}
 
 		/// <summary>
@@ -170,15 +182,14 @@ namespace mTouchPDFReader.Library.Views.Management
 		class DataSource : UITableViewSource
 		{
 			const string CellIdentifier = "Cell";
-
-			private BookmarksViewController mController;
+			private BookmarksViewController _Controller;
 
 			/// <summary>
 			/// Work constructor
 			/// </summary>
 			public DataSource(BookmarksViewController controller)
 			{
-				mController = controller;
+				_Controller = controller;
 			}
 
 			/// <summary>
@@ -186,7 +197,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			private int GetCorrectRowIndex(int rowIndex)
 			{
-				return (mController.mEditMode == UITableViewCellEditingStyle.Insert) ? rowIndex - 1 : rowIndex;
+				return (_Controller._EditMode == UITableViewCellEditingStyle.Insert) ? rowIndex - 1 : rowIndex;
 			}
 
 			/// <summary>
@@ -194,17 +205,17 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			private void AddNewRow(UITableView tableView, NSIndexPath indexPath)
 			{
-				string bookmakrName = string.IsNullOrEmpty(mController.mNewBookmarkNameTxt.Text) 
-					? string.Format("Bookmark {0}".t(), mController.mBookmarks.Count + 1)
-					: mController.mNewBookmarkNameTxt.Text;
+				string bookmakrName = string.IsNullOrEmpty(_Controller._NewBookmarkNameTxt.Text) 
+					? string.Format("Bookmark {0}".t(), _Controller._Bookmarks.Count + 1)
+					: _Controller._NewBookmarkNameTxt.Text;
 				tableView.BeginUpdates();
-				var newIndexPath = NSIndexPath.FromRowSection(indexPath.Row + mController.mBookmarks.Count + 1, 0);
-				var newBookmark = new DocumentBookmark(mController.mDocumentId, -1, bookmakrName, mController.mCurrentPageNumber);
+				var newIndexPath = NSIndexPath.FromRowSection(indexPath.Row + _Controller._Bookmarks.Count + 1, 0);
+				var newBookmark = new DocumentBookmark(_Controller._DocumentId, -1, bookmakrName, _Controller._CurrentPageNumber);
 				DocumentBookmarkManager.Instance.SaveBookmark(newBookmark);
-				mController.mBookmarks.Add(newBookmark);
-				mController.mBookmarksTable.InsertRows(new NSIndexPath[] { newIndexPath }, UITableViewRowAnimation.Fade);
+				_Controller._Bookmarks.Add(newBookmark);
+				_Controller._BookmarksTable.InsertRows(new NSIndexPath[] { newIndexPath }, UITableViewRowAnimation.Fade);
 				tableView.EndUpdates();
-				mController.SetEditingMode(UITableViewCellEditingStyle.None);
+				_Controller.SetEditingMode(UITableViewCellEditingStyle.None);
 			}
 
 			/// <summary>
@@ -212,10 +223,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			private void DeleteRow(UITableView tableView, NSIndexPath indexPath)
 			{
-				DocumentBookmarkManager.Instance.DeleteBookmark(mController.mBookmarks[GetCorrectRowIndex(indexPath.Row)].Id);
-				mController.mBookmarks.RemoveAt(indexPath.Row);
+				DocumentBookmarkManager.Instance.DeleteBookmark(_Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].Id);
+				_Controller._Bookmarks.RemoveAt(indexPath.Row);
 				tableView.DeleteRows(new NSIndexPath[] { indexPath }, UITableViewRowAnimation.Fade);
-				mController.SetEditingMode(UITableViewCellEditingStyle.None);
+				_Controller.SetEditingMode(UITableViewCellEditingStyle.None);
 			}
 
 			/// <summary>
@@ -223,7 +234,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			public override int RowsInSection(UITableView tableview, int section)
 			{
-				return (mController.mEditMode == UITableViewCellEditingStyle.Insert) ? mController.mBookmarks.Count + 1 : mController.mBookmarks.Count;
+				return (_Controller._EditMode == UITableViewCellEditingStyle.Insert) ? _Controller._Bookmarks.Count + 1 : _Controller._Bookmarks.Count;
 			}
 
 			/// <summary>
@@ -232,9 +243,9 @@ namespace mTouchPDFReader.Library.Views.Management
 			public override UITableViewCellEditingStyle EditingStyleForRow(UITableView tableView, NSIndexPath indexPath)
 			{
 				// Insert button alwasy should be at the top 
-				if ((mController.mEditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
+				if ((_Controller._EditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
 					return UITableViewCellEditingStyle.Insert;
-				} else if (mController.mEditMode == UITableViewCellEditingStyle.Delete) {
+				} else if (_Controller._EditMode == UITableViewCellEditingStyle.Delete) {
 					return UITableViewCellEditingStyle.Delete;
 				} else {
 					return UITableViewCellEditingStyle.None;
@@ -247,7 +258,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
 			{
 				if (editingStyle == UITableViewCellEditingStyle.Insert) {
-					mController.mNewBookmarkNameTxt.ResignFirstResponder();
+					_Controller._NewBookmarkNameTxt.ResignFirstResponder();
 					AddNewRow(tableView, indexPath);
 				} else if (editingStyle == UITableViewCellEditingStyle.Delete) {
 					DeleteRow(tableView, indexPath);
@@ -268,16 +279,16 @@ namespace mTouchPDFReader.Library.Views.Management
 			public override UITableViewCell GetCell(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
 				UITableViewCell cell;
-				if ((mController.mEditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
-					cell = mController.mNewBookmarkCell;
-					mController.mNewBookmarkNameTxt.Text = string.Format("Bookmark {0}".t(), mController.mBookmarks.Count + 1);
+				if ((_Controller._EditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
+					cell = _Controller._NewBookmarkCell;
+					_Controller._NewBookmarkNameTxt.Text = string.Format("Bookmark {0}".t(), _Controller._Bookmarks.Count + 1);
 				} else {
 					cell = tableView.DequeueReusableCell(CellIdentifier);
 					if (cell == null) {
 						cell = new UITableViewCell(UITableViewCellStyle.Subtitle, CellIdentifier);
 					}
-					cell.TextLabel.Text = mController.mBookmarks[GetCorrectRowIndex(indexPath.Row)].Name;
-					cell.DetailTextLabel.Text = string.Format("Page {0}".t(), mController.mBookmarks[GetCorrectRowIndex(indexPath.Row)].PageNumber);
+					cell.TextLabel.Text = _Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].Name;
+					cell.DetailTextLabel.Text = string.Format("Page {0}".t(), _Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].PageNumber);
 				}
 				return cell;
 			}
@@ -287,13 +298,13 @@ namespace mTouchPDFReader.Library.Views.Management
 			/// </summary>
 			public override void RowSelected(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
-				if ((mController.mEditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
+				if ((_Controller._EditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
 					// Insert button always at the top
 					AddNewRow(tableView, indexPath);
 				} else {
-					int pageNumber = mController.mBookmarks[GetCorrectRowIndex(indexPath.Row)].PageNumber;
-					mController.CallbackAction(pageNumber);
-					mController.mPopoverController.Dismiss(true);
+					int pageNumber = _Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].PageNumber;
+					_Controller.CallbackAction(pageNumber);
+					_Controller._PopoverController.Dismiss(true);
 				}
 			}
 		}

@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Goto page view controller
+// GotoPageViewController.cs (Goto page view controller)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -21,21 +34,18 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class GotoPageViewController : UIViewControllerWithPopover
 	{			
-		#region Fields
-		
 		/// <summary>
-		/// New page number text view
+		/// The new page number text view.
 		/// </summary>
-		private UITextField mPageNumberTxt;
-		
-		#endregion
-		
-		#region Constructors
+		private UITextField _PageNumberTxt;		
 
+		#region Constructors
+		/// <summary>
+		/// Working.
+		/// </summary>
 		public GotoPageViewController(Action<object> callbackAction) : base(null, null, callbackAction)
 		{
 		}
-
 		#endregion
 
 		/// <summary>
@@ -60,7 +70,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/NavigateToPage32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
 				int pageNumber;
-				int.TryParse(mPageNumberTxt.Text, out pageNumber);
+				int.TryParse(_PageNumberTxt.Text, out pageNumber);
 				if ((pageNumber <= 0) || (pageNumber > PDFDocument.PageCount)) {
 					using (var alert = new UIAlertView("Error".t(), "Invalid page number".t(), null, "Ok")) {
 						alert.Show();
@@ -68,20 +78,20 @@ namespace mTouchPDFReader.Library.Views.Management
 				} else {
 					CallbackAction(pageNumber);
 				}
-				mPopoverController.Dismiss(true);
+				_PopoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
 			// Create PageNumber text field
-			mPageNumberTxt = new UITextField(new RectangleF(20, 58, View.Bounds.Width - 40, 31));
-			mPageNumberTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			mPageNumberTxt.BorderStyle = UITextBorderStyle.RoundedRect;
-			mPageNumberTxt.KeyboardType = UIKeyboardType.NumberPad;
-			mPageNumberTxt.Font = UIFont.SystemFontOfSize(17.0f);
-			mPageNumberTxt.Text = PDFDocument.CurrentPageNumber.ToString();
-			View.AddSubview(mPageNumberTxt);
+			_PageNumberTxt = new UITextField(new RectangleF(20, 58, View.Bounds.Width - 40, 31));
+			_PageNumberTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			_PageNumberTxt.BorderStyle = UITextBorderStyle.RoundedRect;
+			_PageNumberTxt.KeyboardType = UIKeyboardType.NumberPad;
+			_PageNumberTxt.Font = UIFont.SystemFontOfSize(17.0f);
+			_PageNumberTxt.Text = PDFDocument.CurrentPageNumber.ToString();
+			View.AddSubview(_PageNumberTxt);
 		}
 		
 		/// <summary>

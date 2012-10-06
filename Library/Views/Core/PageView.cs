@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Page View 
+// PageView.cs (Page View )
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Drawing;
@@ -19,8 +32,7 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class PageView : UIScrollView
 	{
-		#region Constants
-		
+		#region Constants		
 		/// <summary>
 		/// Content view padding
 		/// </summary>
@@ -29,50 +41,46 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <summary>
 		/// Thumb content size
 		/// </summary>
-		private const int ThumbContentSize = 500;
-		
+		private const int ThumbContentSize = 500;		
 		#endregion
 			
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
-		/// Page content view
+		/// The page content view.
 		/// </summary>
-		private PageContentView mPageContentView;
+		private PageContentView _PageContentView;
 		
 		/// <summary>
-		/// Page thumb view
+		/// The page thumb view.
 		/// </summary>
-		private ThumbView mThumbView;
+		private ThumbView _ThumbView;
 		
 		/// <summary>
-		/// Page view container
+		/// The page view container.
 		/// </summary>
-		private UIView mPageContentContainerView;	
+		private UIView _PageContentContainerView;	
 		
 		/// <summary>
-		/// Zoom scale step
+		/// The zoom scale step.
 		/// </summary>
-		private float mZoomScaleStep;
+		private float _ZoomScaleStep;
 		
 		/// <summary>
-		/// Page number displayed in view
+		/// Gets or sets the opened page number.
 		/// </summary>
 		public int PageNumber {
 			get {
-				return mPageContentView.PageNumber;
+				return _PageContentView.PageNumber;
 			}
 			set {
-				mPageContentView.PageNumber = value;
+				_PageContentView.PageNumber = value;
 			}
-		}
-		
+		}		
 		#endregion
 		
-		#region UIScrollView methods
-		
+		#region UIScrollView methods		
 		/// <summary>
-		/// Work constructor
+		/// Working.
 		/// </summary>
 		public PageView(RectangleF frame, int pageNumber) : base(frame)
 		{
@@ -87,38 +95,38 @@ namespace mTouchPDFReader.Library.Views.Core
 			AutosizesSubviews = false;
 			BackgroundColor = UIColor.Clear;
 			ViewForZoomingInScrollView = delegate(UIScrollView sender) { 
-				return mPageContentContainerView; 
+				return _PageContentContainerView; 
 			};
 			
 			// Create and init (calc frame size) page content view
-			mPageContentView = new PageContentView(PageContentView.GetPageViewSize(pageNumber), pageNumber);
+			_PageContentView = new PageContentView(PageContentView.GetPageViewSize(pageNumber), pageNumber);
 			
 			// Create and init page content container view
-			mPageContentContainerView = new UIView(mPageContentView.Bounds);
-			mPageContentContainerView.AutosizesSubviews = false;
-			mPageContentContainerView.UserInteractionEnabled = false;
-			mPageContentContainerView.ContentMode = UIViewContentMode.Redraw;
-			mPageContentContainerView.AutoresizingMask = UIViewAutoresizing.None;
-			mPageContentContainerView.Layer.CornerRadius = 5;
-			mPageContentContainerView.Layer.ShadowOffset = new SizeF(2.0f, 2.0f);
-			mPageContentContainerView.Layer.ShadowRadius = 4.0f;
-			mPageContentContainerView.Layer.ShadowOpacity = 1.0f;
-			mPageContentContainerView.Layer.ShadowPath = UIBezierPath.FromRect(mPageContentContainerView.Bounds).CGPath;
-			mPageContentContainerView.BackgroundColor = UIColor.White;			
+			_PageContentContainerView = new UIView(_PageContentView.Bounds);
+			_PageContentContainerView.AutosizesSubviews = false;
+			_PageContentContainerView.UserInteractionEnabled = false;
+			_PageContentContainerView.ContentMode = UIViewContentMode.Redraw;
+			_PageContentContainerView.AutoresizingMask = UIViewAutoresizing.None;
+			_PageContentContainerView.Layer.CornerRadius = 5;
+			_PageContentContainerView.Layer.ShadowOffset = new SizeF(2.0f, 2.0f);
+			_PageContentContainerView.Layer.ShadowRadius = 4.0f;
+			_PageContentContainerView.Layer.ShadowOpacity = 1.0f;
+			_PageContentContainerView.Layer.ShadowPath = UIBezierPath.FromRect(_PageContentContainerView.Bounds).CGPath;
+			_PageContentContainerView.BackgroundColor = UIColor.White;			
 			
 			// Create and init page thumb view
-			mThumbView = new ThumbView(mPageContentView.Bounds, ThumbContentSize, pageNumber);
+			_ThumbView = new ThumbView(_PageContentView.Bounds, ThumbContentSize, pageNumber);
 			
 			// Add views to parents
-			mPageContentContainerView.AddSubview(mThumbView);
-			mPageContentContainerView.AddSubview(mPageContentView);						
-			AddSubview(mPageContentContainerView);
+			//mPageContentContainerView.AddSubview(mThumbView);
+			_PageContentContainerView.AddSubview(_PageContentView);						
+			AddSubview(_PageContentContainerView);
 			
 			// Set content size, offset and inset
-			ContentSize = mPageContentView.Bounds.Size;
+			ContentSize = _PageContentView.Bounds.Size;
 			ContentOffset = new PointF((0.0f - ContentViewPadding), (0.0f - ContentViewPadding));
 			ContentInset = new UIEdgeInsets(ContentViewPadding, ContentViewPadding, ContentViewPadding, ContentViewPadding);
-			ContentSize = mPageContentContainerView.Bounds.Size;
+			ContentSize = _PageContentContainerView.Bounds.Size;
 			
 			// Setup zoom scale
 			UpdateMinimumMaximumZoom();
@@ -126,14 +134,14 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Calls when subview needs to layout - Centers PageContentView in parent view
+		/// Layouts the subviews.
 		/// </summary>
 		public override void LayoutSubviews()
 		{
 			base.LayoutSubviews();
 			
 			SizeF boundsSize = Bounds.Size;
-			RectangleF viewFrame = mPageContentContainerView.Frame;		
+			RectangleF viewFrame = _PageContentContainerView.Frame;		
 			if (viewFrame.Size.Width < boundsSize.Width) {
 				viewFrame.X = (boundsSize.Width - viewFrame.Size.Width) / 2.0f + ContentOffset.X;
 			} else {
@@ -144,11 +152,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			} else {
 				viewFrame.Y = 0.0f;
 			}	
-			mPageContentContainerView.Frame = viewFrame;
+			_PageContentContainerView.Frame = viewFrame;
 		}
 		
 		/// <summary>
-		/// Calls when users taps view
+		/// Touch begans action handler.
 		/// </summary>
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
@@ -160,12 +168,10 @@ namespace mTouchPDFReader.Library.Views.Core
 					ZoomIncrement(); 
 				}
 			}			
-		}
-		
+		}		
 		#endregion
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Gets zoom factor for source rect, which fits target rect
 		/// </summary>
@@ -185,10 +191,10 @@ namespace mTouchPDFReader.Library.Views.Core
 		public void UpdateMinimumMaximumZoom()
 		{
 			RectangleF targetRect = RectangleFExtensions.Inset(Bounds, ContentViewPadding, ContentViewPadding);
-			float zoomScale = GetZoomScaleThatFits(targetRect.Size, mPageContentView.Bounds.Size);
+			float zoomScale = GetZoomScaleThatFits(targetRect.Size, _PageContentView.Bounds.Size);
 			MinimumZoomScale = zoomScale; 	
 			MaximumZoomScale = zoomScale * OptionsManager.Instance.Options.ZoomScaleLevels; 
-			mZoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / OptionsManager.Instance.Options.ZoomScaleLevels;
+			_ZoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / OptionsManager.Instance.Options.ZoomScaleLevels;
 		}
 		
 		/// <summary>
@@ -206,7 +212,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale > MinimumZoomScale) {
-				zoomScale -= mZoomScaleStep;
+				zoomScale -= _ZoomScaleStep;
 				if (zoomScale < MinimumZoomScale) {
 					zoomScale = MinimumZoomScale;
 				}
@@ -221,14 +227,13 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale < MaximumZoomScale) {
-				zoomScale += mZoomScaleStep;
+				zoomScale += _ZoomScaleStep;
 				if (zoomScale > MaximumZoomScale) {
 					zoomScale = MaximumZoomScale;
 				}
 				SetZoomScale(zoomScale, true);
 			}
-		}
-		
+		}		
 		#endregion
 	}
 }

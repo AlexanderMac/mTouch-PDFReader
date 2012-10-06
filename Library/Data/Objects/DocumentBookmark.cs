@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Document bookmark
+// DocumentBookmark.cs (Document bookmark)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using mTouchPDFReader.Library.Data.Enums;
@@ -16,51 +29,51 @@ namespace mTouchPDFReader.Library.Data.Objects
 	public class DocumentBookmark
 	{
 		/// <summary>
-		/// Document Id
+		/// Gets the document Id.
 		/// </summary>
-		private int mDocId;
 		public int DocId {
-			get { return mDocId; }
+			get { return _DocId; }
 		}
+		private int _DocId;
 
 		/// <summary>
-		/// Bookmark Id
+		/// Gets the bookmark Id.
 		/// </summary>
-		private int mId;
 		public int Id {
-			get { return mId; }
-			set { mId = value; }
+			get { return _Id; }
+			set { _Id = value; }
 		}
+		private int _Id;
 		
 		/// <summary>
-		/// Bookmark name
+		/// Gets the bookmark name.
 		/// </summary>
-		private string mName;
 		public string Name {
-			get { return mName; }
+			get { return _Name; }
 		}
+		private string _Name;
 		
 		/// <summary>
-		/// Bookmark page number
+		/// Gets the bookmark page number.
 		/// </summary>
-		private int mPageNumber;
 		public int PageNumber {
-			get { return mPageNumber; }
+			get { return _PageNumber; }
 		}
+		private int _PageNumber;
 		
 		/// <summary>
-		/// Work constructor
+		/// Working.
 		/// </summary>
-		/// <param name="docId">PDF document id</param>
-		/// <param name="id">Bookmark id</param>
-		/// <param name="name">Bookmark name</param>
-		/// <param name="pageNumber">Bookmark page number</param>
+		/// <param name="docId">The PDF document id.</param>
+		/// <param name="id">The bookmark id.</param>
+		/// <param name="name">The bookmark name.</param>
+		/// <param name="pageNumber">The bookmark page number.</param>
 		public DocumentBookmark(int docId, int id, string name, int pageNumber)
 		{
-			mDocId = docId;
-			mId = id;
-			mName = name;
-			mPageNumber = pageNumber;
+			_DocId = docId;
+			_Id = id;
+			_Name = name;
+			_PageNumber = pageNumber;
 		}
 	}
 }

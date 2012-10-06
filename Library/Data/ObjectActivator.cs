@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader library
-// Objects activator
+// ObjectActivator.cs (Objects activator)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using mTouchPDFReader.Library.Data.Managers;
@@ -15,24 +28,16 @@ namespace mTouchPDFReader.Library.Data
 {
 	public class ObjectsActivator
 	{
-		#region Fields
-		
-		/// <summary>
-		/// Initializing flag
-		/// </summary>
-		private bool mInitialized;
-		
-		#endregion
-		
-		#region Logic		
-		
+		private bool _Initialized;		
+
+		#region Logic			
 		/// <summary>
 		/// Creates objects
 		/// </summary>
 		public void CreateObjects()
 		{
-			if (!mInitialized) {
-				mInitialized = true;
+			if (!_Initialized) {
+				_Initialized = true;
 				OptionsManager.Instance = CreateOptionsManager();
 				DocumentNoteManager.Instance = CreateDocumentNoteManager();
 				DocumentBookmarkManager.Instance = CreateDocumentBookmarkManager();
@@ -64,8 +69,7 @@ namespace mTouchPDFReader.Library.Data
 		protected virtual DocumentBookmarkManager CreateDocumentBookmarkManager()
 		{
 			return new DocumentBookmarkManager();
-		}
-		
+		}		
 		#endregion
 	}
 }

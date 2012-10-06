@@ -1,12 +1,25 @@
-//****************************************//
+//
 // mTouch-PDFReader demo
-// Simple document note manager
+// MyDocumentNoteManager.cs (Simple document note manager)
 //
-// Created by Matsibarov Alexander. 2012.
-// Copyright Matsibarov Alexander 2012. All rights reserved.
+//  Author:
+//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-// www.mtouch-pdfreader.com
-//****************************************//
+//  Copyright (c) 2012 Alexander Matsibarov
+//
+//  This program is free software: you can redistribute it and/or modify
+//  it under the terms of the GNU General Public License as published by
+//  the Free Software Foundation, either version 3 of the License, or
+//  (at your option) any later version.
+//
+//  This program is distributed in the hope that it will be useful,
+//  but WITHOUT ANY WARRANTY; without even the implied warranty of
+//  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+//  GNU General Public License for more details.
+//
+//  You should have received a copy of the GNU General Public License
+//  along with this program.  If not, see <http://www.gnu.org/licenses/>.
+//
 
 using System;
 using System.Collections.Generic;
@@ -18,23 +31,20 @@ namespace mTouchPDFReader.Demo.DataObjects
 {
 	public class MyDocumentNoteManager : DocumentNoteManager
 	{
-		#region Fields
-		
+		#region Fields		
 		/// <summary>
-		/// List of the all document notes
+		/// The document notes list.
 		/// </summary>
-		private static List<DocumentNote> mAllNotes;
-		
+		private static List<DocumentNote> _AllNotes;		
 		#endregion
 		
-		#region Logic
-		
+		#region Logic		
 		/// <summary>
 		/// Static constructor
 		/// </summary>
 		static MyDocumentNoteManager()
 		{
-			mAllNotes = new List<DocumentNote>();
+			_AllNotes = new List<DocumentNote>();
 		}
 		
 		/// <summary>
@@ -43,7 +53,7 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <returns>New note id</returns>
 		protected override int GetNewId()
 		{
-			return mAllNotes.Count + 1;
+			return _AllNotes.Count + 1;
 		}
 		
 		/// <summary>
@@ -53,7 +63,7 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <returns>Note</returns>
 		public override DocumentNote LoadNote(int docId)
 		{
-			var note = mAllNotes.FirstOrDefault(n => n.DocId == docId);
+			var note = _AllNotes.FirstOrDefault(n => n.DocId == docId);
 			if (note == null) {
 				note = new DocumentNote(docId, -1, string.Empty);
 			}			
@@ -67,12 +77,11 @@ namespace mTouchPDFReader.Demo.DataObjects
 		/// <param name="note">Note</param>
 		public override void SaveNote(DocumentNote note)
 		{
-			if (!mAllNotes.Contains(note)) {
+			if (!_AllNotes.Contains(note)) {
 				note.Id = GetNewId();
-				mAllNotes.Add(note);
+				_AllNotes.Add(note);
 			}
-		}
-		
+		}		
 		#endregion
 	}
 }
