@@ -54,7 +54,6 @@ namespace mTouchPDFReader.Demo
 			base.ViewDidLoad();
 			var optionsView = new OptionsTableViewController();
 			optionsView.View.Frame = View.Bounds;
-			optionsView.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			View.AddSubview(optionsView.View);
 		}
 		

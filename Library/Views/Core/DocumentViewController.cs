@@ -397,46 +397,27 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <summary>
 		/// Calculates the default page view content offset
 		/// </summary>
-		private PointF CalcDefaultPageViewContentOffset(int pageNumber)
+		private PointF CalcDefaultPageViewContentOffset()
 		{
 			if (_CurrentPageView == null) {
 				return new PointF(0, 0);
 			}
-			bool pageIsAfterCurrent = pageNumber > _CurrentPageView.PageNumber;
-			if (RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal) {
-				var left = pageIsAfterCurrent ? 0.0f : _CurrentPageView.Bounds.Width;
-				return new PointF(left, _CurrentPageView.ContentOffset.Y);
-			} else {
-				var top = pageIsAfterCurrent ? 0.0f : _CurrentPageView.Bounds.Height;
-				return new PointF(_CurrentPageView.ContentOffset.X, top);
-			}
+			return RC.Get<IOptionsManager>().Options.PageTurningType == PageTurningTypes.Horizontal
+				? new PointF(0.0f, _CurrentPageView.ContentOffset.Y)
+				: new PointF(_CurrentPageView.ContentOffset.X, 0.0f);
 		}
-
+		
 		/// <summary>
 		/// Sets equal zoomScale for all pages
 		/// </summary>
-		private void SetPagesEqualZoomScale(PageView currentPageView, float zoomScale)
+		private void SetPagesEqualZoomScale(PageView pageView, float zoomScale)
 		{
-			for (int i = 0; i < _PageViews.Count; i++) {
-				var view = _PageViews [i];
-				if (view != currentPageView) {
+			foreach (var view in _PageViews) {
+				if (view != pageView) {
 					// Set equal zoomScale from all pageViews 
 					view.ZoomScale = zoomScale;
 					// Offset pageView, to it don't overlapped
-					view.ContentOffset = CalcDefaultPageViewContentOffset(view.PageNumber);
-				}
-			}
-		}
-
-		/// <summary>
-		/// Sets equal offset for all pages
-		/// </summary>
-		private void SetPagesEqualOffset(PageView currentPageView)
-		{
-			for (int i = 0; i < _PageViews.Count; i++) {
-				var view = _PageViews [i];
-				if (view != currentPageView) {
-					view.ContentOffset = CalcDefaultPageViewContentOffset(view.PageNumber);
+					view.ContentOffset = CalcDefaultPageViewContentOffset();
 				}
 			}
 		}
@@ -681,15 +662,10 @@ namespace mTouchPDFReader.Library.Views.Core
 					if (pageView == null) {
 						pageView = new PageView(viewRect, i);
 						pageView.ZoomScale = _CurrentPageView != null ? _CurrentPageView.ZoomScale : pageView.MinimumZoomScale;
-						pageView.ContentOffset = CalcDefaultPageViewContentOffset(i);
+						pageView.ContentOffset = CalcDefaultPageViewContentOffset();
 						pageView.ZoomingEnded += delegate(object sender, ZoomingEndedEventArgs e) {
-							var view = (PageView)sender;
-							SetPagesEqualZoomScale(view, view.ZoomScale);
-						};/*
-						pageView.DecelerationEnded += delegate(object sender, EventArgs e) {
-							var view = (PageView)sender;
-							SetPagesEqualOffset(view);
-						};*/
+							SetPagesEqualZoomScale((PageView)sender, e.AtScale);
+						};
 						_ScrollView.AddSubview(pageView);
 						_PageViews.Add(pageView);
 					} else {

@@ -121,5 +121,7 @@
     <Content Include="Images\Toolbar\Save32.png" />
     <Content Include="en.lproj\Localizable.strings" />
     <Content Include="ru.lproj\Localizable.strings" />
+    <Content Include="Images\Background\OnePageBg.png" />
+    <Content Include="Images\Background\TwoPageBg.png" />
   </ItemGroup>
 </Project>

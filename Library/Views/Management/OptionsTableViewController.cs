@@ -92,6 +92,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+			View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
    
 			// Page turning type
 			_PageTurningTypeCell = CreateTurningTypeCell();
@@ -115,6 +116,8 @@ namespace mTouchPDFReader.Library.Views.Management
 			_LibraryVersionCell = CreateLibraryVersionCell();
 			
 			TableView = new UITableView(View.Bounds, UITableViewStyle.Grouped);
+			TableView.BackgroundView = null;
+			TableView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			TableView.Source = new DataSource(this);        	
 		}
 		
@@ -197,7 +200,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		private UISwitch CreateSwitchControl(string[] values)
 		{
 			int width = 90;
-			var ctrl = new UISwitch(new RectangleF(DefaultCellWidth - width - 60, 10, width, 30));
+			var ctrl = new UISwitch(new RectangleF(DefaultCellWidth - width - 45, 10, width, 30));
 			ctrl.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
 			return ctrl;
 		}
@@ -210,8 +213,8 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// <returns>Slider control</returns>
 		private UISlider CreateSliderControl(int minValue, int maxValue)
 		{
-			int width = 250;
-			var slider = new UISlider(new RectangleF(DefaultCellWidth - width - 60, 10, width, 30));
+			int width = 200;
+			var slider = new UISlider(new RectangleF(DefaultCellWidth - width - 55, 10, width, 30));
 			slider.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
 			slider.MinValue = minValue;
 			slider.MaxValue = maxValue;
