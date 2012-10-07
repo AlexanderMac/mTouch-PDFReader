@@ -41,7 +41,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// </summary>
 		public static string Version {
 			get {
-				return "2.0a";
+				return "2.0.228 alpha";
 			}
 		}
 	}

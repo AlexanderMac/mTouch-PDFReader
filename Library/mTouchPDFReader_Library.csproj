@@ -95,6 +95,7 @@
     <Compile Include="Interfaces\IDocumentNoteManager.cs" />
     <Compile Include="Interfaces\IOptionsManager.cs" />
     <Compile Include="Interfaces\IDocumentBookmarkManager.cs" />
+    <Compile Include="Views\Core\PageViewController.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

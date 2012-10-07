@@ -22,15 +22,11 @@
 //
 
 using System;
-using System.Linq;
 using System.Collections.Generic;
 using System.Drawing;
-using MonoTouch.Foundation;
-using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
-using mTouchPDFReader.Library.Data.Managers;
 using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Core

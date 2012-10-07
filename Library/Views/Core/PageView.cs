@@ -21,14 +21,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using MonoTouch.CoreGraphics;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
-using mTouchPDFReader.Library.Data.Managers;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -80,7 +78,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}		
 		#endregion
 		
-		#region UIScrollView methods		
+		#region UIScrollView		
 		/// <summary>
 		/// Working.
 		/// </summary>
@@ -120,7 +118,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_ThumbView = new ThumbView(_PageContentView.Bounds, ThumbContentSize, pageNumber);
 			
 			// Add views to parents
-			//mPageContentContainerView.AddSubview(mThumbView);
+			//??_PageContentContainerView.AddSubview(_ThumbView);
 			_PageContentContainerView.AddSubview(_PageContentView);						
 			AddSubview(_PageContentContainerView);
 			
@@ -140,8 +138,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		public override void LayoutSubviews()
 		{
-			base.LayoutSubviews();
-			
+			base.LayoutSubviews();			
 			SizeF boundsSize = Bounds.Size;
 			RectangleF viewFrame = _PageContentContainerView.Frame;		
 			if (viewFrame.Size.Width < boundsSize.Width) {
@@ -175,11 +172,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		#region Logic		
 		/// <summary>
-		/// Gets zoom factor for source rect, which fits target rect
+		/// Gets zoom factor for the source rect to fits the target rect.
 		/// </summary>
-		/// <param name="target"></param>
-		/// <param name="source"></param>
-		/// <returns> </returns>
+		/// <param name="target">The targer rect.</param>
+		/// <param name="source">The source rect.</param>
+		/// <returns>The zoom scale factor.</returns>
 		private static float GetZoomScaleThatFits(SizeF target, SizeF source)
 		{
 			float wScale = target.Width / source.Width;
@@ -188,7 +185,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Updates minimum/maximum zoom scale
+		/// Updates the minimum/maximum zoom scale factor.
 		/// </summary>
 		public void UpdateMinimumMaximumZoom()
 		{
@@ -200,7 +197,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Resets zoom scale
+		/// Resets the zoom scale factor.
 		/// </summary>
 		public void ZoomReset()
 		{
@@ -208,13 +205,13 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Decrements zoom scale
+		/// Decrements the zoom scale factor.
 		/// </summary>
 		public void ZoomDecrement()
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale > MinimumZoomScale) {
-				zoomScale -= _ZoomScaleStep;
+				zoomScale /= _ZoomScaleStep;
 				if (zoomScale < MinimumZoomScale) {
 					zoomScale = MinimumZoomScale;
 				}
@@ -223,13 +220,13 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Increments zoom scale
+		/// Increments the zoom scale factor.
 		/// </summary>
 		public void ZoomIncrement()
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale < MaximumZoomScale) {
-				zoomScale += _ZoomScaleStep;
+				zoomScale *= _ZoomScaleStep;
 				if (zoomScale > MaximumZoomScale) {
 					zoomScale = MaximumZoomScale;
 				}

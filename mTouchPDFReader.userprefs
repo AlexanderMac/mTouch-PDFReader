@@ -1,36 +1,27 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Library/en.lproj/Localizable.strings">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/DocumentViewController.cs">
     <Files>
-      <File FileName="Demo/Info.plist" />
-      <File FileName="Demo/Views/Options/OptionsViewController.xib.cs" Line="55" Column="15" />
-      <File FileName="Library/Views/Management/OptionsTableViewController.cs" Line="251" Column="63" />
-      <File FileName="Library/ru.lproj/Localizable.strings" Line="11" Column="1" />
-      <File FileName="Library/Data/Managers/LocalizationManager.cs" Line="37" Column="1" />
-      <File FileName="Library/en.lproj/Localizable.strings" Line="1" Column="1" />
+      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="524" Column="56" />
+      <File FileName="Library/Views/Core/PageViewController.cs" Line="45" Column="16" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="mTouchPDFReader_Demo" expanded="True">
-            <Node name="Resource" expanded="True" />
-            <Node name="Views" expanded="True">
-              <Node name="Options" expanded="True">
-                <Node name="OptionsViewController.xib" expanded="True" />
-              </Node>
-            </Node>
-          </Node>
           <Node name="mTouchPDFReader_Library" expanded="True">
             <Node name="Data" expanded="True">
               <Node name="Managers" expanded="True" />
             </Node>
-            <Node name="en.lproj" expanded="True">
-              <Node name="Localizable.strings" selected="True" />
+            <Node name="en.lproj" expanded="True" />
+            <Node name="Images" expanded="True">
+              <Node name="Background" expanded="True" />
             </Node>
             <Node name="ru.lproj" expanded="True" />
             <Node name="Utils" expanded="True" />
             <Node name="Views" expanded="True">
-              <Node name="Core" expanded="True" />
+              <Node name="Core" expanded="True">
+                <Node name="DocumentViewController.cs" selected="True" />
+              </Node>
               <Node name="Management" expanded="True" />
               <Node name="XViews" expanded="True" />
             </Node>

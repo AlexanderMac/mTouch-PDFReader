@@ -21,9 +21,7 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Drawing;
-using MonoTouch.Foundation;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
 
@@ -116,10 +114,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			// Draw page on CGImage
 			CGImage pageImage;
 			using (CGColorSpace rgb = CGColorSpace.CreateDeviceRGB()) {
-				using (CGBitmapContext context = new CGBitmapContext(null, targetSize.Width, targetSize.Height, 8, 0, rgb, CGBitmapFlags.ByteOrder32Little | CGBitmapFlags.NoneSkipFirst)) {
-					using (CGPDFPage pdfPage = PDFDocument.GetPage(pageNumber)) {
+				using (var context = new CGBitmapContext(null, targetSize.Width, targetSize.Height, 8, 0, rgb, CGBitmapFlags.ByteOrder32Little | CGBitmapFlags.NoneSkipFirst)) {
+					using (var pdfPage = PDFDocument.GetPage(pageNumber)) {
 						// Draw page on custom CGBitmap context
-						RectangleF thumbRect = new RectangleF(0.0f, 0.0f, targetSize.Width, targetSize.Height);
+						var thumbRect = new RectangleF(0.0f, 0.0f, targetSize.Width, targetSize.Height);
 						context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
 						context.FillRect(thumbRect);
 						context.ConcatCTM(pdfPage.GetDrawingTransform(CGPDFBox.Crop, thumbRect, 0, true));

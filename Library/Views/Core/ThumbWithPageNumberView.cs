@@ -25,7 +25,6 @@ using System;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using MonoTouch.CoreGraphics;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -85,7 +84,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Create and init page thumb view
 			int thumbContentSize = (int)Bounds.Size.Width;
-			RectangleF thumbViewFrame = new RectangleF(0, Padding, Bounds.Size.Width, Bounds.Size.Height - 2 * Padding - PageNumberLabelHeight);
+			var thumbViewFrame = new RectangleF(0, Padding, Bounds.Size.Width, Bounds.Size.Height - 2 * Padding - PageNumberLabelHeight);
 			_ThumbView = new ThumbView(thumbViewFrame, thumbContentSize, pageNumber);
 			
 			// Create and init page number label		
