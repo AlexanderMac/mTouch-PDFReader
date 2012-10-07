@@ -211,7 +211,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale > MinimumZoomScale) {
-				zoomScale /= _ZoomScaleStep;
+				zoomScale -= _ZoomScaleStep;
 				if (zoomScale < MinimumZoomScale) {
 					zoomScale = MinimumZoomScale;
 				}
@@ -226,7 +226,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			float zoomScale = ZoomScale;
 			if (zoomScale < MaximumZoomScale) {
-				zoomScale *= _ZoomScaleStep;
+				zoomScale += _ZoomScaleStep;
 				if (zoomScale > MaximumZoomScale) {
 					zoomScale = MaximumZoomScale;
 				}

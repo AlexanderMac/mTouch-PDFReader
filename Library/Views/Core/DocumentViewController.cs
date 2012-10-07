@@ -66,11 +66,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		private PageViewController _FirstPageViewCntr;
 
 		/// <summary>
-		/// The second PageView controller.
-		/// </summary>
-		private PageViewController _SecondPageViewCntr;
-
-		/// <summary>
 		/// The toolbar view.
 		/// </summary>
 		private UIView _Toolbar;
@@ -176,7 +171,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_BookPageViewController = new UIPageViewController(
 				UIPageViewControllerTransitionStyle.PageCurl,
 				navOrientation, 
-				UIPageViewControllerSpineLocation.Min);		
+				UIPageViewControllerSpineLocation.None);		
 			_BookPageViewController.View.Frame = GetBookPageViewFrameRect();
 			_BookPageViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			_BookPageViewController.View.BackgroundColor = UIColor.GroupTableViewBackgroundColor;
@@ -242,7 +237,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIViewController GetNextPageViewController(UIPageViewController pageController, UIViewController referenceViewController)
 		{			
 			var curPageCntr = referenceViewController as PageViewController;
-			if (curPageCntr.PageView.PageNumber == (PDFDocument.PageCount - 1)) {				
+			if (curPageCntr.PageView.PageNumber == (PDFDocument.PageCount)) {				
 				return null;
 			} 
 			int pageNumber = curPageCntr.PageView.PageNumber + 1;

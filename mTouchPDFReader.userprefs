@@ -1,16 +1,18 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhoneSimulator" />
   <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/DocumentViewController.cs">
     <Files>
-      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="524" Column="56" />
-      <File FileName="Library/Views/Core/PageViewController.cs" Line="45" Column="16" />
+      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="254" Column="4" />
+      <File FileName="Library/Views/Core/PageView.cs" Line="220" Column="4" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
+          <Node name="mTouchPDFReader_Demo" expanded="True" />
           <Node name="mTouchPDFReader_Library" expanded="True">
             <Node name="Data" expanded="True">
               <Node name="Managers" expanded="True" />
+              <Node name="Objects" expanded="True" />
             </Node>
             <Node name="en.lproj" expanded="True" />
             <Node name="Images" expanded="True">
@@ -37,6 +39,7 @@
           <Value>tableView.IndexPathsForVisibleRows</Value>
           <Value>uri</Value>
           <Value>uri</Value>
+          <Value>pageViewCntr</Value>
         </State>
       </Pad>
       <Pad Id="ConnectionManagerPad">
@@ -48,7 +51,9 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/amac/Projects/OpenSource/mTouch-PDFReader/Library/Views/Core/DocumentViewController.cs" line="639" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Library/Views/Core/DocumentViewController.cs" line="439" offsetX="547" offsetY="6570" expression="currentPageView.Bounds" liveUpdate="False" />
