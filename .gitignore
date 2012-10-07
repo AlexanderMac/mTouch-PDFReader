@@ -1,4 +1,4 @@
-*/bin/*
-*/obj/*
+bin
+obj
 .DS_STORE
 version.txt
