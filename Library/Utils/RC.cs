@@ -59,8 +59,12 @@ namespace mTouchPDFReader.Library.Utils
 		/// <typeparam name="TClass">The registered class type.</typeparam>
 		public static void RegisterReference<TInterface, TClass>() where TClass : TInterface
 		{
-			var interfaceInfo = typeof (TInterface);
+			var interfaceInfo = typeof(TInterface);
 			var classInfo = typeof(TClass);
+			if (interfaceInfo == classInfo) {
+				throw new Exception("Can't register reference! The tring to register interface by interface");
+			}
+
 			if (!Instance._References.ContainsKey(interfaceInfo.FullName)) {
 				_Instance._References[interfaceInfo.FullName] = classInfo;
 			} else {
