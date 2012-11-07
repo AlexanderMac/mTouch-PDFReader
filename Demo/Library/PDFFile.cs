@@ -25,7 +25,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 
-namespace mTouchPDFReader.Demo.DataObjects
+namespace mTouchPDFReader.Demo.Library
 {
 	public class PDFFile
 	{

@@ -24,7 +24,7 @@
 using System;
 using MonoTouch.Foundation;
 
-namespace mTouchPDFReader.Library.Data.Managers
+namespace mTouchPDFReader.Library.Managers
 {
 	public static class LocalizationManager
 	{

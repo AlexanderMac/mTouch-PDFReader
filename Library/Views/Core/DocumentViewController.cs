@@ -356,15 +356,14 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (RC.Get<IOptionsManager>().Options.NoteBtnVisible) {
 				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
 					var note = RC.Get<IDocumentNoteManager>().Load(_DocumentId);
-					var view = new NoteViewController(note, p => { /* Noting */ });
+					var view = new NoteViewController(note, null);
 					PresentPopover(view, _BtnNote.Frame);
 				});
 			}
 			if (RC.Get<IOptionsManager>().Options.BookmarksBtnVisible) {
 				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
 					var bookmarks = RC.Get<IDocumentBookmarkManager>().LoadList(_DocumentId);
-					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => {
-						OpenDocumentPage((int)p); });
+					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
 					PresentPopover(view, _BtnBookmarksList.Frame);
 				});
 			}

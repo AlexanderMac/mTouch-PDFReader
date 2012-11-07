@@ -41,6 +41,7 @@
     <WarningLevel>4</WarningLevel>
     <MtouchLink>None</MtouchLink>
     <ConsolePause>False</ConsolePause>
+    <MtouchArch>ARMv7</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
     <DebugSymbols>True</DebugSymbols>
@@ -122,14 +123,14 @@
     <Compile Include="Views\Options\OptionsViewController.xib.cs">
       <DependentUpon>OptionsViewController.xib</DependentUpon>
     </Compile>
-    <Compile Include="DataObjects\PDFFile.cs" />
-    <Compile Include="DataObjects\MyDocumentBookmarkManager.cs" />
-    <Compile Include="DataObjects\MyDocumentNoteManager.cs" />
     <Compile Include="Main.cs" />
+    <Compile Include="Library\PDFFile.cs" />
+    <Compile Include="Library\MyDocumentBookmarkManager.cs" />
+    <Compile Include="Library\MyDocumentNoteManager.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="DataObjects\" />
     <Folder Include="Views\Options\" />
+    <Folder Include="Library\" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library\mTouchPDFReader_Library.csproj">

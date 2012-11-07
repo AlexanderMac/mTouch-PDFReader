@@ -27,7 +27,7 @@ using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Views.Core;
-using mTouchPDFReader.Library.Data.Managers;
+using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management

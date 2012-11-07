@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// DocumentNoteManager.cs (DDocument note manager)
+// DocumentBookmarkManager.cs (Document bookmarks manager)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,45 +22,60 @@
 //
 
 using System;
+using System.Collections.Generic;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Library.Data.Managers
+namespace mTouchPDFReader.Library.Managers
 {
-	public class DocumentNoteManager : IDocumentNoteManager
+	public class DocumentBookmarkManager : IDocumentBookmarkManager
 	{
 		#region Logic	
 		/// <summary>
 		/// Hidden constructor to create instance only from RC.
 		/// </summary>
-		protected DocumentNoteManager()	{}
+		protected DocumentBookmarkManager()	{}
 
 		/// <summary>
-		/// Gets the new bookmark identifier.
-		/// </summary>
-		/// <returns>The new bookmark identifier.</returns>
-		protected virtual int GetNewId()
+		/// Creates the new <see cref="DocumentBookmark"/> object.
+		/// </summary>.
+		/// </param>
+		public virtual DocumentBookmark GetNew(int docId, string name, int pageNumber)
 		{
-			return 0;
+			return new DocumentBookmark {
+				Id = -1,
+				DocId = docId, 
+				Name = name,
+				PageNumber = pageNumber
+			};
 		}
 
 		/// <summary>
-		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
+		/// Gets the <see cref="DocumentBookmark"/> list by the <see cref="docId"/>.
 		/// </summary>
 		/// <param name="docId">The PDF document Id.</param>
-		/// <returns>The <see cref="DocumentNote"/> object.</returns>
-		public virtual DocumentNote Load(int docId)
+		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>
+		public virtual List<DocumentBookmark> LoadList(int docId)
 		{
-			return new DocumentNote(docId, -1, string.Empty);
+			return new List<DocumentBookmark>();
 		}
-
+		
 		/// <summary>
-		/// Saves the see cref="DocumentNote"/> object.
+		/// Saves the <see cref="DocumentBookmark"/> object. 
 		/// </summary>
-		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
-		public virtual void Save(DocumentNote note)
+		/// <param name="bookmark">The bookmark object.</param>
+		public virtual void Save(DocumentBookmark bookmark)
 		{
 			// Noting
+		}	
+		
+		/// <summary>
+		/// Deletes the <see cref="DocumentBookmark"/> object by <see cref="bookmarkId"/>.
+		/// </summary>
+		/// <param name="bookmarkId">The bookmark id.</param>
+		public virtual void Delete(int bookmarkId)
+		{
+			// Nothing
 		}		
 		#endregion
 	}

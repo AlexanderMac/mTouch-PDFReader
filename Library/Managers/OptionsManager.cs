@@ -28,7 +28,7 @@ using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Enums;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Library.Data.Managers
+namespace mTouchPDFReader.Library.Managers
 {
 	public class OptionsManager : IOptionsManager
 	{		

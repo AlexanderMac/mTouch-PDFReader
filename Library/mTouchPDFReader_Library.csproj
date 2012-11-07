@@ -74,10 +74,7 @@
     <Compile Include="Views\Management\GotoPageViewController.cs" />
     <Compile Include="Views\Management\NoteViewController.cs" />
     <Compile Include="Data\Objects\SystemInfo.cs" />
-    <Compile Include="Data\Managers\OptionsManager.cs" />
     <Compile Include="Data\Objects\Options.cs" />
-    <Compile Include="Data\Managers\DocumentBookmarkManager.cs" />
-    <Compile Include="Data\Managers\DocumentNoteManager.cs" />
     <Compile Include="Data\Objects\DocumentBookmark.cs" />
     <Compile Include="Data\Objects\DocumentNote.cs" />
     <Compile Include="Views\Management\OptionsTableViewController.cs" />
@@ -90,19 +87,21 @@
     <Compile Include="Views\Core\ThumbWithPageNumberView.cs" />
     <Compile Include="Views\Core\ThumbsViewController.cs" />
     <Compile Include="Data\Enums\PageTurningTypes.cs" />
-    <Compile Include="Data\Managers\LocalizationManager.cs" />
     <Compile Include="Utils\RC.cs" />
     <Compile Include="Interfaces\IDocumentNoteManager.cs" />
     <Compile Include="Interfaces\IOptionsManager.cs" />
     <Compile Include="Interfaces\IDocumentBookmarkManager.cs" />
     <Compile Include="Views\Core\PageViewController.cs" />
+    <Compile Include="Managers\OptionsManager.cs" />
+    <Compile Include="Managers\DocumentBookmarkManager.cs" />
+    <Compile Include="Managers\DocumentNoteManager.cs" />
+    <Compile Include="Managers\LocalizationManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />
     <Folder Include="Data\" />
     <Folder Include="Data\Objects\" />
     <Folder Include="Data\Enums\" />
-    <Folder Include="Data\Managers\" />
     <Folder Include="Interfaces\" />
   </ItemGroup>
   <ItemGroup>

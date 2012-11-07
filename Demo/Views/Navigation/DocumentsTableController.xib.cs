@@ -26,7 +26,7 @@ using System.Collections.Generic;
 using System.IO;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Demo.DataObjects;
+using mTouchPDFReader.Demo.Library;
 using mTouchPDFReader.Library.Views.Core;
 
 namespace mTouchPDFReader.Demo

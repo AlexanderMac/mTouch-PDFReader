@@ -28,53 +28,19 @@ namespace mTouchPDFReader.Library.Data.Objects
 	public class DocumentNote
 	{
 		/// <summary>
-		/// Gets the document Id.
-		/// </summary>
-		public int DocId {
-			get {
-				return _DocId;
-			}
-		}
-		private int _DocId;
-		
-		/// <summary>
 		/// Get the note Id.
 		/// </summary>
-		public int Id {
-			get {
-				return _Id;
-			}
-			set {
-				_Id = value;
-			}
-		}
-		private int _Id;
+		public int Id { get; set; }
+		
+		/// <summary>
+		/// Gets the document Id.
+		/// </summary>
+		public int DocId { get; set; }
 		
 		/// <summary>
 		/// Get the note.
 		/// </summary>
-		public string Note {
-			get {
-				return _Note;
-			}
-			set {
-				_Note = value;
-			}
-		}
-		private string _Note;
-			
-		/// <summary>
-		/// Working.
-		/// </summary>
-		/// <param name="docId">The PDF document id.</param>
-		/// <param name="id">The note id.</param>
-		/// <param name="note">The note.</param>
-		public DocumentNote(int docId, int id, string note)
-		{
-			_DocId = docId;
-			_Id = id;
-			_Note = note;
-		}
+		public string Note { get; set; }
 	}
 }
 

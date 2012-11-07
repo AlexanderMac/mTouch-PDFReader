@@ -29,52 +29,24 @@ namespace mTouchPDFReader.Library.Data.Objects
 	public class DocumentBookmark
 	{
 		/// <summary>
-		/// Gets the document Id.
-		/// </summary>
-		public int DocId {
-			get { return _DocId; }
-		}
-		private int _DocId;
-
-		/// <summary>
 		/// Gets the bookmark Id.
 		/// </summary>
-		public int Id {
-			get { return _Id; }
-			set { _Id = value; }
-		}
-		private int _Id;
+		public int Id { get; set; }
+		
+		/// <summary>
+		/// Gets the document Id.
+		/// </summary>
+		public int DocId { get; set; }	
 		
 		/// <summary>
 		/// Gets the bookmark name.
 		/// </summary>
-		public string Name {
-			get { return _Name; }
-		}
-		private string _Name;
+		public string Name { get; set; }
 		
 		/// <summary>
 		/// Gets the bookmark page number.
 		/// </summary>
-		public int PageNumber {
-			get { return _PageNumber; }
-		}
-		private int _PageNumber;
-		
-		/// <summary>
-		/// Working.
-		/// </summary>
-		/// <param name="docId">The PDF document id.</param>
-		/// <param name="id">The bookmark id.</param>
-		/// <param name="name">The bookmark name.</param>
-		/// <param name="pageNumber">The bookmark page number.</param>
-		public DocumentBookmark(int docId, int id, string name, int pageNumber)
-		{
-			_DocId = docId;
-			_Id = id;
-			_Name = name;
-			_PageNumber = pageNumber;
-		}
+		public int PageNumber { get; set; }
 	}
 }
 

@@ -1,6 +1,6 @@
 //
-// mTouch-PDFReader demo
-// MyDocumentNoteManager.cs (Simple document note manager)
+// mTouch-PDFReader library
+// DocumentNoteManager.cs (DDocument note manager)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,71 +22,52 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using mTouchPDFReader.Library.Data.Managers;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Demo.DataObjects
+namespace mTouchPDFReader.Library.Managers
 {
-	public class MyDocumentNoteManager : DocumentNoteManager
+	public class DocumentNoteManager : IDocumentNoteManager
 	{
-		#region Fields		
-		/// <summary>
-		/// The document notes list.
-		/// </summary>
-		private static List<DocumentNote> _AllNotes;		
-		#endregion
-		
-		#region Logic
+		#region Logic	
 		/// <summary>
 		/// Hidden constructor to create instance only from RC.
 		/// </summary>
-		protected MyDocumentNoteManager() {}
+		protected DocumentNoteManager()	{}
 
 		/// <summary>
-		/// Static.
-		/// </summary>
-		static MyDocumentNoteManager()
+		/// Creates the new <see cref="DocumentNote"/> object.
+		/// </summary>.
+		/// </param>
+		public virtual DocumentNote GetNew(int docId, string note)
 		{
-			_AllNotes = new List<DocumentNote>();
+			return new DocumentNote {
+				Id = -1,
+				DocId = docId,
+				Note = note
+			};
 		}
-		
-		/// <summary>
-		/// Gets the new bookmark identifier.
-		/// </summary>
-		/// <returns>The new bookmark identifier.</returns>
-		protected override int GetNewId()
-		{
-			return _AllNotes.Count + 1;
-		}
-		
+
 		/// <summary>
 		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
 		/// </summary>
 		/// <param name="docId">The PDF document Id.</param>
 		/// <returns>The <see cref="DocumentNote"/> object.</returns>
-		public override DocumentNote Load(int docId)
+		public virtual DocumentNote Load(int docId)
 		{
-			var note = _AllNotes.FirstOrDefault(n => n.DocId == docId);
-			if (note == null) {
-				note = new DocumentNote(docId, -1, string.Empty);
-			}			
-			return note;
+			return new DocumentNote {
+				Id = -1, DocId = docId, Note = string.Empty
+			};
 		}
 
 		/// <summary>
 		/// Saves the see cref="DocumentNote"/> object.
 		/// </summary>
 		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
-		public override void Save(DocumentNote note)
+		public virtual void Save(DocumentNote note)
 		{
-			if (!_AllNotes.Contains(note)) {
-				note.Id = GetNewId();
-				_AllNotes.Add(note);
-			}
+			// Noting
 		}		
 		#endregion
 	}
 }
-

@@ -1,6 +1,6 @@
 //
-// mTouch-PDFReader library
-// DocumentBookmarkManager.cs (Document bookmarks manager)
+// mTouch-PDFReader demo
+// MyDocumentBookmarkManager.cs (Simple document bookmarks manager)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -23,26 +23,33 @@
 
 using System;
 using System.Collections.Generic;
-using mTouchPDFReader.Library.Interfaces;
+using System.Linq;
+using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Library.Data.Managers
+namespace mTouchPDFReader.Demo.Library
 {
-	public class DocumentBookmarkManager : IDocumentBookmarkManager
+	public class MyDocumentBookmarkManager : DocumentBookmarkManager
 	{
+		#region Fields		
+		/// <summary>
+		/// The document bookmarks list.
+		/// </summary>
+		private static List<DocumentBookmark> _AllBookmarks;		
+		#endregion
+		
 		#region Logic	
 		/// <summary>
 		/// Hidden constructor to create instance only from RC.
 		/// </summary>
-		protected DocumentBookmarkManager()	{}
+		protected MyDocumentBookmarkManager() {}
 
 		/// <summary>
-		/// Gets the new bookmark identifier.
+		/// Static.
 		/// </summary>
-		/// <returns>The new bookmark identifier.</returns>
-		protected virtual int GetNewId()
+		static MyDocumentBookmarkManager()
 		{
-			return 0;
+			_AllBookmarks = new List<DocumentBookmark>();
 		}
 		
 		/// <summary>
@@ -50,28 +57,35 @@ namespace mTouchPDFReader.Library.Data.Managers
 		/// </summary>
 		/// <param name="docId">The PDF document Id.</param>
 		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>
-		public virtual List<DocumentBookmark> LoadList(int docId)
+		public override List<DocumentBookmark> LoadList(int docId)
 		{
-			return new List<DocumentBookmark>();
+			var retValue = _AllBookmarks.Where(d => d.DocId == docId).ToList();
+			return retValue;
 		}
 		
 		/// <summary>
 		/// Saves the <see cref="DocumentBookmark"/> object. 
 		/// </summary>
 		/// <param name="bookmark">The bookmark object.</param>
-		public virtual void Save(DocumentBookmark bookmark)
+		public override void Save(DocumentBookmark bookmark)
 		{
-			// Noting
+			if (!_AllBookmarks.Contains(bookmark)) {
+				bookmark.Id = _AllBookmarks.Count + 1;
+				_AllBookmarks.Add(bookmark);
+			}
 		}	
 		
 		/// <summary>
 		/// Deletes the <see cref="DocumentBookmark"/> object by <see cref="bookmarkId"/>.
 		/// </summary>
-		/// <param name="bookmarkId">The bookmark id.</param>
-		public virtual void Delete(int bookmarkId)
+		public override void Delete(int bookmarkId)
 		{
-			// Nothing
+			var bookmark = _AllBookmarks.First(d => d.Id == bookmarkId);
+			if (bookmark != null) {
+				_AllBookmarks.Remove(bookmark);
+			}
 		}		
 		#endregion
 	}
 }
+

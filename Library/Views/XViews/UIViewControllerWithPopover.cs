@@ -30,6 +30,7 @@ namespace mTouchPDFReader.Library.XViews
 {
 	public abstract class UIViewControllerWithPopover : UIViewController
 	{
+		#region Fields
 		/// <summary>
 		/// The callback action. 
 		/// </summary>
@@ -39,6 +40,7 @@ namespace mTouchPDFReader.Library.XViews
 			}
 		}
 		private Action<object> _CallbackAction;
+		#endregion
 		
 		/// <summary>
 		/// The Popover controller.
@@ -73,8 +75,7 @@ namespace mTouchPDFReader.Library.XViews
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			ContentSizeForViewInPopover = GetPopoverSize();
-		
+			ContentSizeForViewInPopover = GetPopoverSize();		
 		}
 		
 		/// <summary>

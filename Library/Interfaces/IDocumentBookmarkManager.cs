@@ -30,7 +30,13 @@ namespace mTouchPDFReader.Library.Interfaces
 	public interface IDocumentBookmarkManager
 	{
 		/// <summary>
-		/// Gets the <see cref="DocumentBookmark"/> bookmarks collection by the <see cref="docId"/>.
+		/// Creates the new <see cref="DocumentBookmark"/> object.
+		/// </summary>.
+		/// </param>
+		DocumentBookmark GetNew(int docId, string name, int pageNumber);
+
+		/// <summary>
+		/// Gets the <see cref="DocumentBookmark"/> list by the <see cref="docId"/>.
 		/// </summary>
 		/// <param name="docId">The PDF document Id.</param>
 		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>

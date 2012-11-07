@@ -29,7 +29,7 @@ using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
-using mTouchPDFReader.Library.Data.Managers;
+using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management
@@ -45,7 +45,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// <summary>
 		/// The note text view.
 		/// </summary>
-		private UITextView _NoteTxt;		
+		private UITextView _TxtNote;		
 		#endregion
 
 		#region Constructors
@@ -58,9 +58,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		#endregion
 
-		/// <summary>
-		/// Calls when view are loaded 
-		/// </summary>
+		#region UI logic
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -79,9 +77,8 @@ namespace mTouchPDFReader.Library.Views.Management
 			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
-				_Note.Note = _NoteTxt.Text;
+				_Note.Note = _TxtNote.Text;
 				RC.Get<IDocumentNoteManager>().Save(_Note);
-				CallbackAction(_NoteTxt);
 				_PopoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);
@@ -89,29 +86,23 @@ namespace mTouchPDFReader.Library.Views.Management
 			View.AddSubview(toolBar);
 			
 			// Create text note
-			_NoteTxt = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
-			_NoteTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
-			_NoteTxt.Font = UIFont.SystemFontOfSize(17.0f);
-			_NoteTxt.Text = _Note.Note;
-			View.AddSubview(_NoteTxt);
+			_TxtNote = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
+			_TxtNote.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
+			_TxtNote.Font = UIFont.SystemFontOfSize(17.0f);
+			_TxtNote.Text = _Note.Note;
+			View.AddSubview(_TxtNote);
 		}
 		
-		/// <summary>
-		/// Returns popover size, must be overrided in child classes
-		/// </summary>
-		/// <returns>Popover size</returns>
 		protected override SizeF GetPopoverSize()
 		{
 			return new SizeF(400, 400);
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
+		#endregion
 	}
 }
 

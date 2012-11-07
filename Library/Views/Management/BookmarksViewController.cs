@@ -29,7 +29,7 @@ using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
-using mTouchPDFReader.Library.Data.Managers;
+using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management
@@ -38,7 +38,7 @@ namespace mTouchPDFReader.Library.Views.Management
 	{		
 		#region Fields		
 		/// <summary>
-		/// The opened document id. 
+		/// The document id. 
 		/// </summary>
 		private int _DocumentId;
 		
@@ -86,9 +86,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		#endregion
 
-		/// <summary>
-		/// Calls when view are loaded 
-		/// </summary>
+		#region UI Logic
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -137,26 +135,16 @@ namespace mTouchPDFReader.Library.Views.Management
 			_NewBookmarkCell.AddSubview(_NewBookmarkNameTxt);
 		}
 		
-		/// <summary>
-		/// Returns popover size, must be overrided in child classes
-		/// </summary>
-		/// <returns>Popover size</returns>
 		protected override SizeF GetPopoverSize()
 		{
 			return new SizeF(400, 400);
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
 
-		/// <summary>
-		/// Sets editing mode
-		/// </summary>
 		private void SetEditingMode(UITableViewCellEditingStyle mode)
 		{
 			bool editing;
@@ -177,11 +165,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			_BookmarksTable.SetEditing(editing, true);
 			_BookmarksTable.ReloadData();
 		}
+		#endregion
 
-		/// <summary>
-		/// TableView datasource
-		/// </summary> 
-		class DataSource : UITableViewSource
+		#region Table DataSource
+		private class DataSource : UITableViewSource
 		{
 			const string CellIdentifier = "Cell";
 			private BookmarksViewController _Controller;
@@ -212,7 +199,7 @@ namespace mTouchPDFReader.Library.Views.Management
 					: _Controller._NewBookmarkNameTxt.Text;
 				tableView.BeginUpdates();
 				var newIndexPath = NSIndexPath.FromRowSection(indexPath.Row + _Controller._Bookmarks.Count + 1, 0);
-				var newBookmark = new DocumentBookmark(_Controller._DocumentId, -1, bookmakrName, _Controller._CurrentPageNumber);
+				var newBookmark = RC.Get<IDocumentBookmarkManager>().GetNew(_Controller._DocumentId, bookmakrName, _Controller._CurrentPageNumber);
 				RC.Get<IDocumentBookmarkManager>().Save(newBookmark);
 				_Controller._Bookmarks.Add(newBookmark);
 				_Controller._BookmarksTable.InsertRows(new NSIndexPath[] { newIndexPath }, UITableViewRowAnimation.Fade);
@@ -310,6 +297,7 @@ namespace mTouchPDFReader.Library.Views.Management
 				}
 			}
 		}
+		#endregion
 	}
 }
 
