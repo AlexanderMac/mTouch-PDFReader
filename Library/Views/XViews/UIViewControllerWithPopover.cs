@@ -77,6 +77,14 @@ namespace mTouchPDFReader.Library.XViews
 			base.ViewDidLoad();
 			ContentSizeForViewInPopover = GetPopoverSize();		
 		}
+
+		/// <summary>
+		/// Called when permission is shought to rotate
+		/// </summary>
+		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
+		{
+			return true;
+		}
 		
 		/// <summary>
 		/// Returns popover size, must be override in child classes

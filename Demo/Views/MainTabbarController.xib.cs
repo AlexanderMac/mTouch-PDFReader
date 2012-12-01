@@ -60,6 +60,9 @@ namespace mTouchPDFReader.Demo
 		{
 			base.ViewDidLoad();
 			tabbarController.View.Frame = View.Bounds;
+
+			AddChildViewController(tabbarController);
+			tabbarController.DidMoveToParentViewController(this);
 			View.AddSubview(tabbarController.View);
 		}
 		

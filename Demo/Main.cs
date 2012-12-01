@@ -38,7 +38,7 @@ namespace mTouchPDFReader.Demo
 	{
 		static void Main(string[] args)
 		{
-			UIApplication.Main(args);
+			UIApplication.Main(args, null, "AppDelegate");
 		}
 	}
 	
@@ -48,11 +48,13 @@ namespace mTouchPDFReader.Demo
 		// This method is invoked when the application has loaded its UI and its ready to run
 		public override bool FinishedLaunching(UIApplication app, NSDictionary options)
 		{
-			window.AddSubview(mainTabbarController.View);
-			window.MakeKeyAndVisible();
 			RC.RegisterReference<IDocumentBookmarkManager, MyDocumentBookmarkManager>();
 			RC.RegisterReference<IDocumentNoteManager, MyDocumentNoteManager>();
 			RC.RegisterReference<IOptionsManager, OptionsManager>();
+
+			window.RootViewController = mainTabbarController;
+			window.MakeKeyAndVisible();
+
 			return true;
 		}
 		

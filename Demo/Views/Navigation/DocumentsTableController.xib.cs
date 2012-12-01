@@ -98,9 +98,8 @@ namespace mTouchPDFReader.Demo
 			/// </summary>
 			private void OpenDocument(int rowId)
 			{				
-				var docViewController = new DocumentViewController();
+				var docViewController = new DocumentViewController(PDFFile.PDFFiles[rowId].Id, PDFFile.PDFFiles[rowId].Name, PDFFile.PDFFiles[rowId].FilePath);
 				_Controller.NavigationController.PushViewController(docViewController, true);
-				docViewController.OpenDocument(PDFFile.PDFFiles [rowId].Id, PDFFile.PDFFiles [rowId].Name, PDFFile.PDFFiles [rowId].FilePath);
 			}
 
 			/// <summary>

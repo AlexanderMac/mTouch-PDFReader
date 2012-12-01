@@ -24,6 +24,7 @@
 using System;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
@@ -54,16 +55,21 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// The document id.
 		/// </summary>
 		private int _DocumentId;
+
+		/// <summary>
+		/// The document name.
+		/// </summary>
+		private string _DocumentName;
+
+		/// <summary>
+		/// The document path.
+		/// </summary>
+		private string _DocumentPath;
 			
 		/// <summary>
 		/// The book PageView controller.
 		/// </summary>
 		private UIPageViewController _BookPageViewController;
-
-		/// <summary>
-		/// The first PageView controller.
-		/// </summary>
-		private PageViewController _FirstPageViewCntr;
 
 		/// <summary>
 		/// The toolbar view.
@@ -106,37 +112,31 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UILabel _PageNumberLabel;
 		#endregion
 			
-		#region Constructors
-		public DocumentViewController(IntPtr handle) : base(handle)
+		#region Initialization
+		/// <summary>
+		/// Default.
+		/// </summary>
+		public DocumentViewController(int docId, string docName, string docPath) : base(null, null)
 		{
-			Initialize();
+			_DocumentId = docId;
+			_DocumentName = docName;
+			_DocumentPath = docPath;
 		}
-
-		[Export("initWithCoder:")]
-		public DocumentViewController(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
-
-		public DocumentViewController() : base(null, null)
-		{
-			Initialize(); 
-		}
-
-		void Initialize()
-		{
-		}		
 		#endregion
 		
 		#region UIViewController	
 		/// <summary>
-		/// Called after the controller’s view is loaded into memory.
+		/// Calls after the controller’s view did loaded into memory.
 		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+
+			// Load document
+			PDFDocument.OpenDocument(_DocumentName, _DocumentPath);
 			
-			// Init View			
+			// Init View	
+			Title = _DocumentName;
 			View.BackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
 	
 			// Create toolbar
@@ -171,21 +171,29 @@ namespace mTouchPDFReader.Library.Views.Core
 			_BookPageViewController = new UIPageViewController(
 				UIPageViewControllerTransitionStyle.PageCurl,
 				navOrientation, 
-				UIPageViewControllerSpineLocation.None);		
+				UIPageViewControllerSpineLocation.Min);		
 			_BookPageViewController.View.Frame = GetBookPageViewFrameRect();
 			_BookPageViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			_BookPageViewController.View.BackgroundColor = UIColor.GroupTableViewBackgroundColor;
 			_BookPageViewController.GetNextViewController = GetNextPageViewController;
 			_BookPageViewController.GetPreviousViewController = GetPreviousPageViewController;
-			//_BookPageViewController.GetSpineLocation = GetSpineLocation;
+			_BookPageViewController.GetSpineLocation = GetSpineLocation;
 			_BookPageViewController.DidFinishAnimating += delegate(object sender, UIPageViewFinishedAnimationEventArgs e) {
 				PageFinishedAnimation(e.Completed, e.Finished, e.PreviousViewControllers);
 			};
+			_BookPageViewController.SetViewControllers(
+				new UIViewController[] { GetPageViewController(1) }, 
+				UIPageViewControllerNavigationDirection.Forward, 
+				false,
+				s => ExecAfterOpenPageActions());	
+
+			AddChildViewController(_BookPageViewController);
+			_BookPageViewController.DidMoveToParentViewController(this);
 			View.AddSubview(_BookPageViewController.View);
 		}
 
 		/// <summary>
-		/// Called after the controller’s view the did layout subviews.
+		/// Calls after the controller’s view the did layout subviews.
 		/// </summary>
 		public override void ViewDidLayoutSubviews()
 		{
@@ -194,7 +202,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Called when permission is shought to rotate
+		/// Calls the possibility rotate the view.
 		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
@@ -202,7 +210,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Calls when object is disposing
+		/// Calls when object is disposing.
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
@@ -221,10 +229,10 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIViewController GetPreviousPageViewController(UIPageViewController pageController, UIViewController referenceViewController)
 		{			
 			var curPageCntr = referenceViewController as PageViewController;
-			if (curPageCntr.PageView.PageNumber == 0) {
+			if (curPageCntr.PageNumber == 0) {
 				return null;				
 			} 
-			int pageNumber = curPageCntr.PageView.PageNumber - 1;
+			int pageNumber = curPageCntr.PageNumber - 1;
 			return GetPageViewController(pageNumber);	
 		}
 
@@ -237,10 +245,14 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIViewController GetNextPageViewController(UIPageViewController pageController, UIViewController referenceViewController)
 		{			
 			var curPageCntr = referenceViewController as PageViewController;
-			if (curPageCntr.PageView.PageNumber == (PDFDocument.PageCount)) {				
+			if (curPageCntr.PageNumber == (PDFDocument.PageCount)) {				
+				return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid
+					? _GetEmptyPageContentVC()
+					: null;	
+			} else if (curPageCntr.PageNumber == -1) { 
 				return null;
-			} 
-			int pageNumber = curPageCntr.PageView.PageNumber + 1;
+			}
+			int pageNumber = curPageCntr.PageNumber + 1;
 			return GetPageViewController(pageNumber);	
 		}	
 
@@ -252,10 +264,21 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>The spine location.</returns>
 		private UIPageViewControllerSpineLocation GetSpineLocation(UIPageViewController pageViewController, UIInterfaceOrientation orientation)
 		{
-			if(orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-				return UIPageViewControllerSpineLocation.Min;
+			var currentPageVC = _GetCurrentPageContentVC();
+			UIViewController[] viewControllers;
+			UIPageViewControllerSpineLocation spineLocation;
+			
+			if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
+				viewControllers = new UIViewController[] { currentPageVC };
+				pageViewController.DoubleSided = false;
+				spineLocation = UIPageViewControllerSpineLocation.Min;
+			} else {
+				viewControllers = _GetTwoPageContentVC();
+				spineLocation = UIPageViewControllerSpineLocation.Mid; 
 			}
-			return UIPageViewControllerSpineLocation.Mid;
+			
+			pageViewController.SetViewControllers(viewControllers, UIPageViewControllerNavigationDirection.Forward, true, s => { });
+			return spineLocation;
 		}
 
 		/// <summary>
@@ -267,13 +290,12 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void PageFinishedAnimation(bool completed, bool finished, UIViewController[] previousViewControllers)
 		{
 			if (completed) {
-				_FirstPageViewCntr = (PageViewController)_BookPageViewController.ViewControllers[0]; //??
 				ExecAfterOpenPageActions();
 			}
 		}
 		#endregion
 				
-		#region UILogic		
+		#region UI Logic		
 		/// <summary>
 		/// Presents popover
 		/// </summary>
@@ -337,8 +359,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				OpenPriorPage();
 			});
 			_BtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", delegate {
-				var view = new GotoPageViewController(p => {
-					OpenDocumentPage((int)p); });
+				var view = new GotoPageViewController(p => OpenDocumentPage((int)p));
 				PresentPopover(view, _BtnNavigateToPage.Frame);
 			});
 			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", delegate {
@@ -492,12 +513,32 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void UpdatePageViewFrameRectAndZoomScale()
 		{
-			if (_FirstPageViewCntr != null) {
-				_FirstPageViewCntr.PageView.Frame = GetPageViewFrameRect();
-				_FirstPageViewCntr.PageView.UpdateMinimumMaximumZoom();
-				_FirstPageViewCntr.PageView.ZoomReset();
+			foreach (var pageVC in _BookPageViewController.ViewControllers.Cast<PageViewController>()) {
+				if (pageVC != null && pageVC.IsNotEmptyPage) {
+					pageVC.PageView.Frame = GetPageViewFrameRect();
+					pageVC.PageView.UpdateMinimumMaximumZoom();
+					pageVC.PageView.ZoomReset();
+				}
 			}
 		}		
+
+		/// <summary>
+		/// Gets the get current PageView controller.
+		/// </summary>
+		/// <returns>The current PageView controller.</returns>
+		private PageViewController _GetCurrentPageContentVC()
+		{
+			return (PageViewController)_BookPageViewController.ViewControllers[0];
+		}
+
+		/// <summary>
+		/// Gets the empty PageView controller.
+		/// </summary>
+		/// <returns>The empty PageView controller.</returns>
+		private PageViewController _GetEmptyPageContentVC()
+		{
+			return new PageViewController(GetPageViewFrameRect(), -1);
+		}
 
 		/// <summary>
 		/// Gets the PageView controller by <see cref="pageNumber"/>.
@@ -513,42 +554,81 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Opens the document.
+		/// Gets the two PageView controllers.
 		/// </summary>
-		/// <param name="docId">The document id.</param>
-		/// <param name="docName">The document name.</param>
-		/// <param name="docPath">The document file path.</param>
-		public virtual void OpenDocument(int docId, string docName, string docPath)
+		/// <returns>The two PageView controllers.</returns>
+		private PageViewController[] _GetTwoPageContentVC()
 		{
-			_DocumentId = docId;
-			Title = docName;
-			PDFDocument.OpenDocument(docName, docPath);
-			UpdateSliderMaxValue();
-			OpenDocumentPage(1);
+			UIViewController[] viewControllers;
+			var currentPageVC = _GetCurrentPageContentVC();
+			if (currentPageVC.PageNumber == 1 || currentPageVC.PageNumber % 2 != 0) { // 1,3,5
+ 				var nextPageVC = GetNextPageViewController(_BookPageViewController, currentPageVC);
+				if (nextPageVC == null) {
+					nextPageVC = _GetEmptyPageContentVC();
+				}
+				viewControllers = new UIViewController[] { currentPageVC, nextPageVC };		
+			} else {
+				var previousPageVC = GetPreviousPageViewController(_BookPageViewController, currentPageVC);
+				viewControllers = new UIViewController[] { previousPageVC, currentPageVC };	
+			}
+			return viewControllers.Cast<PageViewController>().ToArray();
 		}
-		
+
+		/// <summary>
+		/// Gets the two PageView controllers by the firstPageIndex.
+		/// </summary>
+		/// <param name='firstPageIndex'>The first page index.</param>
+		/// <returns>The two PageView controllers.</returns>
+		private PageViewController[] _GetTwoPageContentVCByIndex(int firstPageIndex)
+		{
+			var firstPageVC = GetPageViewController(firstPageIndex);
+			var secondPageVC = firstPageIndex + 1 < PDFDocument.PageCount 
+				? GetPageViewController(firstPageIndex + 1)
+				: _GetEmptyPageContentVC();
+			var viewControllers = new UIViewController[] { firstPageVC, secondPageVC };		
+			return viewControllers.Cast<PageViewController>().ToArray();
+		}
+
+		/// <summary>
+		/// Gets the page increment value.
+		/// </summary>
+		/// <returns>The page increment value.</returns>
+		private int _GetPageIncValue()
+		{
+			return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid ? 2 : 1;
+		}
+
+
 		/// <summary>
 		/// Opens the document page.
 		/// </summary>
 		/// <param name="pageNumber">The document page number.</param>
 		public virtual void OpenDocumentPage(int pageNumber)
 		{
-			var pageViewCntr = GetPageViewController(pageNumber);
-			if (pageViewCntr != null) {
-				_FirstPageViewCntr = pageViewCntr;
-
-				// Calc navigation direction
-				var navDirection = pageNumber < PDFDocument.CurrentPageNumber  
-					? UIPageViewControllerNavigationDirection.Reverse
-						: UIPageViewControllerNavigationDirection.Forward;
-
-				// Open page
-				_BookPageViewController.SetViewControllers(
-					new UIViewController[] { _FirstPageViewCntr }, 
-					navDirection, 
-					true, 
-					s => { ExecAfterOpenPageActions(); });
+			if (pageNumber < 1 || pageNumber > PDFDocument.PageCount) {
+				return;
 			}
+
+			// Calc navigation direction
+			var navDirection = pageNumber < PDFDocument.CurrentPageNumber  
+				? UIPageViewControllerNavigationDirection.Reverse
+				: UIPageViewControllerNavigationDirection.Forward;
+
+			// Create single PageView or two PageViews
+			UIViewController[] viewControllers;
+			if (_BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid) {
+				viewControllers = _GetTwoPageContentVCByIndex(pageNumber);
+			} else {
+				var pageVC = GetPageViewController(pageNumber);
+				viewControllers = new UIViewController[] { pageVC };
+			}
+
+			// Open page
+			_BookPageViewController.SetViewControllers(
+				viewControllers, 
+				navDirection, 
+				true, 
+				s => { ExecAfterOpenPageActions(); });
 		}		
 
 		/// <summary>
@@ -557,7 +637,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void ExecAfterOpenPageActions()
 		{
 			// Set current page
-			PDFDocument.CurrentPageNumber = _FirstPageViewCntr.PageView.PageNumber;	
+			PDFDocument.CurrentPageNumber = _GetCurrentPageContentVC().PageNumber;	
 			
 			// Update PageNumber label
 			if (_PageNumberLabel != null) {
@@ -585,7 +665,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void OpenPriorPage()
 		{
-			OpenDocumentPage(PDFDocument.CurrentPageNumber - 1);
+			OpenDocumentPage(PDFDocument.CurrentPageNumber - _GetPageIncValue());
 		}
 		
 		/// <summary>
@@ -593,7 +673,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void OpenNextPage()
 		{
-			OpenDocumentPage(PDFDocument.CurrentPageNumber + 1);
+			OpenDocumentPage(PDFDocument.CurrentPageNumber + _GetPageIncValue());
 		}
 		
 		/// <summary>
@@ -609,8 +689,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void ZoomOut()
 		{
-			if (PDFDocument.DocumentHasLoaded) {
-				_FirstPageViewCntr.PageView.ZoomDecrement();
+			var pageVC = _GetCurrentPageContentVC();
+			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
+				pageVC.PageView.ZoomDecrement();
 			}
 		}
 		
@@ -619,27 +700,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void ZoomIn()
 		{
-			if (PDFDocument.DocumentHasLoaded) {
-				_FirstPageViewCntr.PageView.ZoomIncrement();
+			var pageVC = _GetCurrentPageContentVC();
+			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
+				pageVC.PageView.ZoomIncrement();
 			}
 		}		
 		#endregion
-
-		private class PageViewControllerDelegate : UIPageViewControllerDelegate
-		{
-			/// <summary>
-			/// Gets the spine location.
-			/// </summary>
-			/// <param name='pageController'>The book PageView controller.</param>
-			/// <param name='orientation'>The device orientation.</param>
-			/// <returns>The spine location.</returns>
-			public override UIPageViewControllerSpineLocation GetSpineLocation(UIPageViewController pageViewController, UIInterfaceOrientation orientation)
-			{
-				if(orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-					return UIPageViewControllerSpineLocation.Min;
-				}
-				return UIPageViewControllerSpineLocation.Mid;
-			}
-		}
 	}
 }

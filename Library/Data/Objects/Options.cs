@@ -31,7 +31,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 	public class Options
 	{
 		#region Default constants		
-		private const PageTurningTypes DefaultPageTurningType = PageTurningTypes.Vertical;
+		private const PageTurningTypes DefaultPageTurningType = PageTurningTypes.Horizontal;
 		private const bool DefaultToolbarVisible = true;
 		private const bool DefaultStatusbarVisible = true;
 		private const bool DefaultPageNumberVisible = true;

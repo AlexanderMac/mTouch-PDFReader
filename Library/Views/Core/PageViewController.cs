@@ -30,24 +30,35 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class PageViewController : UIViewController
 	{
+		#region Fields
 		/// <summary>
 		/// The PageView frame.
 		/// </summary>
 		private RectangleF _ViewFrame;
 
 		/// <summary>
-		/// The page number.
+		/// Gets the page number.
 		/// </summary>
-		private int _PageNumber;
+		public int PageNumber { get; private set; }
 
 		/// <summary>
 		/// Gets the PageView.
 		/// </summary>
 		public PageView PageView {
 			get {
-				return (PageView)View;
+				return View as PageView;
 			}
 		}
+
+		/// <summary>
+		/// Gets the value indicaties whether the page is not Empty page.
+		/// </summary>
+		public bool IsNotEmptyPage {
+			get {
+				return PageView != null;
+			}
+		}
+		#endregion
 
 		#region Constructors
 		public PageViewController(IntPtr handle) : base(handle)
@@ -62,7 +73,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		public PageViewController(RectangleF viewFrame, int pageNumber) : base(null, null)
 		{
 			_ViewFrame = viewFrame;
-			_PageNumber = pageNumber;
+			PageNumber = pageNumber;
 		}	
 		#endregion
 
@@ -73,7 +84,19 @@ namespace mTouchPDFReader.Library.Views.Core
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			View = new PageView(_ViewFrame, _PageNumber);
+			if (PageNumber == -1) {
+				View.BackgroundColor = UIColor.Clear;
+			} else {
+				View = new PageView(_ViewFrame, PageNumber);
+			}
+		}
+
+		/// <summary>
+		/// Called when permission is shought to rotate
+		/// </summary>
+		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
+		{
+			return true;
 		}
 		#endregion
 	}
