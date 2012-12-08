@@ -163,6 +163,9 @@ namespace mTouchPDFReader.Library.Views.Core
 					}
 				}
 			}
+
+			// Update Slider Max value
+			UpdateSliderMaxValue();
 			
 			// Create the book PageView controller
 			var navOrientation = RC.Get<IOptionsManager>().Options.PageTurningType == mTouchPDFReader.Library.Data.Enums.PageTurningTypes.Horizontal

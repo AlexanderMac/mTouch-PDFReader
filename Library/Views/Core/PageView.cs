@@ -118,7 +118,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_ThumbView = new ThumbView(_PageContentView.Bounds, ThumbContentSize, pageNumber);
 			
 			// Add views to parents
-			//??_PageContentContainerView.AddSubview(_ThumbView);
+			_PageContentContainerView.AddSubview(_ThumbView);
 			_PageContentContainerView.AddSubview(_PageContentView);						
 			AddSubview(_PageContentContainerView);
 			
