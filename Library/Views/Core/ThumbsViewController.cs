@@ -28,6 +28,7 @@ using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.XViews;
+using mTouchPDFReader.Library.Managers;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -113,7 +114,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_ParentViewWidth = parentViewWidth;
 			_OpenPageCallback = callbackAction; 
 			_ThumbViews = new List<ThumbWithPageNumberView>();
-			_ThumbViews.Capacity = RC.Get<IOptionsManager>().Options.ThumbsBufferSize;					
+			_ThumbViews.Capacity = MgrAccessor.OptionsMgr.Options.ThumbsBufferSize;					
 		}				
 		#endregion
 		
@@ -152,7 +153,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>Popover size</returns>
 		protected override SizeF GetPopoverSize()
 		{
-			return new SizeF(_ParentViewWidth - 20, ThumbPadding * 2 + RC.Get<IOptionsManager>().Options.ThumbSize);
+			return new SizeF(_ParentViewWidth - 20, ThumbPadding * 2 + MgrAccessor.OptionsMgr.Options.ThumbSize);
 		}
 
 		/// <summary>
@@ -224,7 +225,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			if ((x < 0) || (x > _ScrollView.ContentSize.Width - ThumbPadding)) {
 				return -1;
 			}
-			int retValue = (int)(x / (float)(RC.Get<IOptionsManager>().Options.ThumbSize + ThumbPadding)) + 1;
+			int retValue = (int)(x / (float)(MgrAccessor.OptionsMgr.Options.ThumbSize + ThumbPadding)) + 1;
 			#if DEBUG
 			WriteMessageToDebugLog("GetThumbNumberByX", string.Format("x = {0}, pageNumber={1}", x, retValue));
 			#endif
@@ -238,8 +239,8 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns></returns>
 		private RectangleF GetThumbFrameByPage(int pageNumber)
 		{
-			float left = (pageNumber - 1) * (ThumbPadding + RC.Get<IOptionsManager>().Options.ThumbSize) + ThumbPadding;
-			var retValue = new RectangleF(left, ThumbPadding, RC.Get<IOptionsManager>().Options.ThumbSize, RC.Get<IOptionsManager>().Options.ThumbSize);
+			float left = (pageNumber - 1) * (ThumbPadding + MgrAccessor.OptionsMgr.Options.ThumbSize) + ThumbPadding;
+			var retValue = new RectangleF(left, ThumbPadding, MgrAccessor.OptionsMgr.Options.ThumbSize, MgrAccessor.OptionsMgr.Options.ThumbSize);
 			#if DEBUG
 			WriteMessageToDebugLog("GetThumbFrameByPage", string.Format("frame = {0}", retValue));
 			#endif
@@ -253,14 +254,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			// Check existing thumbs in visible rectangle, create thumbs if needed
 			for (int i = _FirstVisibleThumbNumber; i <= _FirstVisibleThumbNumber + _MaxVisibleThumbsCount; i++) {
-				ThumbWithPageNumberView thumb = CreateThumbForPageIfNotExists(i);
-				#if DEBUG
-				if (thumb != null) {
-					WriteMessageToDebugLog("CreateThumbs", string.Format("thumb.Frame.X={0}, thumb.PageNumber={1}", thumb.Frame, thumb.PageNumber));
-				} else {
-					WriteMessageToDebugLog("CreateThumbs", "thumb is null");
-				}
-				#endif
+				CreateThumbForPageIfNotExists(i);
 			}
 		}
 		
@@ -301,7 +295,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			#endif
 			
 			// Pack thumbs size to ThumbsBufferSize (only one extra item can be created - remove it)
-			if (_ThumbViews.Count > RC.Get<IOptionsManager>().Options.ThumbsBufferSize) {
+			if (_ThumbViews.Count > MgrAccessor.OptionsMgr.Options.ThumbsBufferSize) {
 				// Remove view from first or last position of the list (according direction)
 				if (_ScrollDirection > 0) {
 					_ThumbViews [0].RemoveFromSuperview();
@@ -322,7 +316,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void UpdateScrollViewContentSize()
 		{
-			float contentWidth = (ThumbPadding + RC.Get<IOptionsManager>().Options.ThumbSize) * PDFDocument.PageCount + ThumbPadding;
+			float contentWidth = (ThumbPadding + MgrAccessor.OptionsMgr.Options.ThumbSize) * PDFDocument.PageCount + ThumbPadding;
 			float contentHeight = _ScrollView.Frame.Size.Height;
 			_ScrollView.ContentSize = new SizeF(contentWidth, contentHeight);
 		}
@@ -344,7 +338,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_Initializing = true;
 			
 			// Calc maximum visible thumbs count 
-			_MaxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)RC.Get<IOptionsManager>().Options.ThumbSize);
+			_MaxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)MgrAccessor.OptionsMgr.Options.ThumbSize);
 			if (_MaxVisibleThumbsCount > PDFDocument.PageCount) {
 				_MaxVisibleThumbsCount = PDFDocument.PageCount;
 			}

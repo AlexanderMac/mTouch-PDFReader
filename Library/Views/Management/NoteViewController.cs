@@ -78,7 +78,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
 				_Note.Note = _TxtNote.Text;
-				RC.Get<IDocumentNoteManager>().Save(_Note);
+				MgrAccessor.DocumentNoteMgr.Save(_Note);
 				_PopoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);

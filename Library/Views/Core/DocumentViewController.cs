@@ -33,6 +33,7 @@ using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.XViews;
 using mTouchPDFReader.Library.Views.Management;
+using mTouchPDFReader.Library.Managers;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -140,7 +141,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			View.BackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
 	
 			// Create toolbar
-			if (RC.Get<IOptionsManager>().Options.ToolbarVisible) {
+			if (MgrAccessor.OptionsMgr.Options.ToolbarVisible) {
 				_Toolbar = CreateToolbar();
 				if (_Toolbar != null) {
 					View.AddSubview(_Toolbar);
@@ -148,7 +149,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 			
 			// Create bottom bar (with slider)
-			if (RC.Get<IOptionsManager>().Options.BottombarVisible) {
+			if (MgrAccessor.OptionsMgr.Options.BottombarVisible) {
 				_BottomBar = CreateBottomBar();
 				if (_BottomBar != null) {
 					View.AddSubview(_BottomBar);
@@ -168,12 +169,9 @@ namespace mTouchPDFReader.Library.Views.Core
 			UpdateSliderMaxValue();
 			
 			// Create the book PageView controller
-			var navOrientation = RC.Get<IOptionsManager>().Options.PageTurningType == mTouchPDFReader.Library.Data.Enums.PageTurningTypes.Horizontal
-				? UIPageViewControllerNavigationOrientation.Horizontal
-				: UIPageViewControllerNavigationOrientation.Vertical;
 			_BookPageViewController = new UIPageViewController(
-				UIPageViewControllerTransitionStyle.PageCurl,
-				navOrientation, 
+				MgrAccessor.OptionsMgr.Options.PageTransitionStyle,
+				MgrAccessor.OptionsMgr.Options.PageNavigationOrientation, 
 				UIPageViewControllerSpineLocation.Min);		
 			_BookPageViewController.View.Frame = GetBookPageViewFrameRect();
 			_BookPageViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
@@ -268,20 +266,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIPageViewControllerSpineLocation GetSpineLocation(UIPageViewController pageViewController, UIInterfaceOrientation orientation)
 		{
 			var currentPageVC = _GetCurrentPageContentVC();
-			UIViewController[] viewControllers;
-			UIPageViewControllerSpineLocation spineLocation;
-			
-			if (orientation == UIInterfaceOrientation.Portrait || orientation == UIInterfaceOrientation.PortraitUpsideDown) {
-				viewControllers = new UIViewController[] { currentPageVC };
-				pageViewController.DoubleSided = false;
-				spineLocation = UIPageViewControllerSpineLocation.Min;
-			} else {
-				viewControllers = _GetTwoPageContentVC();
-				spineLocation = UIPageViewControllerSpineLocation.Mid; 
-			}
-			
-			pageViewController.SetViewControllers(viewControllers, UIPageViewControllerNavigationDirection.Forward, true, s => { });
-			return spineLocation;
+			pageViewController.DoubleSided = false;
+			pageViewController.SetViewControllers(new UIViewController[] { currentPageVC }, UIPageViewControllerNavigationDirection.Forward, true, s => { });
+			return UIPageViewControllerSpineLocation.Min;
 		}
 
 		/// <summary>
@@ -377,21 +364,21 @@ namespace mTouchPDFReader.Library.Views.Core
 			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", delegate {
 				ZoomIn(); 
 			});
-			if (RC.Get<IOptionsManager>().Options.NoteBtnVisible) {
+			if (MgrAccessor.OptionsMgr.Options.NoteBtnVisible) {
 				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
-					var note = RC.Get<IDocumentNoteManager>().Load(_DocumentId);
+					var note = MgrAccessor.DocumentNoteMgr.Load(_DocumentId);
 					var view = new NoteViewController(note, null);
 					PresentPopover(view, _BtnNote.Frame);
 				});
 			}
-			if (RC.Get<IOptionsManager>().Options.BookmarksBtnVisible) {
+			if (MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible) {
 				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
-					var bookmarks = RC.Get<IDocumentBookmarkManager>().LoadList(_DocumentId);
+					var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_DocumentId);
 					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
 					PresentPopover(view, _BtnBookmarksList.Frame);
 				});
 			}
-			if (RC.Get<IOptionsManager>().Options.ThumbsBtnVisible) {
+			if (MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible) {
 				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs32.png", delegate {
 					var view = new ThumbsViewController(View.Bounds.Width, p => {
 						OpenDocumentPage((int)p); });
@@ -439,20 +426,25 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Create slider
 			float sliderWidth = bottomBarFrame.Width - 15;
-			if (RC.Get<IOptionsManager>().Options.PageNumberVisible) {
+			if (MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
 				sliderWidth -= PageNumberLabelSize.Width;
 			}
 			var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
 			_Slider = new UISlider(pageSliderFrame);
 			_Slider.MinValue = 1;
 			_Slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			_Slider.ValueChanged += delegate { 
+			_Slider.ValueChanged += delegate {
+				if (_PageNumberLabel != null) {
+					_PageNumberLabel.Text = string.Format(@"{0}/{1}", (int)_Slider.Value, PDFDocument.PageCount);
+				}
+			};
+			_Slider.TouchUpInside += delegate(object sender, EventArgs e) {
 				OpenDocumentPage((int)_Slider.Value);
 			};
 			bottomBar.AddSubview(_Slider);
 
 			// Create page number view		
-			if (RC.Get<IOptionsManager>().Options.PageNumberVisible) {
+			if (MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
 				var pageNumberViewFrame = new RectangleF(pageSliderFrame.Width + 10, 5, PageNumberLabelSize.Width, PageNumberLabelSize.Height);
 				var pageNumberView = new UIView(pageNumberViewFrame);
 				pageNumberView.AutosizesSubviews = false;
@@ -557,42 +549,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Gets the two PageView controllers.
-		/// </summary>
-		/// <returns>The two PageView controllers.</returns>
-		private PageViewController[] _GetTwoPageContentVC()
-		{
-			UIViewController[] viewControllers;
-			var currentPageVC = _GetCurrentPageContentVC();
-			if (currentPageVC.PageNumber == 1 || currentPageVC.PageNumber % 2 != 0) { // 1,3,5
- 				var nextPageVC = GetNextPageViewController(_BookPageViewController, currentPageVC);
-				if (nextPageVC == null) {
-					nextPageVC = _GetEmptyPageContentVC();
-				}
-				viewControllers = new UIViewController[] { currentPageVC, nextPageVC };		
-			} else {
-				var previousPageVC = GetPreviousPageViewController(_BookPageViewController, currentPageVC);
-				viewControllers = new UIViewController[] { previousPageVC, currentPageVC };	
-			}
-			return viewControllers.Cast<PageViewController>().ToArray();
-		}
-
-		/// <summary>
-		/// Gets the two PageView controllers by the firstPageIndex.
-		/// </summary>
-		/// <param name='firstPageIndex'>The first page index.</param>
-		/// <returns>The two PageView controllers.</returns>
-		private PageViewController[] _GetTwoPageContentVCByIndex(int firstPageIndex)
-		{
-			var firstPageVC = GetPageViewController(firstPageIndex);
-			var secondPageVC = firstPageIndex + 1 < PDFDocument.PageCount 
-				? GetPageViewController(firstPageIndex + 1)
-				: _GetEmptyPageContentVC();
-			var viewControllers = new UIViewController[] { firstPageVC, secondPageVC };		
-			return viewControllers.Cast<PageViewController>().ToArray();
-		}
-
-		/// <summary>
 		/// Gets the page increment value.
 		/// </summary>
 		/// <returns>The page increment value.</returns>
@@ -600,7 +556,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid ? 2 : 1;
 		}
-
 
 		/// <summary>
 		/// Opens the document page.
@@ -617,18 +572,12 @@ namespace mTouchPDFReader.Library.Views.Core
 				? UIPageViewControllerNavigationDirection.Reverse
 				: UIPageViewControllerNavigationDirection.Forward;
 
-			// Create single PageView or two PageViews
-			UIViewController[] viewControllers;
-			if (_BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid) {
-				viewControllers = _GetTwoPageContentVCByIndex(pageNumber);
-			} else {
-				var pageVC = GetPageViewController(pageNumber);
-				viewControllers = new UIViewController[] { pageVC };
-			}
+			// Create single PageView
+			var pageVC = GetPageViewController(pageNumber);
 
 			// Open page
 			_BookPageViewController.SetViewControllers(
-				viewControllers, 
+				new UIViewController[] { pageVC }, 
 				navDirection, 
 				true, 
 				s => { ExecAfterOpenPageActions(); });

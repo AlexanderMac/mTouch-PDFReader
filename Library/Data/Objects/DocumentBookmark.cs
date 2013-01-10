@@ -22,7 +22,6 @@
 //
 
 using System;
-using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Data.Objects
 {

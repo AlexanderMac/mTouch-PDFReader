@@ -6,6 +6,7 @@
 "Button 'Thumbs'"="Кнопка 'Миниатюры'";
 
 "Color"="Цвет";
+"Curl"="Естественное перелистывание";
 
 "Delete bookmark?"="Удалить закладку?";
 
@@ -13,12 +14,13 @@
 
 "Go..."="Перейти...";
 
-"Horz."="Гор.";
+"Horizontal"="Гориз.";
 
 "Invalid page number"="Неверный номер страницы";
 
 "Library information"="Информация о библиотеке";
 
+"Navigation orientation"="Ориентация навигации";
 "No"="Нет";
 "Note"="Заметка";
 
@@ -29,16 +31,14 @@
 
 "Scale"="Масштабирование";
 "Scale by double click"="Масштабирование по двойному клику";
+"Scroll"="Прокрутка";
 "Status"="Статус";
 
 "Thumbs"="Миниатюры";
-"Thumbs buffer size"="Размер буфера миниатюр";
-"Thumbs size"="Размер миниатюры";
-"Turning"="Перелистывание";
-"Type"="Тип";
+"Transition style"="стиль перелистывание";
 
 "Version"="Версия";
-"Vert."="Верт.";
+"Vertical"="Верт.";
 "Visibility"="Видимость";
 
 "Yes"="Да";

@@ -29,7 +29,6 @@ using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Managers;
-using mTouchPDFReader.Library.Data.Enums;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Views.Management
@@ -42,8 +41,9 @@ namespace mTouchPDFReader.Library.Views.Management
 		#endregion
 		
 		#region Fields		
-		// Page turning
-		private UITableViewCell _PageTurningTypeCell;
+		// Page transition style and navigation orientation
+		private UITableViewCell _PageTransitionStyleCell;
+		private UITableViewCell _PageNavigationOrientationCell;
 		// Visibility
 		private UITableViewCell _ToolbarVisibilityCell;
 		private UITableViewCell _BottombarVisibilityCell;
@@ -51,14 +51,9 @@ namespace mTouchPDFReader.Library.Views.Management
 		private UITableViewCell _NoteBtnVisibilityCell;
 		private UITableViewCell _BookmarksBtnVisibilityCell;
 		private UITableViewCell _ThumbsBtnVisibilityCell; 
-		// Colors
-		private UITableViewCell _BackgroundColorCell; 
 		// Zoom
 		private UITableViewCell _ZoomScaleLevelsCell;
 		private UITableViewCell _ZoomByDoubleTouchCell;
-		// Thumbs
-		private UITableViewCell _ThumbsBufferSizeCell;
-		private UITableViewCell _ThumbSizeCell;
 		// Library info
 		private UITableViewCell _LibraryReleaseDateCell;
 		private UITableViewCell _LibraryVersionCell;		
@@ -94,8 +89,9 @@ namespace mTouchPDFReader.Library.Views.Management
 			base.ViewDidLoad();
 			View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
    
-			// Page turning type
-			_PageTurningTypeCell = CreateTurningTypeCell();
+			// Page transition style and navigation orientation
+			_PageTransitionStyleCell = _CreatePageTransitionStyleCell();
+			_PageNavigationOrientationCell = _CreatePageNavigationOrientationCell();
 			// Visibility
 			_ToolbarVisibilityCell = CreateToolbarVisibilityCell();
 			_BottombarVisibilityCell = CreateBottombarVisibilityCell();
@@ -103,14 +99,9 @@ namespace mTouchPDFReader.Library.Views.Management
 			_NoteBtnVisibilityCell = CreateNoteBtnVisibilityCell();
 			_BookmarksBtnVisibilityCell = CreateBookmarksBtnVisibilityCell();
 			_ThumbsBtnVisibilityCell = CreateThumbsBtnVisibilityCell();
-			// Colors
-			_BackgroundColorCell = CreateBackgroundColorCell();
 			// Zoom
 			_ZoomScaleLevelsCell = CreateZoomScaleLevelsCell();
 			_ZoomByDoubleTouchCell = CreatemZoomByDoubleTouchCell();
-			// Thumbs
-			_ThumbsBufferSizeCell = CreateThumbsBufferSizeCell();
-			_ThumbSizeCell = CreateThumbSizeCell();
 			// Library info
 			_LibraryReleaseDateCell = CreateLibraryReleaseDateCell();
 			_LibraryVersionCell = CreateLibraryVersionCell();
@@ -129,7 +120,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			return true;
 		}
 		
-		#region Logic		
+		#region Helpers		
 		/// <summary>
 		/// Creates table cell 
 		/// </summary>
@@ -220,20 +211,41 @@ namespace mTouchPDFReader.Library.Views.Management
 			slider.MaxValue = maxValue;
 			return slider;
 		}
-		
+		#endregion
+
+		#region Creating cells
 		/// <summary>
-		/// Creates turning type cell 
+		/// Creates the page transition style cell. 
 		/// </summary>
-		/// <returns>Table cell</returns>
-		private UITableViewCell CreateTurningTypeCell()
+		/// <returns>The table cell.</returns>
+		private UITableViewCell _CreatePageTransitionStyleCell()
 		{
-			var cell = CreateCell("PageTurningTypeCell");
-			var label = CreateTitleLabelControl("Type".t());
-			var seg = CreateSegmentControl(new string[] { "Horz.".t(),	"Vert.".t() }, 150);
-			seg.SelectedSegment = (int)RC.Get<IOptionsManager>().Options.PageTurningType;
+			var cell = CreateCell("PageTransitionStyleCell");
+			var label = CreateTitleLabelControl("Transition style".t());
+			var seg = CreateSegmentControl(new string[] { "Curl".t(), "Scroll".t() }, 150);
+			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
 			seg.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.PageTurningType = (PageTurningTypes)seg.SelectedSegment;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.PageTransitionStyle = (UIPageViewControllerTransitionStyle)seg.SelectedSegment;
+				MgrAccessor.OptionsMgr.Save();
+			};
+			cell.AddSubview(label);
+			cell.AddSubview(seg);
+			return cell;
+		}
+
+		/// <summary>
+		/// Creates the page navigation orientation cell. 
+		/// </summary>
+		/// <returns>The table cell.</returns>
+		private UITableViewCell _CreatePageNavigationOrientationCell()
+		{
+			var cell = CreateCell("PageNavigationOrientationCell");
+			var label = CreateTitleLabelControl("Navigation orientation".t());
+			var seg = CreateSegmentControl(new string[] { "Horizontal".t(), "Vertical".t() }, 250);
+			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
+			seg.ValueChanged += delegate {
+				MgrAccessor.OptionsMgr.Options.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)seg.SelectedSegment;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(seg);
@@ -241,18 +253,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates toolbar visibility cell 
+		/// Creates the toolbar visibility cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateToolbarVisibilityCell()
 		{
 			var cell = CreateCell("ToolbarVisibilityCell");
 			var label = CreateTitleLabelControl("Toolbar".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.ToolbarVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.ToolbarVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.ToolbarVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.ToolbarVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -260,18 +272,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates bottombar visibility cell 
+		/// Creates the bottombar visibility cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateBottombarVisibilityCell()
 		{
 			var cell = CreateCell("BottombarVisibilityCell");
 			var label = CreateTitleLabelControl("Bottombar".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.BottombarVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.BottombarVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.BottombarVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.BottombarVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -279,18 +291,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates page number visibility cell 
+		/// Creates the page number visibility cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreatePageNumberVisibilityCell()
 		{
 			var cell = CreateCell("PageNumberVisibilityCell");
 			var label = CreateTitleLabelControl("Page number".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.PageNumberVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.PageNumberVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.PageNumberVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.PageNumberVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -298,18 +310,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates note button visibility cell 
+		/// Creates the note button visibility cell. 
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateNoteBtnVisibilityCell()
 		{
 			var cell = CreateCell("NoteBtnVisibilityCell");
 			var label = CreateTitleLabelControl("Button 'Note'".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.NoteBtnVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.NoteBtnVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.NoteBtnVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.NoteBtnVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -317,18 +329,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates bookmarks button visibility cell 
+		/// Creates the bookmarks button visibility cell. 
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateBookmarksBtnVisibilityCell()
 		{
 			var cell = CreateCell("BookmarksBtnVisibilityCell");
 			var label = CreateTitleLabelControl("Button 'Bookmarks'".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.BookmarksBtnVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.BookmarksBtnVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -336,18 +348,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates thumbs button visibility cell 
+		/// Creates the thumbs button visibility cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateThumbsBtnVisibilityCell()
 		{
 			var cell = CreateCell("ThumbsBtnVisibilityCell");
 			var label = CreateTitleLabelControl("Button 'Thumbs'".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.ThumbsBtnVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.ThumbsBtnVisible = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -355,30 +367,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates background color cell 
+		/// Creates the zoom scale levels cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
-		private UITableViewCell CreateBackgroundColorCell()
-		{
-			var cell = CreateCell("BackgroundColorCell");
-			var label = CreateTitleLabelControl("Background".t());
-			cell.AddSubview(label);
-			return cell;
-		}
-		
-		/// <summary>
-		/// Creates zoom scale levels cell 
-		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateZoomScaleLevelsCell()
 		{
 			var cell = CreateCell("ZoomScaleLevelsCell");
 			var label = CreateTitleLabelControl("Zoom scale levels".t());
 			var slider = CreateSliderControl(Options.MinZoomScaleLevels, Options.MaxZoomScaleLevels);
-			slider.SetValue(RC.Get<IOptionsManager>().Options.ZoomScaleLevels, false);
+			slider.SetValue(MgrAccessor.OptionsMgr.Options.ZoomScaleLevels, false);
 			slider.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.ZoomScaleLevels = (int)slider.Value;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.ZoomScaleLevels = (int)slider.Value;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(slider);
@@ -386,18 +386,18 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates zoom by double touch cell 
+		/// Creates the zoom by double touch cell.
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreatemZoomByDoubleTouchCell()
 		{
 			var cell = CreateCell("ZoomByDoubleTouchCell");
 			var label = CreateTitleLabelControl("Scale by double click".t());
 			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(RC.Get<IOptionsManager>().Options.AllowZoomByDoubleTouch, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.AllowZoomByDoubleTouch, false);
 			switchCtrl.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.AllowZoomByDoubleTouch = switchCtrl.On;
-				RC.Get<IOptionsManager>().Save();
+				MgrAccessor.OptionsMgr.Options.AllowZoomByDoubleTouch = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
 			cell.AddSubview(switchCtrl);
@@ -405,66 +405,28 @@ namespace mTouchPDFReader.Library.Views.Management
 		}
 		
 		/// <summary>
-		/// Creates thumbs buffer size cell 
+		/// Creates the library release date cell. 
 		/// </summary>
-		/// <returns>Table cell</returns>
-		private UITableViewCell CreateThumbsBufferSizeCell()
-		{
-			var cell = CreateCell("ThumbsBufferSizeCell");
-			var label = CreateTitleLabelControl("Thumbs buffer size".t());
-			var slider = CreateSliderControl(Options.MinThumbsBufferSize, Options.MaxThumbsBufferSize);
-			slider.SetValue(RC.Get<IOptionsManager>().Options.ThumbsBufferSize, false);
-			slider.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.ThumbsBufferSize = (int)slider.Value;
-				RC.Get<IOptionsManager>().Save();
-			};
-			cell.AddSubview(label);
-			cell.AddSubview(slider);
-			return cell;
-		}
-		
-		/// <summary>
-		/// Creates thumbs size cell 
-		/// </summary>
-		/// <returns>Table cell</returns>
-		private UITableViewCell CreateThumbSizeCell()
-		{
-			var cell = CreateCell("ThumbSizeCell");
-			var label = CreateTitleLabelControl("Thumbs size".t());
-			var slider = CreateSliderControl(Options.MinThumbSize, Options.MaxThumbSize);
-			slider.SetValue(RC.Get<IOptionsManager>().Options.ThumbSize, false);
-			slider.ValueChanged += delegate {
-				RC.Get<IOptionsManager>().Options.ThumbSize = (int)slider.Value;
-				RC.Get<IOptionsManager>().Save();
-			};
-			cell.AddSubview(label);
-			cell.AddSubview(slider);
-			return cell;
-		}
-		
-		/// <summary>
-		/// Creates library release date cell 
-		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateLibraryReleaseDateCell()
 		{
 			var cell = CreateCell("LibraryReleaseDateCell");
 			var label = CreateTitleLabelControl("Release date".t());
-			var labelInfo = CreateValueLabelControl(RC.Get<IOptionsManager>().Options.LibraryReleaseDate.ToShortDateString());			
+			var labelInfo = CreateValueLabelControl(MgrAccessor.OptionsMgr.Options.LibraryReleaseDate.ToShortDateString());			
 			cell.AddSubview(label);
 			cell.AddSubview(labelInfo);
 			return cell;
 		}
 		
 		/// <summary>
-		/// Creates library version cell 
+		/// Creates the library version cell. 
 		/// </summary>
-		/// <returns>Table cell</returns>
+		/// <returns>The table cell.</returns>
 		private UITableViewCell CreateLibraryVersionCell()
 		{
 			var cell = CreateCell("LibraryVersionCell");
 			var label = CreateTitleLabelControl("Version".t());
-			var labelInfo = CreateValueLabelControl(RC.Get<IOptionsManager>().Options.LibraryVersion);
+			var labelInfo = CreateValueLabelControl(MgrAccessor.OptionsMgr.Options.LibraryVersion);
 			cell.AddSubview(label);
 			cell.AddSubview(labelInfo);
 			return cell;
@@ -476,9 +438,9 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// </summary> 
 		class DataSource : UITableViewSource
 		{
-			private const int SectionsCount = 6;
-			private readonly int[] RowsInSections = new int[] { 1, 6, 1, 2, 2, 2 };
-			private readonly string[] SectionTitles = new string[] { "Turning".t(), "Visibility".t(), "Color".t(), "Scale".t(), "Thumbs".t(), "Library information".t() };
+			private const int SectionsCount = 4;
+			private readonly int[] RowsInSections = new int[] { 2, 6, 2, 2 };
+			private readonly string[] SectionTitles = new string[] { "Transition style".t(), "Visibility".t(), "Scale".t(), "Library information".t() };
 			
 			/// <summary>
 			/// Parent table controller
@@ -524,7 +486,13 @@ namespace mTouchPDFReader.Library.Views.Management
 			{
 				switch (indexPath.Section) {
 					case 0:
-						return _Controller._PageTurningTypeCell;
+						switch (indexPath.Row) {
+							case 0:
+								return _Controller._PageTransitionStyleCell;
+							case 1:
+								return _Controller._PageNavigationOrientationCell;
+						}
+						break;
 					case 1:
 						switch (indexPath.Row) {
 							case 0:
@@ -542,8 +510,6 @@ namespace mTouchPDFReader.Library.Views.Management
 						}
 						break;
 					case 2:
-						return _Controller._BackgroundColorCell;
-					case 3:
 						switch (indexPath.Row) {
 							case 0:
 								return _Controller._ZoomScaleLevelsCell;
@@ -551,15 +517,7 @@ namespace mTouchPDFReader.Library.Views.Management
 								return _Controller._ZoomByDoubleTouchCell;
 						}
 						break;
-					case 4:
-						switch (indexPath.Row) {
-							case 0:
-								return _Controller._ThumbsBufferSizeCell;
-							case 1:
-								return _Controller._ThumbSizeCell;
-						}
-						break;
-					case 5:
+					case 3:
 						switch (indexPath.Row) {
 							case 0:
 								return _Controller._LibraryReleaseDateCell;

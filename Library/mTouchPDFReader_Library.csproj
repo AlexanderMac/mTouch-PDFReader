@@ -86,7 +86,6 @@
     <Compile Include="Views\Core\ThumbView.cs" />
     <Compile Include="Views\Core\ThumbWithPageNumberView.cs" />
     <Compile Include="Views\Core\ThumbsViewController.cs" />
-    <Compile Include="Data\Enums\PageTurningTypes.cs" />
     <Compile Include="Utils\RC.cs" />
     <Compile Include="Interfaces\IDocumentNoteManager.cs" />
     <Compile Include="Interfaces\IOptionsManager.cs" />
@@ -96,6 +95,7 @@
     <Compile Include="Managers\DocumentBookmarkManager.cs" />
     <Compile Include="Managers\DocumentNoteManager.cs" />
     <Compile Include="Managers\LocalizationManager.cs" />
+    <Compile Include="Managers\MgrAccessor.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Images\" />

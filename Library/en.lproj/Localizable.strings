@@ -6,6 +6,7 @@
 "Button 'Thumbs'"="Button 'Thumbs'";
 
 "Color"="Color";
+"Curl"="Curl";
 
 "Delete bookmark?"="Delete bookmark?";
 
@@ -13,12 +14,13 @@
 
 "Go..."="Go...";
 
-"Horz."="Horz.";
+"Horizontal"="Horizontal";
 
 "Invalid page number"="Invalid page number";
 
 "Library information"="Library information";
 
+"Navigation orientation"="Navigation orientation";
 "No"="No";
 "Note"="Note";
 
@@ -29,15 +31,14 @@
 
 "Scale"="Scale";
 "Scale by double click"="Scale by double click";
+"Scroll"="Scroll";
+"Status"="Status";
 
 "Thumbs"="Thumbs";
-"Thumbs buffer size"="Thumbs buffer size";
-"Thumbs size"="Thumbs size";
-"Turning"="Turning";
-"Type"="Type";
+"Transition style"="Transition style ";
 
 "Version"="Version";
-"Vert."="Vert.";
+"Vertical"="Vertical";
 "Visibility"="Visibility";
 
 "Yes"="Yes";

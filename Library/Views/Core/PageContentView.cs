@@ -129,7 +129,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (!PDFDocument.DocumentHasLoaded) {
 				return;
 			}
-			
+
 			// Draw page
 			context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
 			using (CGPDFPage pdfPage = PDFDocument.GetPage(_PageNumber)) {

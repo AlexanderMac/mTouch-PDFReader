@@ -24,8 +24,8 @@
 using System;
 using System.Xml;
 using System.IO;
+using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Interfaces;
-using mTouchPDFReader.Library.Data.Enums;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Managers
@@ -80,9 +80,13 @@ namespace mTouchPDFReader.Library.Managers
 			try {
 				var optionsXmlDoc = new XmlDocument();
 				optionsXmlDoc.Load(optionsFullFileName);
-				object val = GetNodeValue(optionsXmlDoc, "/Options/PageTurningType", typeof(int));
+				object val = GetNodeValue(optionsXmlDoc, "/Options/PageTransitionStyle", typeof(int));
 				if (val != null) {
-					_Options.PageTurningType = (PageTurningTypes)Convert.ToInt32(val);
+					_Options.PageTransitionStyle = (UIPageViewControllerTransitionStyle)Convert.ToInt32(val);
+				}
+				val = GetNodeValue(optionsXmlDoc, "/Options/PageNavigationOrientation", typeof(int));
+				if (val != null) {
+					_Options.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)Convert.ToInt32(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", typeof(bool));
 				if (val != null) {
@@ -147,9 +151,10 @@ namespace mTouchPDFReader.Library.Managers
 			var optionsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), OptionsFileName);
 			try {
 				string xmlRow = 
-"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
+					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
 					"<Options>" + 
-					"	<PageTurningType>" + (int)_Options.PageTurningType + "</PageTurningType>" +
+					"	<PageTransitionStyle>" + (int)_Options.PageTransitionStyle + "</PageTransitionStyle>" +
+					"	<PageNavigationOrientation>" + (int)_Options.PageNavigationOrientation + "</PageNavigationOrientation>" +
 					"	<ToolbarVisible>" + _Options.ToolbarVisible + "</ToolbarVisible>" +
 					"	<BottombarVisible>" + _Options.BottombarVisible + "</BottombarVisible>" + 
 					"	<PageNumberVisible>" + _Options.PageNumberVisible + "</PageNumberVisible>" +
@@ -162,20 +167,6 @@ namespace mTouchPDFReader.Library.Managers
 					"	<ThumbSize>" + _Options.ThumbSize + "</ThumbSize>" +
 					"</Options>";
 				
-				/*
-				SetNodeValue(optionsXmlDoc, "/Options/PageTurningType", _Options.pPageTurningType);
-				SetNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", _Options.ToolbarVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/StatusbarVisible", _Options.StatusbarVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", _Options.PageNumberVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/NoteBtnVisible", _Options.NoteBtnVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/BookmarksBtnVisible", _Options.BookmarksBtnVisible);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", _Options.ThumbsBtnVisible);				
-				//SetNodeValue(optionsXmlDoc, "/Options/BackgroundColor", _Options.BackgroundColor);
-				SetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", _Options.AllowZoomByDoubleTouch);
-				SetNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", _Options.ZoomScaleLevels);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbsBufferSize", _Options.ThumbsBufferSize);
-				SetNodeValue(optionsXmlDoc, "/Options/ThumbSize", _Options.ThumbSize);
-				*/
 				var optionsXmlDoc = new XmlDocument();
 				optionsXmlDoc.LoadXml(xmlRow);
 				optionsXmlDoc.Save(optionsFullFileName);
@@ -215,27 +206,6 @@ namespace mTouchPDFReader.Library.Managers
 			}
 			return null;
 		}
-		
-		/*
-		/// <summary>
-		/// Returns node value 
-		/// </summary>
-		/// <param name="optionsXmlDoc">Options XML document</param>
-		/// <param name="nodePath">XPath to node</param>
-		/// <param name="nodeValue">Node value</param>
-		private void SetNodeValue(XmlDocument optionsXmlDoc, string nodePath, object nodeValue)
-		{
-			// ?? Check root node and node exists, if not, create
-			try {
-				var xmlNode = optionsXmlDoc.SelectSingleNode(nodePath);
-				if (xmlNode != null) {
-					xmlNode.InnerText = nodeValue.ToString();
-				}
-			} catch (Exception) {
-				// Nothing	
-			}
-		}
-		*/
 		#endregion
 	}
 }

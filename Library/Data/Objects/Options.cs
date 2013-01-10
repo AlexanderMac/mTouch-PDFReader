@@ -24,14 +24,14 @@
 using System;
 using System.Xml;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Data.Objects
 {
 	public class Options
 	{
-		#region Default constants		
-		private const PageTurningTypes DefaultPageTurningType = PageTurningTypes.Horizontal;
+		#region Default constants	
+		private const UIPageViewControllerTransitionStyle DefaultPageTransitionStyle = UIPageViewControllerTransitionStyle.PageCurl;
+		private const UIPageViewControllerNavigationOrientation DefaultPageNavigationOrientation = UIPageViewControllerNavigationOrientation.Horizontal;
 		private const bool DefaultToolbarVisible = true;
 		private const bool DefaultStatusbarVisible = true;
 		private const bool DefaultPageNumberVisible = true;
@@ -56,129 +56,54 @@ namespace mTouchPDFReader.Library.Data.Objects
 		
 		#region Fields	
 		/// <summary>
-		/// Gets or sets the type of the page turning.
+		/// Gets or sets the type of the page transition style.
 		/// </summary>
-		public PageTurningTypes PageTurningType {
-			get {
-				return _PageTurningType;
-			}
-			set {
-				if (_PageTurningType != value) {
-					_PageTurningType = value;
-				}
-			}
-		}
-		private PageTurningTypes _PageTurningType;
-		
+		public UIPageViewControllerTransitionStyle PageTransitionStyle { get; set; }
+
+		/// <summary>
+		/// Gets or sets the type of the page navigation orientation.
+		/// </summary>
+		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
+
 		/// <summary>
 		/// Gets or sets a value indicating whether the toolbar is visible.
 		/// </summary>
-		public bool ToolbarVisible {
-			get {
-				return _ToolbarVisible;
-			}
-			set {
-				if (_ToolbarVisible != value) {
-					_ToolbarVisible = value;
-				}
-			}
-		}
-		private bool _ToolbarVisible;
+		public bool ToolbarVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the bottombar is visible.
 		/// </summary>
-		public bool BottombarVisible {
-			get {
-				return _BottombarVisible;
-			}
-			set {
-				if (_BottombarVisible != value) {
-					_BottombarVisible = value;
-				}
-			}
-		}
-		private bool _BottombarVisible;
+		public bool BottombarVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the pageNumber label is visible.
 		/// number visible.
 		/// </summary>
-		public bool PageNumberVisible {
-			get {
-				return _PageNumberVisible;
-			}
-			set {
-				if (_PageNumberVisible != value) {
-					_PageNumberVisible = value;
-				}
-			}
-		}
-		private bool _PageNumberVisible;
+		public bool PageNumberVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the Note button is visible.
 		/// </summary>
 		/// <value>
-		public bool NoteBtnVisible {
-			get {
-				return _NoteBtnVisible;
-			}
-			set {
-				if (_NoteBtnVisible != value) {
-					_NoteBtnVisible = value;
-				}
-			}
-		}
-		private bool _NoteBtnVisible;
+		public bool NoteBtnVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the Bookmarks button is visible.
 		/// </summary>
 		/// <value>
-		public bool BookmarksBtnVisible {
-			get {
-				return _BookmarksBtnVisible;
-			}
-			set {
-				if (_BookmarksBtnVisible != value) {
-					_BookmarksBtnVisible = value;
-				}
-			}
-		}
-		private bool _BookmarksBtnVisible;
+		public bool BookmarksBtnVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets a value indicating whether the Thumbs button is visible.
 		/// </summary>
 		/// <value>
-		public bool ThumbsBtnVisible {
-			get {
-				return _ThumbsBtnVisible;
-			}
-			set {
-				if (_ThumbsBtnVisible != value) {
-					_ThumbsBtnVisible = value;
-				}
-			}
-		}
-		private bool _ThumbsBtnVisible;
+		public bool ThumbsBtnVisible { get; set; }
 
 		/// <summary>
 		/// Gets or sets the color of the background.
 		/// </summary>
 		/// <value>
-		public UIColor BackgroundColor {
-			get {
-				return _BackgroundColor;
-			}
-			set {
-				if (_BackgroundColor != value) {
-					_BackgroundColor = value;
-				}
-			}
-		}
-		private UIColor _BackgroundColor;
+		public UIColor BackgroundColor { get; set; }
 
 		/// <summary>
 		/// Gets or sets the zoom scale levels.
@@ -206,17 +131,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// Gets or sets a value indicating whether the double touch is allowed.
 		/// by double touch.
 		/// </summary>
-		public bool AllowZoomByDoubleTouch {
-			get {
-				return _AllowZoomByDoubleTouch;
-			}
-			set {
-				if (_AllowZoomByDoubleTouch != value) {
-					_AllowZoomByDoubleTouch = value;
-				}
-			}
-		}
-		private bool _AllowZoomByDoubleTouch;
+		public bool AllowZoomByDoubleTouch { get; set; }
 
 		/// <summary>
 		/// Gets or sets the size of the thumbs buffer.
@@ -288,16 +203,17 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// </summary>
 		public Options()
 		{
-			_PageTurningType = DefaultPageTurningType;
-			_ToolbarVisible = DefaultToolbarVisible;
-			_BottombarVisible = DefaultStatusbarVisible;
-			_PageNumberVisible = DefaultPageNumberVisible;
-			_NoteBtnVisible = DefaultNoteBtnVisible;
-			_BookmarksBtnVisible = DefaultBookmarksBtnVisible;
-			_ThumbsBtnVisible = DefaultThumbsBtnVisible;
-			_BackgroundColor = DefaultBackgroundColor;
-			_ZoomScaleLevels = DefaultZoomScaleLevels;
-			_AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
+			PageTransitionStyle = DefaultPageTransitionStyle;
+			PageNavigationOrientation = DefaultPageNavigationOrientation;
+			ToolbarVisible = DefaultToolbarVisible;
+			BottombarVisible = DefaultStatusbarVisible;
+			PageNumberVisible = DefaultPageNumberVisible;
+			NoteBtnVisible = DefaultNoteBtnVisible;
+			BookmarksBtnVisible = DefaultBookmarksBtnVisible;
+			ThumbsBtnVisible = DefaultThumbsBtnVisible;
+			BackgroundColor = DefaultBackgroundColor;
+			ZoomScaleLevels = DefaultZoomScaleLevels;
+			AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
 			_ThumbsBufferSize = DefaultThumbsBufferSize;
 			_ThumbSize = DefaultThumbSize;
 		}
