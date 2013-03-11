@@ -111,7 +111,8 @@ namespace mTouchPDFReader.Library.Views.Management
 			TableView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			TableView.Source = new DataSource(this);        	
 		}
-		
+
+#pragma warning disable 672
 		/// <summary>
 		/// Called when permission is shought to rotate
 		/// </summary>
@@ -119,6 +120,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			return true;
 		}
+#pragma warning restore 672
 		
 		#region Helpers		
 		/// <summary>

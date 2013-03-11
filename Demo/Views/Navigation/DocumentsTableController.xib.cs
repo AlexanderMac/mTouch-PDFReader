@@ -61,7 +61,8 @@ namespace mTouchPDFReader.Demo
 			});
 			TableView.Source = new DataSource(this);
 		}
-		
+
+#pragma warning disable 672
 		/// <summary>
 		/// Called when permission is shought to rotate
 		/// </summary>
@@ -69,6 +70,7 @@ namespace mTouchPDFReader.Demo
 		{
 			return true;
 		}
+#pragma warning restore 672
 		
 		/// <summary>
 		/// TableView datasource

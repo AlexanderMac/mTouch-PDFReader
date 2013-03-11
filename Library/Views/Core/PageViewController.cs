@@ -91,6 +91,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 
+#pragma warning disable 672
 		/// <summary>
 		/// Called when permission is shought to rotate
 		/// </summary>
@@ -98,6 +99,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			return true;
 		}
+#pragma warning restore 672
 		#endregion
 	}
 }

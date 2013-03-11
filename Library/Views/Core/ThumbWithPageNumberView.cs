@@ -97,7 +97,9 @@ namespace mTouchPDFReader.Library.Views.Core
 			_PageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
 			_PageNumberLabel.ShadowColor = UIColor.Black;
 			_PageNumberLabel.AdjustsFontSizeToFitWidth = true;
+#pragma warning disable 618
 			_PageNumberLabel.MinimumFontSize = 12.0f;
+#pragma warning restore 618
 			_PageNumberLabel.Text = pageNumber.ToString();
 			
 			AddSubview(_ThumbView);

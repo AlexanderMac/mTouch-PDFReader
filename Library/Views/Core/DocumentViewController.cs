@@ -202,6 +202,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			UpdatePageViewFrameRectAndZoomScale();
 		}
 
+#pragma warning disable 672
 		/// <summary>
 		/// Calls the possibility rotate the view.
 		/// </summary>
@@ -209,6 +210,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			return true;
 		}
+#pragma warning restore 672
 
 		/// <summary>
 		/// Calls when object is disposing.
@@ -468,7 +470,9 @@ namespace mTouchPDFReader.Library.Views.Core
 				_PageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
 				_PageNumberLabel.ShadowColor = UIColor.Black;
 				_PageNumberLabel.AdjustsFontSizeToFitWidth = true;
+#pragma warning disable 618
 				_PageNumberLabel.MinimumFontSize = 12.0f;
+#pragma warning restore 618
 				pageNumberView.AddSubview(_PageNumberLabel);
 				bottomBar.AddSubview(pageNumberView);
 			}			

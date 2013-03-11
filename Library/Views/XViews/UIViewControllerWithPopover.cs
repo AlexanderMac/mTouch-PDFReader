@@ -78,6 +78,7 @@ namespace mTouchPDFReader.Library.XViews
 			ContentSizeForViewInPopover = GetPopoverSize();		
 		}
 
+#pragma warning disable 672 
 		/// <summary>
 		/// Called when permission is shought to rotate
 		/// </summary>
@@ -85,6 +86,7 @@ namespace mTouchPDFReader.Library.XViews
 		{
 			return true;
 		}
+#pragma warning restore 672
 		
 		/// <summary>
 		/// Returns popover size, must be override in child classes
