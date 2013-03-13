@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -80,7 +80,7 @@
     <None Include="Images\MainIcon.png" />
     <None Include="Entitlements.plist" />
   </ItemGroup>
-  <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
+  <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
     <Content Include="Resource\sample.pdf" />
     <Content Include="Images\Tabbar\Documents24.png" />
@@ -89,10 +89,10 @@
     <Content Include="Images\Tabbar\Search24.png" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Views\Navigation\DocumentsNavigationController.xib" xmlns="" />
-    <InterfaceDefinition Include="Views\Navigation\DocumentsTableController.xib" xmlns="" />
-    <InterfaceDefinition Include="Views\MainTabbarController.xib" xmlns="" />
-    <InterfaceDefinition Include="Views\MainWindow.xib" xmlns="" />
+    <InterfaceDefinition Include="Views\Navigation\DocumentsNavigationController.xib" />
+    <InterfaceDefinition Include="Views\Navigation\DocumentsTableController.xib" />
+    <InterfaceDefinition Include="Views\MainTabbarController.xib" />
+    <InterfaceDefinition Include="Views\MainWindow.xib" />
     <InterfaceDefinition Include="Views\Options\OptionsViewController.xib" />
   </ItemGroup>
   <ItemGroup>
