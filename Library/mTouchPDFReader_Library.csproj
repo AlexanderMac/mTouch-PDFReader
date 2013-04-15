@@ -29,6 +29,7 @@
         <Command type="AfterBuild" command="../Tools/autoinc_vnumber.sh" workingdir="${ProjectDir}" />
       </CustomCommands>
     </CustomCommands>
+    <NoWarn>618,672</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>
@@ -109,7 +110,6 @@
     <Content Include="Images\Toolbar\NavigateToPage48.png" />
     <Content Include="Images\Toolbar\NavigateToPrior48.png" />
     <Content Include="Images\Toolbar\Note48.png" />
-    <Content Include="Images\Toolbar\Thumbs32.png" />
     <Content Include="Images\Toolbar\ZoomIn48.png" />
     <Content Include="Images\Toolbar\ZoomOut48.png" />
     <Content Include="Images\Toolbar\BookmarkAdd32.png" />
@@ -120,5 +120,10 @@
     <Content Include="ru.lproj\Localizable.strings" />
     <Content Include="Images\Background\OnePageBg.png" />
     <Content Include="Images\Background\TwoPageBg.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Images\Toolbar\AutoHeight48.png" />
+    <BundleResource Include="Images\Toolbar\AutoWidth48.png" />
+    <BundleResource Include="Images\Toolbar\Thumbs48.png" />
   </ItemGroup>
 </Project>

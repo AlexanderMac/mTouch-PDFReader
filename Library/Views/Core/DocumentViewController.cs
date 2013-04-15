@@ -41,6 +41,7 @@ namespace mTouchPDFReader.Library.Views.Core
 	{			
 		#region Constants		
 		private const int MaxPageViewsCount = 3;
+		private const int MaxToolbarButtonsCount = 15;
 		private const float BarPaddingH = 5.0f;
 		private const float BarPaddingV = 5.0f;
 		private const float ToolbarHeight = 50.0f;
@@ -83,17 +84,17 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIButton _BtnNavigateToPage;
 			
 		/// <summary>
-		/// The open note view button. 
+		/// The note view open button. 
 		/// </summary>
 		private UIButton _BtnNote;
 		
 		/// <summary>
-		/// The open bookmarsks list view button.
+		/// The bookmarsks view open button.
 		/// </summary>
 		private UIButton _BtnBookmarksList;
 		
 		/// <summary>
-		/// The open thumbs view button.
+		/// The thumbs view open button.
 		/// </summary>
 		private UIButton _BtnThumbs;
 		
@@ -111,6 +112,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// The page number label.
 		/// </summary>
 		private UILabel _PageNumberLabel;
+
+		/// <summary>
+		/// The created buttons count.
+		/// </summary>
+		private int _CreatedButtonsCount;
 		#endregion
 			
 		#region Initialization
@@ -202,7 +208,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			UpdatePageViewFrameRectAndZoomScale();
 		}
 
-#pragma warning disable 672
 		/// <summary>
 		/// Calls the possibility rotate the view.
 		/// </summary>
@@ -210,7 +215,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			return true;
 		}
-#pragma warning restore 672
 
 		/// <summary>
 		/// Calls when object is disposing.
@@ -344,50 +348,52 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			// Create toolbar buttons
 			var btnFrame = new RectangleF(FirstToolButtonLeft, FirstToolButtonTop, ToolButtonSize, ToolButtonSize);
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToFirst48.png", delegate {
-				OpenFirstPage();
-			});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", delegate {
-				OpenPriorPage();
-			});
-			_BtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", delegate {
-				var view = new GotoPageViewController(p => OpenDocumentPage((int)p));
-				PresentPopover(view, _BtnNavigateToPage.Frame);
-			});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", delegate {
-				OpenNextPage();
-			});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToLast48.png", delegate {
-				OpenLastPage();
-			});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomOut48.png", delegate {
-				ZoomOut();
-			});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", delegate {
-				ZoomIn(); 
-			});
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToFirst48.png", OpenFirstPage);
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", OpenPriorPage);
+			_BtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", () => {
+					var view = new GotoPageViewController(p => OpenDocumentPage((int)p));
+					PresentPopover(view, _BtnNavigateToPage.Frame);
+				});
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", OpenNextPage);
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToLast48.png", OpenLastPage);
+			btnFrame.Offset(22, 0);
+
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomOut48.png", ZoomOut);
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", ZoomIn);
+			btnFrame.Offset(22, 0);
+
 			if (MgrAccessor.OptionsMgr.Options.NoteBtnVisible) {
-				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", delegate {
+				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", () => {
 					var note = MgrAccessor.DocumentNoteMgr.Load(_DocumentId);
 					var view = new NoteViewController(note, null);
 					PresentPopover(view, _BtnNote.Frame);
 				});
 			}
 			if (MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible) {
-				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", delegate {
+				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", () => {
 					var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_DocumentId);
 					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
 					PresentPopover(view, _BtnBookmarksList.Frame);
 				});
 			}
 			if (MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible) {
-				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs32.png", delegate {
-					var view = new ThumbsViewController(View.Bounds.Width, p => {
-						OpenDocumentPage((int)p); });
+				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs48.png", () => {
+					var view = new ThumbsViewController(View.Bounds.Width, p => OpenDocumentPage((int)p));
 					PresentPopover(view, _BtnThumbs.Frame);
 					view.InitThumbs();
 				});
 			}
+			btnFrame.Offset(22, 0);
+
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoWidth48.png", () => SetAutoWidth());
+			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoHeight48.png", () => SetAutoHeight());
+			btnFrame.Offset(22, 0);
+
+			// User defined buttons
+			for (var i = _CreatedButtonsCount; i < MaxToolbarButtonsCount; i++) {
+				CreateUserDefinedToolbarItem(toolBar, ref btnFrame);
+			}
+
 			return toolBar;
 		}
 		
@@ -408,7 +414,20 @@ namespace mTouchPDFReader.Library.Views.Core
 			};
 			toolbar.AddSubview(btn);
 			frame.Offset(44, 0);
+			_CreatedButtonsCount++;
 			return btn;
+		}
+
+		/// <summary>
+		/// Creates the user defined toolbar item.
+		/// </summary>
+		/// <param name="toolbar">Toolbar view.</param>
+		/// <param name="frame">Button frame.</param>
+		/// <returns>Item view.</returns>
+		protected virtual UIView CreateUserDefinedToolbarItem(UIView toolbar, ref RectangleF frame)
+		{
+			// Nothing
+			return null;
 		}
 		
 		/// <summary>
@@ -470,9 +489,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				_PageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
 				_PageNumberLabel.ShadowColor = UIColor.Black;
 				_PageNumberLabel.AdjustsFontSizeToFitWidth = true;
-#pragma warning disable 618
 				_PageNumberLabel.MinimumFontSize = 12.0f;
-#pragma warning restore 618
 				pageNumberView.AddSubview(_PageNumberLabel);
 				bottomBar.AddSubview(pageNumberView);
 			}			
@@ -660,7 +677,21 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
 				pageVC.PageView.ZoomIncrement();
 			}
-		}		
+		}
+
+		/// <summary>
+		/// Sets the page auto width.
+		/// </summary>
+		public virtual void SetAutoWidth()
+		{
+		}
+
+		/// <summary>
+		/// Sets the page auto height.
+		/// </summary>
+		public virtual void SetAutoHeight()
+		{
+		}
 		#endregion
 	}
 }

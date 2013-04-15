@@ -111,13 +111,7 @@ namespace mTouchPDFReader.Library.Managers
 				val = GetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", typeof(bool));
 				if (val != null) {
 					_Options.ThumbsBtnVisible = Convert.ToBoolean(val);
-				}
-				/*
-				object val = GetNodeValue(optionsXmlDoc, "/Options/BackgroundColor", typeof(byte));
-				if (val != null) {
-					_Options.BackgroundColor = DefaultBackgroundColor;
-				}
-				*/			
+				}		
 				val = GetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", typeof(bool));
 				if (val != null) {
 					_Options.AllowZoomByDoubleTouch = Convert.ToBoolean(val);

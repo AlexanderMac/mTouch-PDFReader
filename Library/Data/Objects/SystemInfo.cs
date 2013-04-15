@@ -32,7 +32,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// </summary>
 		public static DateTime ReleaseDate {
 			get {
-				return new DateTime(2012, 12, 01);
+				return new DateTime(2013, 04, 15);
 			}
 		}
 		
@@ -41,7 +41,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// </summary>
 		public static string Version {
 			get {
-				return "2.0.257";
+				return "2.0.300";
 			}
 		}
 	}

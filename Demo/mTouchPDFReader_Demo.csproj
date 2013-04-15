@@ -32,6 +32,7 @@
       </CustomCommands>
     </CustomCommands>
     <MtouchArch>ARMv7</MtouchArch>
+    <NoWarn>618,672</NoWarn>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
     <DebugType>none</DebugType>

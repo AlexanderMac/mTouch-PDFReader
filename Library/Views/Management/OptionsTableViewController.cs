@@ -112,7 +112,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			TableView.Source = new DataSource(this);        	
 		}
 
-#pragma warning disable 672
 		/// <summary>
 		/// Called when permission is shought to rotate
 		/// </summary>
@@ -120,7 +119,6 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			return true;
 		}
-#pragma warning restore 672
 		
 		#region Helpers		
 		/// <summary>
@@ -367,7 +365,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			cell.AddSubview(switchCtrl);
 			return cell;
 		}
-		
+
 		/// <summary>
 		/// Creates the zoom scale levels cell.
 		/// </summary>
