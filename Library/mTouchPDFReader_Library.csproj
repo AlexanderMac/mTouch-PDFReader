@@ -98,6 +98,7 @@
     <Compile Include="Managers\DocumentNoteManager.cs" />
     <Compile Include="Managers\LocalizationManager.cs" />
     <Compile Include="Managers\MgrAccessor.cs" />
+    <Compile Include="Data\Enums\DocumentActionTypes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Enums\" />

@@ -34,6 +34,7 @@ using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.XViews;
 using mTouchPDFReader.Library.Views.Management;
 using mTouchPDFReader.Library.Managers;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -69,7 +70,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private string _DocumentPath;
 			
 		/// <summary>
-		/// The book PageView controller.
+		/// The PageView controller.
 		/// </summary>
 		private UIPageViewController _BookPageViewController;
 
@@ -79,7 +80,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private UIView _Toolbar;
 		
 		/// <summary>
-		/// The open page button.
+		/// The page open button.
 		/// </summary>
 		private UIButton _BtnNavigateToPage;
 			
@@ -112,11 +113,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// The page number label.
 		/// </summary>
 		private UILabel _PageNumberLabel;
-
-		/// <summary>
-		/// The created buttons count.
-		/// </summary>
-		private int _CreatedButtonsCount;
 		#endregion
 			
 		#region Initialization
@@ -149,37 +145,23 @@ namespace mTouchPDFReader.Library.Views.Core
 			// Create toolbar
 			if (MgrAccessor.OptionsMgr.Options.ToolbarVisible) {
 				_Toolbar = CreateToolbar();
-				if (_Toolbar != null) {
-					View.AddSubview(_Toolbar);
-				}
+				View.AddSubview(_Toolbar);
 			}
 			
 			// Create bottom bar (with slider)
 			if (MgrAccessor.OptionsMgr.Options.BottombarVisible) {
-				_BottomBar = CreateBottomBar();
-				if (_BottomBar != null) {
-					View.AddSubview(_BottomBar);
-				} else {
-					if (_Slider != null) {
-						_Slider.RemoveFromSuperview();
-						_Slider.Dispose();
-					}
-					if (_PageNumberLabel != null) {
-						_PageNumberLabel.RemoveFromSuperview();
-						_PageNumberLabel.Dispose();
-					}
-				}
+				_BottomBar = _CreateBottomBar();
+				View.AddSubview(_BottomBar);
+				// Update Slider Max value
+				_UpdateSliderMaxValue();
 			}
-
-			// Update Slider Max value
-			UpdateSliderMaxValue();
 			
 			// Create the book PageView controller
 			_BookPageViewController = new UIPageViewController(
 				MgrAccessor.OptionsMgr.Options.PageTransitionStyle,
 				MgrAccessor.OptionsMgr.Options.PageNavigationOrientation, 
 				UIPageViewControllerSpineLocation.Min);		
-			_BookPageViewController.View.Frame = GetBookPageViewFrameRect();
+			_BookPageViewController.View.Frame = _GetBookPageViewFrameRect();
 			_BookPageViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
 			_BookPageViewController.View.BackgroundColor = UIColor.GroupTableViewBackgroundColor;
 			_BookPageViewController.GetNextViewController = GetNextPageViewController;
@@ -205,7 +187,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		public override void ViewDidLayoutSubviews()
 		{
 			base.ViewDidLayoutSubviews();
-			UpdatePageViewFrameRectAndZoomScale();
+			_UpdatePageViewFrameRectAndZoomScale();
 		}
 
 		/// <summary>
@@ -293,9 +275,9 @@ namespace mTouchPDFReader.Library.Views.Core
 				
 		#region UI Logic		
 		/// <summary>
-		/// Presents popover
+		/// Presents popover.
 		/// </summary>
-		private void PresentPopover(UIViewControllerWithPopover viewCtrl, RectangleF frame)
+		private void _PresentPopover(UIViewControllerWithPopover viewCtrl, RectangleF frame)
 		{
 			var popoverController = new UIPopoverController(viewCtrl);
 			viewCtrl.PopoverController = popoverController;
@@ -303,10 +285,10 @@ namespace mTouchPDFReader.Library.Views.Core
 		}	
 		
 		/// <summary>
-		/// Gets current device orientation
+		/// Gets the current device orientation.
 		/// </summary>
-		/// <returns>Current device orientation</returns>
-		private UIInterfaceOrientation GetDeviceOrientation()
+		/// <returns>Current device orientation.</returns>
+		private UIInterfaceOrientation _GetDeviceOrientation()
 		{
 			switch (UIDevice.CurrentDevice.Orientation) {
 				case UIDeviceOrientation.LandscapeLeft:
@@ -322,9 +304,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Update slider max value
+		/// Updates the slider max value.
 		/// </summary>
-		private void UpdateSliderMaxValue()
+		private void _UpdateSliderMaxValue()
 		{
 			if (_Slider != null) {
 				_Slider.MaxValue = PDFDocument.PageCount;
@@ -332,9 +314,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		}		
 		
 		/// <summary>
-		/// Creates toolbar
+		/// Creates the toolbar.
 		/// </summary>
-		/// <returns>Toolbar view</returns>
+		/// <returns>The toolbar view.</returns>
 		protected virtual UIView CreateToolbar()
 		{
 			// Create toolbar
@@ -345,96 +327,96 @@ namespace mTouchPDFReader.Library.Views.Core
 			toolBarFrame.Height = ToolbarHeight;
 			var toolBar = new UIXToolbarView(toolBarFrame, 0.92f, 0.32f, 0.8f);
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleWidth;
-			
-			// Create toolbar buttons
+
 			var btnFrame = new RectangleF(FirstToolButtonLeft, FirstToolButtonTop, ToolButtonSize, ToolButtonSize);
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToFirst48.png", OpenFirstPage);
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", OpenPriorPage);
-			_BtnNavigateToPage = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", () => {
-					var view = new GotoPageViewController(p => OpenDocumentPage((int)p));
-					PresentPopover(view, _BtnNavigateToPage.Frame);
-				});
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", OpenNextPage);
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToLast48.png", OpenLastPage);
-			btnFrame.Offset(22, 0);
 
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomOut48.png", ZoomOut);
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", ZoomIn);
-			btnFrame.Offset(22, 0);
+			// Create toolbar buttons
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToFirst48.png", _OpenFirstPage);
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", _OpenPriorPage);
+			_BtnNavigateToPage = _CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", () => {
+				var view = new GotoPageViewController(p => OpenDocumentPage((int)p));
+				_PresentPopover(view, _BtnNavigateToPage.Frame);
+			});
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", _OpenNextPage);
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/NavigateToLast48.png", _OpenLastPage);
+			_CreateToolbarSeparator(ref btnFrame);
 
-			if (MgrAccessor.OptionsMgr.Options.NoteBtnVisible) {
-				_BtnNote = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", () => {
-					var note = MgrAccessor.DocumentNoteMgr.Load(_DocumentId);
-					var view = new NoteViewController(note, null);
-					PresentPopover(view, _BtnNote.Frame);
-				});
-			}
-			if (MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible) {
-				_BtnBookmarksList = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", () => {
-					var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_DocumentId);
-					var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
-					PresentPopover(view, _BtnBookmarksList.Frame);
-				});
-			}
-			if (MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible) {
-				_BtnThumbs = CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs48.png", () => {
-					var view = new ThumbsViewController(View.Bounds.Width, p => OpenDocumentPage((int)p));
-					PresentPopover(view, _BtnThumbs.Frame);
-					view.InitThumbs();
-				});
-			}
-			btnFrame.Offset(22, 0);
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomOut48.png", ZoomOut);
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/ZoomIn48.png", _ZoomIn);
+			_CreateToolbarSeparator(ref btnFrame);
 
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoWidth48.png", () => SetAutoWidth());
-			CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoHeight48.png", () => SetAutoHeight());
-			btnFrame.Offset(22, 0);
+			_BtnNote = _CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Note48.png", () => {
+				var note = MgrAccessor.DocumentNoteMgr.Load(_DocumentId);
+				var view = new NoteViewController(note, null);
+				_PresentPopover(view, _BtnNote.Frame);
+			});
+			_BtnBookmarksList = _CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/BookmarksList48.png", () => {
+				var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_DocumentId);
+				var view = new BookmarksViewController(_DocumentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
+				_PresentPopover(view, _BtnBookmarksList.Frame);
+			});
+			_BtnThumbs = _CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/Thumbs48.png", () => {
+				var view = new ThumbsViewController(View.Bounds.Width, p => OpenDocumentPage((int)p));
+				_PresentPopover(view, _BtnThumbs.Frame);
+				view.InitThumbs();
+			});
+			_CreateToolbarSeparator(ref btnFrame);
 
-			// User defined buttons
-			for (var i = _CreatedButtonsCount; i < MaxToolbarButtonsCount; i++) {
-				CreateUserDefinedToolbarItem(toolBar, ref btnFrame);
-			}
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoWidth48.png", () => SetAutoWidth());
+			_CreateToolbarButton(toolBar, ref btnFrame, "Images/Toolbar/AutoHeight48.png", () => SetAutoHeight());
+			_CreateToolbarSeparator(ref btnFrame);
+
+			// Create user defined toolbar items
+			_CreateUserDefinedToolbarItems(toolBar, ref btnFrame);
 
 			return toolBar;
 		}
-		
+
 		/// <summary>
-		/// Creates toolbar button
+		/// Creates separator item.
 		/// </summary>
-		/// <param name="toolbar">Toolbar view</param>
-		/// <param name="frame">Button frame</param>
-		/// <param name="imageUrl">Image button url</param>
-		/// <param name="action">Assoutiated button action</param>
-		/// <returns>Button view</returns>
-		protected virtual UIButton CreateToolbarButton(UIView toolbar, ref RectangleF frame, string imageUrl, Action action)
+		/// <param name="frame">The frame.</param>
+		private void _CreateToolbarSeparator(ref RectangleF frame)
+		{
+			frame.Offset(22, 0);
+		}
+
+		/// <summary>
+		/// Creates the toolbar button.
+		/// </summary>
+		/// <param name="actionType">The document action type.</param>
+		/// <param name="toolbar">The toolbar view.</param>
+		/// <param name="frame">The button frame.</param>
+		/// <param name="imagePath">The image button path.</param>
+		/// <param name="action">The button action.</param>
+		/// <returns>The button view.</returns>
+		protected virtual UIButton _CreateToolbarButton(UIView toolbar, ref RectangleF frame, string imagePath, Action action)
 		{
 			var btn = new UIButton(frame);
-			btn.SetImage(UIImage.FromFile(imageUrl), UIControlState.Normal);
+			btn.SetImage(UIImage.FromFile(imagePath), UIControlState.Normal);
 			btn.TouchUpInside += delegate { 
 				action();
 			};
 			toolbar.AddSubview(btn);
 			frame.Offset(44, 0);
-			_CreatedButtonsCount++;
 			return btn;
 		}
 
 		/// <summary>
-		/// Creates the user defined toolbar item.
+		/// Creates the user defined toolbar items.
 		/// </summary>
-		/// <param name="toolbar">Toolbar view.</param>
-		/// <param name="frame">Button frame.</param>
-		/// <returns>Item view.</returns>
-		protected virtual UIView CreateUserDefinedToolbarItem(UIView toolbar, ref RectangleF frame)
+		/// <param name="toolbar">The toolbar view.</param>
+		/// <param name="frame">The button frame.</param>
+		protected virtual void _CreateUserDefinedToolbarItems(UIView toolbar, ref RectangleF frame)
 		{
-			// Nothing
-			return null;
+			// Nothing. Should be overrided in child classes.
 		}
 		
 		/// <summary>
-		/// Creates bottom bar
+		/// Creates the bottom bar.
 		/// </summary>
-		/// <returns>Bottom bar view</returns>
-		protected virtual UIView CreateBottomBar()
+		/// <returns>The bottom bar view.</returns>
+		protected virtual UIView _CreateBottomBar()
 		{
 			// Create bottom bar	
 			var bottomBarFrame = View.Bounds;
@@ -502,7 +484,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// Gets the book PageView frame rect.
 		/// </summary>
 		/// <returns>The PageView frame rect.</returns>
-		private RectangleF GetBookPageViewFrameRect()
+		private RectangleF _GetBookPageViewFrameRect()
 		{
 			var rect = View.Bounds;
 			if (_Toolbar != null) {
@@ -519,7 +501,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// Gets the PageView frame rect.
 		/// </summary>
 		/// <returns>The PageView frame rect.</returns>
-		private RectangleF GetPageViewFrameRect()
+		private RectangleF _GetPageViewFrameRect()
 		{
 			return _BookPageViewController.View.Bounds; 
 		}
@@ -527,11 +509,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <summary>
 		/// Updates the PageView frame rect and zoom scale.
 		/// </summary>
-		private void UpdatePageViewFrameRectAndZoomScale()
+		private void _UpdatePageViewFrameRectAndZoomScale()
 		{
 			foreach (var pageVC in _BookPageViewController.ViewControllers.Cast<PageViewController>()) {
 				if (pageVC != null && pageVC.IsNotEmptyPage) {
-					pageVC.PageView.Frame = GetPageViewFrameRect();
+					pageVC.PageView.Frame = _GetPageViewFrameRect();
 					pageVC.PageView.UpdateMinimumMaximumZoom();
 					pageVC.PageView.ZoomReset();
 				}
@@ -553,11 +535,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>The empty PageView controller.</returns>
 		private PageViewController _GetEmptyPageContentVC()
 		{
-			return new PageViewController(GetPageViewFrameRect(), -1);
+			return new PageViewController(_GetPageViewFrameRect(), -1);
 		}
 
 		/// <summary>
-		/// Gets the PageView controller by <see cref="pageNumber"/>.
+		/// Gets the PageView controller by the <see cref="pageNumber"/>.
 		/// </summary>
 		/// <param name='pageNumber'>The page number.</param>
 		/// <returns>The PageView controller.</returns>
@@ -566,13 +548,13 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (!PDFDocument.DocumentHasLoaded || pageNumber < 1 || pageNumber > PDFDocument.PageCount || pageNumber == PDFDocument.CurrentPageNumber) {
 				return null;
 			}
-			return new PageViewController(GetPageViewFrameRect(), pageNumber);
+			return new PageViewController(_GetPageViewFrameRect(), pageNumber);
 		}
 
 		/// <summary>
-		/// Gets the page increment value.
+		/// Gets the page incremented value.
 		/// </summary>
-		/// <returns>The page increment value.</returns>
+		/// <returns>The page incremented value.</returns>
 		private int _GetPageIncValue()
 		{
 			return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid ? 2 : 1;
@@ -626,39 +608,39 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		#region Events			
 		/// <summary>
-		/// Opens first page of the document
+		/// Opens the document first page.
 		/// </summary>
-		protected virtual void OpenFirstPage()
+		protected virtual void _OpenFirstPage()
 		{
 			OpenDocumentPage(1);
 		}
 		
 		/// <summary>
-		/// Opens prior page of the document
+		/// Opens the document prior page.
 		/// </summary>
-		protected virtual void OpenPriorPage()
+		protected virtual void _OpenPriorPage()
 		{
 			OpenDocumentPage(PDFDocument.CurrentPageNumber - _GetPageIncValue());
 		}
 		
 		/// <summary>
-		/// Opens next page of the document
+		/// Opens the document next page.
 		/// </summary>
-		protected virtual void OpenNextPage()
+		protected virtual void _OpenNextPage()
 		{
 			OpenDocumentPage(PDFDocument.CurrentPageNumber + _GetPageIncValue());
 		}
 		
 		/// <summary>
-		/// Opens last page of the document
+		/// Opens the document last page. 
 		/// </summary>
-		protected virtual void OpenLastPage()
+		protected virtual void _OpenLastPage()
 		{
 			OpenDocumentPage(PDFDocument.PageCount);
 		}
 		
 		/// <summary>
-		/// Zooming out
+		/// Zooming out the page.
 		/// </summary>
 		protected virtual void ZoomOut()
 		{
@@ -669,9 +651,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		
 		/// <summary>
-		/// Zooming in
+		/// Zooming in the page.
 		/// </summary>
-		protected virtual void ZoomIn()
+		protected virtual void _ZoomIn()
 		{
 			var pageVC = _GetCurrentPageContentVC();
 			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
