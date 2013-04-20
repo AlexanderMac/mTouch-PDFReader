@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// SystemInfo.cs (System info)
+// AutoScaleModes.cs
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -23,27 +23,11 @@
 
 using System;
 
-namespace mTouchPDFReader.Library.Data.Objects
+namespace mTouchPDFReader.Library.Data.Enums
 {
-	public static class SystemInfo
-	{		
-		/// <summary>
-		/// Release date
-		/// </summary>
-		public static DateTime ReleaseDate {
-			get {
-				return new DateTime(2013, 04, 20);
-			}
-		}
-		
-		/// <summary>
-		/// Version
-		/// </summary>
-		public static string Version {
-			get {
-				return "2.1.328";
-			}
-		}
+	public enum AutoScaleModes
+	{
+		AutoWidth,
+		AutoHeight
 	}
 }
-

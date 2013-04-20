@@ -27,6 +27,7 @@ using System.IO;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Managers
 {
@@ -100,22 +101,18 @@ namespace mTouchPDFReader.Library.Managers
 				if (val != null) {
 					_Options.PageNumberVisible = Convert.ToBoolean(val);
 				}
-				val = GetNodeValue(optionsXmlDoc, "/Options/NoteBtnVisible", typeof(bool));
-				if (val != null) {
-					_Options.NoteBtnVisible = Convert.ToBoolean(val);
-				}
-				val = GetNodeValue(optionsXmlDoc, "/Options/BookmarksBtnVisible", typeof(bool));
-				if (val != null) {
-					_Options.BookmarksBtnVisible = Convert.ToBoolean(val);
-				}
-				val = GetNodeValue(optionsXmlDoc, "/Options/ThumbsBtnVisible", typeof(bool));
-				if (val != null) {
-					_Options.ThumbsBtnVisible = Convert.ToBoolean(val);
-				}		
+
+
 				val = GetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", typeof(bool));
 				if (val != null) {
 					_Options.AllowZoomByDoubleTouch = Convert.ToBoolean(val);
 				}
+
+				val = GetNodeValue(optionsXmlDoc, "/Options/AutoScaleMode", typeof(int));
+				if (val != null) {
+					_Options.AutoScaleMode = (AutoScaleModes)Convert.ToInt32(val);
+				}
+
 				val = GetNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", typeof(int));
 				if (val != null) {
 					_Options.ZoomScaleLevels = Convert.ToInt32(val);	
@@ -152,11 +149,9 @@ namespace mTouchPDFReader.Library.Managers
 					"	<ToolbarVisible>" + _Options.ToolbarVisible + "</ToolbarVisible>" +
 					"	<BottombarVisible>" + _Options.BottombarVisible + "</BottombarVisible>" + 
 					"	<PageNumberVisible>" + _Options.PageNumberVisible + "</PageNumberVisible>" +
-					"	<NoteBtnVisible>" + _Options.NoteBtnVisible + "</NoteBtnVisible>" +
-					"	<BookmarksBtnVisible>" + _Options.BookmarksBtnVisible + "</BookmarksBtnVisible>" +
-					"	<ThumbsBtnVisible>" + _Options.ThumbsBtnVisible + "</ThumbsBtnVisible>" +
 					"	<AllowZoomByDoubleTouch>" + _Options.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
 					"	<ZoomScaleLevels>" + _Options.ZoomScaleLevels + "</ZoomScaleLevels>" +
+					"	<AutoScaleMode>" + (int)_Options.AutoScaleMode + "</AutoScaleMode>" +
 					"	<ThumbsBufferSize>" + _Options.ThumbsBufferSize + "</ThumbsBufferSize>" +
 					"	<ThumbSize>" + _Options.ThumbSize + "</ThumbSize>" +
 					"</Options>";

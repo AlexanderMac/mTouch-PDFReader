@@ -1,43 +1,23 @@
 ﻿<Properties>
-  <MonoDevelop.Ide.Workspace ActiveConfiguration="Debug|iPhoneSimulator" />
-  <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/PageViewController.cs">
+  <MonoDevelop.Ide.Workspace ActiveConfiguration="Release|iPhoneSimulator" PreferredExecutionTarget="MonoDevelop.IPhone.IPhoneSimulatorTarget.IPad.6.0" />
+  <MonoDevelop.Ide.Workbench ActiveDocument="Library/Views/Core/DocumentViewController.cs">
     <Files>
-      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="148" Column="21" />
-      <File FileName="Library/Views/Core/PageView.cs" Line="44" Column="45" />
-      <File FileName="Demo/Views/Navigation/DocumentsNavigationController.xib.designer.cs" Line="20" Column="3" />
-      <File FileName="Demo/Views/Navigation/DocumentsNavigationController.xib.cs" Line="67" Column="1" />
-      <File FileName="Demo/Views/Navigation/DocumentsTableController.xib.designer.cs" Line="20" Column="3" />
-      <File FileName="Demo/Views/Navigation/DocumentsTableController.xib.cs" Line="73" Column="1" />
-      <File FileName="Demo/Views/MainTabbarController.xib.designer.cs" Line="20" Column="3" />
-      <File FileName="Demo/Views/MainTabbarController.xib.cs" Line="77" Column="1" />
-      <File FileName="Demo/Views/MainWindow.xib.designer.cs" Line="22" Column="3" />
-      <File FileName="Demo/Views/Options/OptionsViewController.xib.cs" Line="68" Column="1" />
-      <File FileName="Library/Views/XViews/UIViewControllerWithPopover.cs" Line="89" Column="1" />
-      <File FileName="Library/Views/Management/OptionsTableViewController.cs" Line="123" Column="1" />
-      <File FileName="Library/Views/Core/ThumbWithPageNumberView.cs" Line="102" Column="1" />
-      <File FileName="Library/Views/Core/PageViewController.cs" Line="67" Column="3" />
+      <File FileName="Library/Managers/OptionsManager.cs" Line="119" Column="3" />
+      <File FileName="Library/Views/Management/OptionsTableViewController.cs" Line="304" Column="23" />
+      <File FileName="Library/Views/Core/PageViewController.cs" Line="97" Column="20" />
+      <File FileName="Library/Views/Core/PageView.cs" Line="128" Column="6" />
+      <File FileName="Library/Views/Core/DocumentViewController.cs" Line="384" Column="97" />
     </Files>
     <Pads>
       <Pad Id="ProjectPad">
         <State expanded="True">
-          <Node name="mTouchPDFReader_Demo" expanded="True" selected="True">
-            <Node name="Views" expanded="True">
-              <Node name="Navigation" expanded="True">
-                <Node name="DocumentsNavigationController.xib" expanded="True" />
-                <Node name="DocumentsTableController.xib" expanded="True" />
-              </Node>
-              <Node name="Options" expanded="True">
-                <Node name="OptionsViewController.xib" expanded="True" />
-              </Node>
-              <Node name="MainTabbarController.xib" expanded="True" />
-              <Node name="MainWindow.xib" expanded="True" />
-            </Node>
-          </Node>
           <Node name="mTouchPDFReader_Library" expanded="True">
+            <Node name="Managers" expanded="True" />
             <Node name="Views" expanded="True">
-              <Node name="Core" expanded="True" />
+              <Node name="Core" expanded="True">
+                <Node name="DocumentViewController.cs" selected="True" />
+              </Node>
               <Node name="Management" expanded="True" />
-              <Node name="XViews" expanded="True" />
             </Node>
           </Node>
         </State>
@@ -63,7 +43,9 @@
     </Pads>
   </MonoDevelop.Ide.Workbench>
   <MonoDevelop.Ide.DebuggingService.Breakpoints>
-    <BreakpointStore />
+    <BreakpointStore>
+      <Breakpoint file="/Users/amac/Projects/OpenSource/mTouch-PDFReader/Library/Views/Core/DocumentViewController.cs" line="669" />
+    </BreakpointStore>
   </MonoDevelop.Ide.DebuggingService.Breakpoints>
   <MonoDevelop.Ide.DebuggingService.PinnedWatches>
     <Watch file="Library/Views/Core/DocumentViewController.cs" line="439" offsetX="547" offsetY="6570" expression="currentPageView.Bounds" liveUpdate="False" />

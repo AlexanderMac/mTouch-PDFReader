@@ -24,6 +24,7 @@
 using System;
 using System.Xml;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Data.Objects
 {
@@ -32,13 +33,12 @@ namespace mTouchPDFReader.Library.Data.Objects
 		#region Default constants	
 		private const UIPageViewControllerTransitionStyle DefaultPageTransitionStyle = UIPageViewControllerTransitionStyle.PageCurl;
 		private const UIPageViewControllerNavigationOrientation DefaultPageNavigationOrientation = UIPageViewControllerNavigationOrientation.Horizontal;
+
 		private const bool DefaultToolbarVisible = true;
 		private const bool DefaultStatusbarVisible = true;
 		private const bool DefaultPageNumberVisible = true;
-		private const bool DefaultNoteBtnVisible = true;
-		private const bool DefaultBookmarksBtnVisible = true;
-		private const bool DefaultThumbsBtnVisible = true;
-		private readonly UIColor DefaultBackgroundColor = UIColor.ScrollViewTexturedBackgroundColor;
+
+		private const AutoScaleModes DefaultAutoScaleMode = AutoScaleModes.AutoWidth;
 		private const int DefaultZoomScaleLevels = 10;
 		private const bool DefaultAllowZoomByDoubleTouch = true;
 		private const int DefaultThumbsBufferSize = 20;
@@ -64,7 +64,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// Gets or sets the type of the page navigation orientation.
 		/// </summary>
 		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
-
+		
 		/// <summary>
 		/// Gets or sets a value indicating whether the toolbar is visible.
 		/// </summary>
@@ -74,7 +74,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		/// Gets or sets a value indicating whether the bottombar is visible.
 		/// </summary>
 		public bool BottombarVisible { get; set; }
-
+		
 		/// <summary>
 		/// Gets or sets a value indicating whether the pageNumber label is visible.
 		/// number visible.
@@ -82,28 +82,9 @@ namespace mTouchPDFReader.Library.Data.Objects
 		public bool PageNumberVisible { get; set; }
 
 		/// <summary>
-		/// Gets or sets a value indicating whether the Note button is visible.
+		/// Gets or sets the type of the auto scale mode.
 		/// </summary>
-		/// <value>
-		public bool NoteBtnVisible { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the Bookmarks button is visible.
-		/// </summary>
-		/// <value>
-		public bool BookmarksBtnVisible { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the Thumbs button is visible.
-		/// </summary>
-		/// <value>
-		public bool ThumbsBtnVisible { get; set; }
-
-		/// <summary>
-		/// Gets or sets the color of the background.
-		/// </summary>
-		/// <value>
-		public UIColor BackgroundColor { get; set; }
+		public AutoScaleModes AutoScaleMode { get; set; }
 
 		/// <summary>
 		/// Gets or sets the zoom scale levels.
@@ -208,10 +189,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 			ToolbarVisible = DefaultToolbarVisible;
 			BottombarVisible = DefaultStatusbarVisible;
 			PageNumberVisible = DefaultPageNumberVisible;
-			NoteBtnVisible = DefaultNoteBtnVisible;
-			BookmarksBtnVisible = DefaultBookmarksBtnVisible;
-			ThumbsBtnVisible = DefaultThumbsBtnVisible;
-			BackgroundColor = DefaultBackgroundColor;
+			AutoScaleMode = DefaultAutoScaleMode;
 			ZoomScaleLevels = DefaultZoomScaleLevels;
 			AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
 			_ThumbsBufferSize = DefaultThumbsBufferSize;

@@ -63,7 +63,6 @@ namespace mTouchPDFReader.Demo
 		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
-			//??
 			PDFDocument.CloseDocument();
 			base.Dispose(disposing);			
 		}

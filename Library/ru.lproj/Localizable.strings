@@ -1,9 +1,10 @@
+"Auto scale mode"="Режим автомасштабирования";
+"Auto width"="Автоширина";
+"Auto height"="Автовысота";
+
 "Background"="Фон";
 "Bookmarks"="Закладки";
 "Bookmark {0}"="Закладка {0}";
-"Button 'Bookmarks'"="Кнопка 'Закладки'";
-"Button 'Note'"="Кнопка 'Заметка'";
-"Button 'Thumbs'"="Кнопка 'Миниатюры'";
 
 "Color"="Цвет";
 "Curl"="Естественное перелистывание";

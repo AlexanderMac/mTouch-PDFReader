@@ -28,6 +28,7 @@ using MonoTouch.CoreGraphics;
 using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Managers;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -65,7 +66,14 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// The zoom scale step.
 		/// </summary>
 		private float _ZoomScaleStep;
-		
+
+		/// <summary>
+		/// The auto scale modes.
+		/// </summary>
+		private AutoScaleModes _AutoScaleMode;
+		#endregion
+
+		#region Properties		
 		/// <summary>
 		/// Gets or sets the opened page number.
 		/// </summary>
@@ -83,7 +91,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <summary>
 		/// Working.
 		/// </summary>
-		public PageView(RectangleF frame, int pageNumber) : base(frame)
+		public PageView(RectangleF frame, AutoScaleModes autoScaleMode, int pageNumber) : base(frame)
 		{
 			// Init page scroll view
 			ScrollsToTop = false;
@@ -98,6 +106,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			ViewForZoomingInScrollView = delegate(UIScrollView sender) { 
 				return _PageContentContainerView; 
 			};
+			_AutoScaleMode = autoScaleMode;
 			
 			// Create and init (calc frame size) page content view
 			_PageContentView = new PageContentView(PageContentView.GetPageViewSize(pageNumber), pageNumber);
@@ -116,10 +125,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			_PageContentContainerView.BackgroundColor = UIColor.White;			
 			
 			// Create and init page thumb view
-			_ThumbView = new ThumbView(_PageContentView.Bounds, ThumbContentSize, pageNumber);
+			//_ThumbView = new ThumbView(_PageContentView.Bounds, ThumbContentSize, pageNumber);
 			
 			// Add views to parents
-			_PageContentContainerView.AddSubview(_ThumbView);
+			//_PageContentContainerView.AddSubview(_ThumbView);
 			_PageContentContainerView.AddSubview(_PageContentView);						
 			AddSubview(_PageContentContainerView);
 			
@@ -128,10 +137,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			ContentOffset = new PointF((0.0f - ContentViewPadding), (0.0f - ContentViewPadding));
 			ContentInset = new UIEdgeInsets(ContentViewPadding, ContentViewPadding, ContentViewPadding, ContentViewPadding);
 			ContentSize = _PageContentContainerView.Bounds.Size;
-			
-			// Setup zoom scale
+
+			// Setup zoom scale and offset
 			UpdateMinimumMaximumZoom();
-			ZoomScale = MinimumZoomScale;
+			ResetZoom();
+			ResetScrollOffset();
 		}
 		
 		/// <summary>
@@ -178,11 +188,14 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <param name="target">The targer rect.</param>
 		/// <param name="source">The source rect.</param>
 		/// <returns>The zoom scale factor.</returns>
-		private static float GetZoomScaleThatFits(SizeF target, SizeF source)
+		private float _GetZoomScaleThatFits(SizeF target, SizeF source)
 		{
 			float wScale = target.Width / source.Width;
 			float hScale = target.Height / source.Height;
-			return ((wScale < hScale) ? wScale : hScale);
+			var factor = _AutoScaleMode == AutoScaleModes.AutoWidth 
+				? (wScale < hScale ? hScale : wScale)
+				: (wScale < hScale ? wScale : hScale);
+			return factor;
 		}
 		
 		/// <summary>
@@ -191,16 +204,48 @@ namespace mTouchPDFReader.Library.Views.Core
 		public void UpdateMinimumMaximumZoom()
 		{
 			RectangleF targetRect = RectangleFExtensions.Inset(Bounds, ContentViewPadding, ContentViewPadding);
-			float zoomScale = GetZoomScaleThatFits(targetRect.Size, _PageContentView.Bounds.Size);
+			float zoomScale = _GetZoomScaleThatFits(targetRect.Size, _PageContentView.Bounds.Size);
 			MinimumZoomScale = zoomScale; 	
 			MaximumZoomScale = zoomScale * MgrAccessor.OptionsMgr.Options.ZoomScaleLevels; 
 			_ZoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / MgrAccessor.OptionsMgr.Options.ZoomScaleLevels;
 		}
 
 		/// <summary>
+		/// Updates the page view frame rect and zoom scale.
+		/// </summary>
+		/// <param name="newFrame">The new frame.</param>
+		public void UpdateFrameRectAndZoomScale(RectangleF newFrame)
+		{
+			Frame = newFrame;
+			UpdateMinimumMaximumZoom();
+			ResetZoom();
+			ResetScrollOffset();
+		}
+		
+		/// <summary>
+		/// Updates the page view autoscale mode.
+		/// </summary>
+		/// <param name="newMode">The new mode.</param>
+		public void UpdateAutoScaleMode(AutoScaleModes newMode)
+		{
+			_AutoScaleMode = newMode;
+			UpdateMinimumMaximumZoom();
+			ResetZoom();
+			ResetScrollOffset();
+		}
+
+		/// <summary>
+		/// Resets the scroll offset.
+		/// </summary>
+		public void ResetScrollOffset()
+		{
+			SetContentOffset(new PointF(0.0f, 0.0f), false);
+		}
+
+		/// <summary>
 		/// Resets the zoom scale factor.
 		/// </summary>
-		public void ZoomReset()
+		public void ResetZoom()
 		{
 			ZoomScale = MinimumZoomScale;
 		}

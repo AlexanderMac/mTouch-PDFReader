@@ -30,6 +30,7 @@ using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.Data.Objects;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Views.Management
 {
@@ -44,13 +45,11 @@ namespace mTouchPDFReader.Library.Views.Management
 		// Page transition style and navigation orientation
 		private UITableViewCell _PageTransitionStyleCell;
 		private UITableViewCell _PageNavigationOrientationCell;
+		private UITableViewCell _AutoScaleMode;
 		// Visibility
 		private UITableViewCell _ToolbarVisibilityCell;
 		private UITableViewCell _BottombarVisibilityCell;
 		private UITableViewCell _PageNumberVisibilityCell;
-		private UITableViewCell _NoteBtnVisibilityCell;
-		private UITableViewCell _BookmarksBtnVisibilityCell;
-		private UITableViewCell _ThumbsBtnVisibilityCell; 
 		// Zoom
 		private UITableViewCell _ZoomScaleLevelsCell;
 		private UITableViewCell _ZoomByDoubleTouchCell;
@@ -92,19 +91,17 @@ namespace mTouchPDFReader.Library.Views.Management
 			// Page transition style and navigation orientation
 			_PageTransitionStyleCell = _CreatePageTransitionStyleCell();
 			_PageNavigationOrientationCell = _CreatePageNavigationOrientationCell();
+			_AutoScaleMode = _CreateAutoScaleModeCell();
 			// Visibility
-			_ToolbarVisibilityCell = CreateToolbarVisibilityCell();
-			_BottombarVisibilityCell = CreateBottombarVisibilityCell();
-			_PageNumberVisibilityCell = CreatePageNumberVisibilityCell();
-			_NoteBtnVisibilityCell = CreateNoteBtnVisibilityCell();
-			_BookmarksBtnVisibilityCell = CreateBookmarksBtnVisibilityCell();
-			_ThumbsBtnVisibilityCell = CreateThumbsBtnVisibilityCell();
+			_ToolbarVisibilityCell = _CreateToolbarVisibilityCell();
+			_BottombarVisibilityCell = _CreateBottombarVisibilityCell();
+			_PageNumberVisibilityCell = _CreatePageNumberVisibilityCell();
 			// Zoom
-			_ZoomScaleLevelsCell = CreateZoomScaleLevelsCell();
-			_ZoomByDoubleTouchCell = CreatemZoomByDoubleTouchCell();
+			_ZoomScaleLevelsCell = _CreateZoomScaleLevelsCell();
+			_ZoomByDoubleTouchCell = _CreatemZoomByDoubleTouchCell();
 			// Library info
-			_LibraryReleaseDateCell = CreateLibraryReleaseDateCell();
-			_LibraryVersionCell = CreateLibraryVersionCell();
+			_LibraryReleaseDateCell = _CreateLibraryReleaseDateCell();
+			_LibraryVersionCell = _CreateLibraryVersionCell();
 			
 			TableView = new UITableView(View.Bounds, UITableViewStyle.Grouped);
 			TableView.BackgroundView = null;
@@ -256,7 +253,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the toolbar visibility cell.
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateToolbarVisibilityCell()
+		private UITableViewCell _CreateToolbarVisibilityCell()
 		{
 			var cell = CreateCell("ToolbarVisibilityCell");
 			var label = CreateTitleLabelControl("Toolbar".t());
@@ -275,7 +272,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the bottombar visibility cell.
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateBottombarVisibilityCell()
+		private UITableViewCell _CreateBottombarVisibilityCell()
 		{
 			var cell = CreateCell("BottombarVisibilityCell");
 			var label = CreateTitleLabelControl("Bottombar".t());
@@ -294,7 +291,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the page number visibility cell.
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreatePageNumberVisibilityCell()
+		private UITableViewCell _CreatePageNumberVisibilityCell()
 		{
 			var cell = CreateCell("PageNumberVisibilityCell");
 			var label = CreateTitleLabelControl("Page number".t());
@@ -308,61 +305,23 @@ namespace mTouchPDFReader.Library.Views.Management
 			cell.AddSubview(switchCtrl);
 			return cell;
 		}
-		
+
 		/// <summary>
-		/// Creates the note button visibility cell. 
+		/// Creates the page auto scale mode cell. 
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateNoteBtnVisibilityCell()
+		private UITableViewCell _CreateAutoScaleModeCell()
 		{
-			var cell = CreateCell("NoteBtnVisibilityCell");
-			var label = CreateTitleLabelControl("Button 'Note'".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.NoteBtnVisible, false);
-			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Options.NoteBtnVisible = switchCtrl.On;
+			var cell = CreateCell("AutoScaleModelCell");
+			var label = CreateTitleLabelControl("Auto scale mode".t());
+			var seg = CreateSegmentControl(new string[] { "Auto width".t(), "Auto height".t() }, 250);
+			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.AutoScaleMode;
+			seg.ValueChanged += delegate {
+				MgrAccessor.OptionsMgr.Options.AutoScaleMode = (AutoScaleModes)seg.SelectedSegment;
 				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
-			cell.AddSubview(switchCtrl);
-			return cell;
-		}
-		
-		/// <summary>
-		/// Creates the bookmarks button visibility cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateBookmarksBtnVisibilityCell()
-		{
-			var cell = CreateCell("BookmarksBtnVisibilityCell");
-			var label = CreateTitleLabelControl("Button 'Bookmarks'".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible, false);
-			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Options.BookmarksBtnVisible = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
-			};
-			cell.AddSubview(label);
-			cell.AddSubview(switchCtrl);
-			return cell;
-		}
-		
-		/// <summary>
-		/// Creates the thumbs button visibility cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateThumbsBtnVisibilityCell()
-		{
-			var cell = CreateCell("ThumbsBtnVisibilityCell");
-			var label = CreateTitleLabelControl("Button 'Thumbs'".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible, false);
-			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Options.ThumbsBtnVisible = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
-			};
-			cell.AddSubview(label);
-			cell.AddSubview(switchCtrl);
+			cell.AddSubview(seg);
 			return cell;
 		}
 
@@ -370,7 +329,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the zoom scale levels cell.
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateZoomScaleLevelsCell()
+		private UITableViewCell _CreateZoomScaleLevelsCell()
 		{
 			var cell = CreateCell("ZoomScaleLevelsCell");
 			var label = CreateTitleLabelControl("Zoom scale levels".t());
@@ -389,7 +348,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the zoom by double touch cell.
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreatemZoomByDoubleTouchCell()
+		private UITableViewCell _CreatemZoomByDoubleTouchCell()
 		{
 			var cell = CreateCell("ZoomByDoubleTouchCell");
 			var label = CreateTitleLabelControl("Scale by double click".t());
@@ -408,7 +367,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the library release date cell. 
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateLibraryReleaseDateCell()
+		private UITableViewCell _CreateLibraryReleaseDateCell()
 		{
 			var cell = CreateCell("LibraryReleaseDateCell");
 			var label = CreateTitleLabelControl("Release date".t());
@@ -422,7 +381,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		/// Creates the library version cell. 
 		/// </summary>
 		/// <returns>The table cell.</returns>
-		private UITableViewCell CreateLibraryVersionCell()
+		private UITableViewCell _CreateLibraryVersionCell()
 		{
 			var cell = CreateCell("LibraryVersionCell");
 			var label = CreateTitleLabelControl("Version".t());
@@ -439,7 +398,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		class DataSource : UITableViewSource
 		{
 			private const int SectionsCount = 4;
-			private readonly int[] RowsInSections = new int[] { 2, 6, 2, 2 };
+			private readonly int[] RowsInSections = new int[] { 2, 3, 3, 2 };
 			private readonly string[] SectionTitles = new string[] { "Transition style".t(), "Visibility".t(), "Scale".t(), "Library information".t() };
 			
 			/// <summary>
@@ -501,19 +460,15 @@ namespace mTouchPDFReader.Library.Views.Management
 								return _Controller._BottombarVisibilityCell;
 							case 2:
 								return _Controller._PageNumberVisibilityCell;
-							case 3:
-								return _Controller._NoteBtnVisibilityCell;
-							case 4:
-								return _Controller._BookmarksBtnVisibilityCell;
-							case 5:
-								return _Controller._ThumbsBtnVisibilityCell;
 						}
 						break;
 					case 2:
 						switch (indexPath.Row) {
 							case 0:
-								return _Controller._ZoomScaleLevelsCell;
+								return _Controller._AutoScaleMode;
 							case 1:
+								return _Controller._ZoomScaleLevelsCell;
+							case 2:
 								return _Controller._ZoomByDoubleTouchCell;
 						}
 						break;

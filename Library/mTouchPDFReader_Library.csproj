@@ -99,6 +99,7 @@
     <Compile Include="Managers\LocalizationManager.cs" />
     <Compile Include="Managers\MgrAccessor.cs" />
     <Compile Include="Data\Enums\DocumentActionTypes.cs" />
+    <Compile Include="Data\Enums\AutoScaleModes.cs" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Data\Enums\" />
@@ -126,5 +127,7 @@
     <BundleResource Include="Images\Toolbar\AutoHeight48.png" />
     <BundleResource Include="Images\Toolbar\AutoWidth48.png" />
     <BundleResource Include="Images\Toolbar\Thumbs48.png" />
+    <BundleResource Include="Images\Toolbar\AutoHeight_Selected48.png" />
+    <BundleResource Include="Images\Toolbar\AutoWidth_Selected48.png" />
   </ItemGroup>
 </Project>

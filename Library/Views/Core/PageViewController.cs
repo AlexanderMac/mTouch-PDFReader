@@ -25,6 +25,7 @@ using System;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
@@ -35,6 +36,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// The PageView frame.
 		/// </summary>
 		private RectangleF _ViewFrame;
+
+		/// <summary>
+		/// The auto scale modes.
+		/// </summary>
+		private AutoScaleModes _AutoScaleMode;
 
 		/// <summary>
 		/// Gets the page number.
@@ -70,9 +76,10 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 		}
 		
-		public PageViewController(RectangleF viewFrame, int pageNumber) : base(null, null)
+		public PageViewController(RectangleF viewFrame, AutoScaleModes autoScaleMode, int pageNumber) : base(null, null)
 		{
 			_ViewFrame = viewFrame;
+			_AutoScaleMode = autoScaleMode;
 			PageNumber = pageNumber;
 		}	
 		#endregion
@@ -87,7 +94,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (PageNumber == -1) {
 				View.BackgroundColor = UIColor.Clear;
 			} else {
-				View = new PageView(_ViewFrame, PageNumber);
+				View = new PageView(_ViewFrame, _AutoScaleMode, PageNumber);
 			}
 		}
 
