@@ -198,15 +198,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Calls after the controller’s view the did layout subviews.
-		/// </summary>
-		public override void ViewDidLayoutSubviews()
-		{
-			base.ViewDidLayoutSubviews();
-			_UpdatePageViewFrameRectAndZoomScale();
-		}
-
-		/// <summary>
 		/// Calls the possibility rotate the view.
 		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
@@ -523,20 +514,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 
 		/// <summary>
-		/// Updates the page view frame rect and zoom scale.
-		/// </summary>
-		private void _UpdatePageViewFrameRectAndZoomScale()
-		{
-			var pageVCs = _BookPageViewController.ViewControllers
-				.Cast<PageViewController>()
-				.Where(x => x != null && x.IsNotEmptyPage);
-
-			foreach (var pageVC in pageVCs) {
-				pageVC.PageView.UpdateFrameRectAndZoomScale(_GetPageViewFrameRect());
-			}
-		}
-
-		/// <summary>
 		/// Updates the page view autoscale mode.
 		/// </summary>
 		private void _UpdatePageViewAutoScaleMode()
@@ -544,9 +521,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			var pageVCs = _BookPageViewController.ViewControllers
 				.Cast<PageViewController>()
 				.Where(x => x != null && x.IsNotEmptyPage);
-			
+
 			foreach (var pageVC in pageVCs) {
-				pageVC.PageView.UpdateAutoScaleMode(_AutoScaleMode);
+				pageVC.PageView.AutoScaleMode = _AutoScaleMode;
+				pageVC.PageView.SetNeedsLayout();
 			}
 		}
 
