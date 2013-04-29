@@ -219,7 +219,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			var cell = CreateCell("PageTransitionStyleCell");
 			var label = CreateTitleLabelControl("Transition style".t());
-			var seg = CreateSegmentControl(new string[] { "Curl".t(), "Scroll".t() }, 150);
+			var seg = CreateSegmentControl(new string[] { "Curl".t(), "Scroll".t() }, 300);
 			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
 			seg.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.PageTransitionStyle = (UIPageViewControllerTransitionStyle)seg.SelectedSegment;
@@ -238,7 +238,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			var cell = CreateCell("PageNavigationOrientationCell");
 			var label = CreateTitleLabelControl("Navigation orientation".t());
-			var seg = CreateSegmentControl(new string[] { "Horizontal".t(), "Vertical".t() }, 250);
+			var seg = CreateSegmentControl(new string[] { "Horizontal".t(), "Vertical".t() }, 300);
 			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
 			seg.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)seg.SelectedSegment;
