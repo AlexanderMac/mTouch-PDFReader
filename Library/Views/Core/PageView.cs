@@ -82,6 +82,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		}		
 
 		/// <summary>
+		/// Gets or sets flag, indicates, that zoom and offset should be updated.
+		/// </summary>
+		public bool NeedUpdateZoomAndOffset { get; set; }
+
+		/// <summary>
 		/// Gets or sets the auto scale modes.
 		/// </summary>
 		public AutoScaleModes AutoScaleMode { get; set; }
@@ -107,6 +112,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				return _PageContentContainerView; 
 			};
 			AutoScaleMode = autoScaleMode;
+			NeedUpdateZoomAndOffset = true;
 			
 			// Create and init (calc frame size) page content view
 			_PageContentView = new PageContentView(PageContentView.GetPageViewSize(pageNumber), pageNumber);
@@ -138,7 +144,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			ContentInset = new UIEdgeInsets(ContentViewPadding, ContentViewPadding, ContentViewPadding, ContentViewPadding);
 			ContentSize = _PageContentContainerView.Bounds.Size;
 		}
-		
+
 		/// <summary>
 		/// Layouts the subviews.
 		/// </summary>
@@ -146,11 +152,13 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			base.LayoutSubviews();	
 
-			_UpdateMinimumMaximumZoom();
-			_ResetZoom();
-			_ResetScrollOffset();
-
-			_AlignPageContentView();						
+			if (NeedUpdateZoomAndOffset) {
+				_UpdateMinimumMaximumZoom();
+				_ResetZoom();
+				_ResetScrollOffset();
+				NeedUpdateZoomAndOffset = false;
+			}	
+			_AlignPageContentView();
 		}
 		
 		/// <summary>
@@ -233,7 +241,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			ZoomScale = MinimumZoomScale;
 		}
-		
+
 		/// <summary>
 		/// Decrements the zoom scale factor.
 		/// </summary>
