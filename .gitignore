@@ -1,4 +1,5 @@
 bin
 obj
 .DS_STORE
+*.userprefs
 version.txt

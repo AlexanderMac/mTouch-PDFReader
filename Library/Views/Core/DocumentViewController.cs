@@ -254,7 +254,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			var curPageCntr = referenceViewController as PageViewController;
 			if (curPageCntr.PageNumber == (PDFDocument.PageCount)) {				
 				return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid
-					? _GetEmptyPageVC()
+					? _GetEmptyPageContentVC()
 					: null;	
 			} else if (curPageCntr.PageNumber == -1) { 
 				return null;
@@ -271,7 +271,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// <returns>The spine location.</returns>
 		private UIPageViewControllerSpineLocation GetSpineLocation(UIPageViewController pageViewController, UIInterfaceOrientation orientation)
 		{
-			var currentPageVC = _GetCurrentPageVC();
+			var currentPageVC = _GetCurrentPageContentVC();
 			pageViewController.DoubleSided = false;
 			pageViewController.SetViewControllers(new UIViewController[] { currentPageVC }, UIPageViewControllerNavigationDirection.Forward, true, s => { });
 			return UIPageViewControllerSpineLocation.Min;
@@ -529,7 +529,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		private void _UpdatePageViewAutoScaleMode()
 		{
-			foreach (var pageVC in _BookPageViewController.ChildViewControllers.Cast<PageViewController>()) {
+			var pageVCs = _BookPageViewController.ViewControllers
+				.Cast<PageViewController>()
+				.Where(x => x != null && x.IsNotEmptyPage);
+
+			foreach (var pageVC in pageVCs) {
 				pageVC.PageView.NeedUpdateZoomAndOffset = true;
 				pageVC.PageView.AutoScaleMode = _AutoScaleMode;
 				pageVC.PageView.SetNeedsLayout();
@@ -540,7 +544,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// Gets the get current PageView controller.
 		/// </summary>
 		/// <returns>The current PageView controller.</returns>
-		private PageViewController _GetCurrentPageVC()
+		private PageViewController _GetCurrentPageContentVC()
 		{
 			return (PageViewController)_BookPageViewController.ViewControllers[0];
 		}
@@ -549,7 +553,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// Gets the empty PageView controller.
 		/// </summary>
 		/// <returns>The empty PageView controller.</returns>
-		private PageViewController _GetEmptyPageVC()
+		private PageViewController _GetEmptyPageContentVC()
 		{
 			return new PageViewController(_GetPageViewFrameRect(), _AutoScaleMode, -1);
 		}
@@ -629,7 +633,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private void ExecAfterOpenPageActions()
 		{
 			// Set current page
-			PDFDocument.CurrentPageNumber = _GetCurrentPageVC().PageNumber;	
+			PDFDocument.CurrentPageNumber = _GetCurrentPageContentVC().PageNumber;	
 			
 			// Update PageNumber label
 			if (_PageNumberLabel != null) {
@@ -681,7 +685,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void ZoomOut()
 		{
-			var pageVC = _GetCurrentPageVC();
+			var pageVC = _GetCurrentPageContentVC();
 			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
 				pageVC.PageView.ZoomDecrement();
 			}
@@ -692,7 +696,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		/// </summary>
 		protected virtual void _ZoomIn()
 		{
-			var pageVC = _GetCurrentPageVC();
+			var pageVC = _GetCurrentPageContentVC();
 			if (PDFDocument.DocumentHasLoaded && pageVC.IsNotEmptyPage) {
 				pageVC.PageView.ZoomIncrement();
 			}
