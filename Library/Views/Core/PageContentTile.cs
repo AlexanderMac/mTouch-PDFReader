@@ -33,42 +33,27 @@ namespace mTouchPDFReader.Library.Views.Core
 	[Register("PageContentTile")]
 	public class PageContentTile : CATiledLayer
 	{		
-		/// <summary>
-		/// Gets or sets the draw layer action.
-		/// </summary>
 		public Action<CGContext> OnDraw {
 			get { return _OnDraw; }
 			set { _OnDraw = value; }
 		}
 		private Action<CGContext> _OnDraw;
 		
-		/// <summary>
-		/// Gets the fade duration.
-		/// </summary>
 		[Export("fadeDuration")]
 		public static new double FadeDuration {
 			get { return 0.001; }
 		}
 		
-		/// <summary>
-		/// Default.
-		/// </summary>
-		public PageContentTile() : base()
+		public PageContentTile()
 		{
 			Initialize();
         }
 		
-		/// <summary>
-		/// Working.
-		/// </summary>
         public PageContentTile(IntPtr handle) : base(handle)
         {
 			Initialize();
         }
 		
-		/// <summary>
-		/// Initializes the layer.
-		/// </summary>
 		public void Initialize()
 		{
 			LevelsOfDetail = 4;
@@ -80,9 +65,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			TileSize = new SizeF(sizeOfTiles, sizeOfTiles);
 		}	
 		
-		/// <summary>
-		/// Draws the layer.
-		/// </summary>
 		public override void DrawInContext(CGContext ctx)
 		{
 			_OnDraw(ctx);

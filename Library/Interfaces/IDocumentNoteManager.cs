@@ -21,30 +21,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Interfaces
 {
 	public interface IDocumentNoteManager
 	{
-		/// <summary>
-		/// Creates the new <see cref="DocumentNote"/> object.
-		/// </summary>.
-		/// </param>
 		DocumentNote GetNew(int docId, string note);
-
-		/// <summary>
-		/// Gets the <see cref="DocumentNote"/> object by the <see cref="docId"/>.
-		/// </summary>
-		/// <param name="docId">The PDF document Id.</param>
-		/// <returns>The <see cref="DocumentNote"/> object.</returns>
 		DocumentNote Load(int docId);
-		
-		/// <summary>
-		/// Saves the see cref="T"/> object.
-		/// </summary>
-		/// <param name="note">The <see cref="DocumentNote"/> object.</param>
 		void Save(DocumentNote note);
 	}
 }

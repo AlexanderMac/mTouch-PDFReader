@@ -21,7 +21,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Collections.Generic;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
@@ -30,16 +29,9 @@ namespace mTouchPDFReader.Library.Managers
 {
 	public class DocumentBookmarkManager : IDocumentBookmarkManager
 	{
-		#region Logic	
-		/// <summary>
-		/// Hidden constructor to create instance only from RC.
-		/// </summary>
 		protected DocumentBookmarkManager()	{}
 
-		/// <summary>
-		/// Creates the new <see cref="DocumentBookmark"/> object.
-		/// </summary>.
-		/// </param>
+		#region IDocumentBookmarkManager memebers
 		public virtual DocumentBookmark GetNew(int docId, string name, int pageNumber)
 		{
 			return new DocumentBookmark {
@@ -50,29 +42,16 @@ namespace mTouchPDFReader.Library.Managers
 			};
 		}
 
-		/// <summary>
-		/// Gets the <see cref="DocumentBookmark"/> list by the <see cref="docId"/>.
-		/// </summary>
-		/// <param name="docId">The PDF document Id.</param>
-		/// <returns>The <see cref="DocumentBookmark"/> objects list.</returns>
 		public virtual List<DocumentBookmark> LoadList(int docId)
 		{
 			return new List<DocumentBookmark>();
 		}
 		
-		/// <summary>
-		/// Saves the <see cref="DocumentBookmark"/> object. 
-		/// </summary>
-		/// <param name="bookmark">The bookmark object.</param>
 		public virtual void Save(DocumentBookmark bookmark)
 		{
 			// Noting
 		}	
 		
-		/// <summary>
-		/// Deletes the <see cref="DocumentBookmark"/> object by <see cref="bookmarkId"/>.
-		/// </summary>
-		/// <param name="bookmarkId">The bookmark id.</param>
 		public virtual void Delete(int bookmarkId)
 		{
 			// Nothing

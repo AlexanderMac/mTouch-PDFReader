@@ -22,9 +22,7 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Views.Core;
 using mTouchPDFReader.Library.Managers;
@@ -34,23 +32,10 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class GotoPageViewController : UIViewControllerWithPopover
 	{			
-		/// <summary>
-		/// The new page number text view.
-		/// </summary>
 		private UITextField _PageNumberTxt;		
 
-		#region Constructors
-		/// <summary>
-		/// Working.
-		/// </summary>
-		public GotoPageViewController(Action<object> callbackAction) : base(null, null, callbackAction)
-		{
-		}
-		#endregion
-
-		/// <summary>
-		/// Calls when view are loaded 
-		/// </summary>
+		public GotoPageViewController(Action<object> callbackAction) : base(null, null, callbackAction)	{}
+		
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -94,18 +79,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			View.AddSubview(_PageNumberTxt);
 		}
 		
-		/// <summary>
-		/// Returns popover size, must be overrided in child classes
-		/// </summary>
-		/// <returns>Popover size</returns>
 		protected override SizeF GetPopoverSize()
 		{
 			return new SizeF(200, 100);
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;

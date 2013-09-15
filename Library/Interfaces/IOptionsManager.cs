@@ -21,26 +21,14 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Interfaces
 {
 	public interface IOptionsManager
 	{
-		/// <summary>
-		/// Gets the options. 
-		/// </summary>
 		Options Options { get; }
-
-		/// <summary>
-		/// Loads the options. 
-		/// </summary>
 		void Load();
-
-		/// <summary>
-		/// Saves the options. 
-		/// </summary>
 		void Save();
 	}
 }

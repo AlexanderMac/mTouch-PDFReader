@@ -22,15 +22,10 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
-using MonoTouch.Foundation;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Utils;
-using mTouchPDFReader.Library.Interfaces;
-using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.XViews;
 using mTouchPDFReader.Library.Views.Management;
 using mTouchPDFReader.Library.Managers;
@@ -54,86 +49,24 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region Fields			
-		/// <summary>
-		/// The document id.
-		/// </summary>
-		private int _DocumentId;
-
-		/// <summary>
-		/// The document name.
-		/// </summary>
-		private string _DocumentName;
-
-		/// <summary>
-		/// The document path.
-		/// </summary>
-		private string _DocumentPath;
-			
-		/// <summary>
-		/// The PageView controller.
-		/// </summary>
+		private readonly int _DocumentId;
+		private readonly string _DocumentName;
+		private readonly string _DocumentPath;
 		private UIPageViewController _BookPageViewController;
-
-		/// <summary>
-		/// The toolbar view.
-		/// </summary>
 		private UIView _Toolbar;
-		
-		/// <summary>
-		/// The page open button.
-		/// </summary>
 		private UIButton _BtnNavigateToPage;
-			
-		/// <summary>
-		/// The note view open button. 
-		/// </summary>
 		private UIButton _BtnNote;
-		
-		/// <summary>
-		/// The bookmarsks view open button.
-		/// </summary>
 		private UIButton _BtnBookmarksList;
-		
-		/// <summary>
-		/// The thumbs view open button.
-		/// </summary>
 		private UIButton _BtnThumbs;
-
-		/// <summary>
-		/// Sets the auto width mode.
-		/// </summary>
 		private UIButton _BtnAutoWidth;
-
-		/// <summary>
-		/// Sets the auto height mode;
-		/// </summary>
 		private UIButton _BtnAutoHeight;
-		
-		/// <summary>
-		/// The bottom bar view.
-		/// </summary>
 		private UIView _BottomBar;
-		
-		/// <summary>
-		/// The slider view.
-		/// </summary>
 		private UISlider _Slider;
-		
-		/// <summary>
-		/// The page number label.
-		/// </summary>
 		private UILabel _PageNumberLabel;
-
-		/// <summary>
-		/// The auto scale modes.
-		/// </summary>
 		private AutoScaleModes _AutoScaleMode;
 		#endregion
 			
 		#region Initialization
-		/// <summary>
-		/// Default.
-		/// </summary>
 		public DocumentViewController(int docId, string docName, string docPath) : base(null, null)
 		{
 			_DocumentId = docId;
@@ -143,9 +76,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region UIViewController	
-		/// <summary>
-		/// Calls after the controller’s view did loaded into memory.
-		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -197,9 +127,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			View.AddSubview(_BookPageViewController.View);
 		}
 
-		/// <summary>
-		/// Called after layout subviews.
-		/// </summary>
 		public override void ViewDidLayoutSubviews()
 		{
 			base.ViewDidLayoutSubviews();
@@ -208,17 +135,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 
-		/// <summary>
-		/// Calls the possibility rotate the view.
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
 
-		/// <summary>
-		/// Calls when object is disposing.
-		/// </summary>
 		protected override void Dispose(bool disposing)
 		{
 			PDFDocument.CloseDocument();
@@ -227,12 +148,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region UIPageViewController	
-		/// <summary>
-		/// Gets the previous PageView controller.
-		/// </summary>
-		/// <param name='pageController'>The book PageView controller.</param>
-		/// <param name='referenceViewController'>The current (opened) PageView controller.</param>
-		/// <returns>The previous page view controller.</returns>
 		private UIViewController GetPreviousPageViewController(UIPageViewController pageController, UIViewController referenceViewController)
 		{			
 			var curPageCntr = referenceViewController as PageViewController;
@@ -243,12 +158,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			return GetPageViewController(pageNumber);
 		}
 
-		/// <summary>
-		/// Gets the next PageView controller.
-		/// </summary>
-		/// <param name='pageController'>The book PageView controller.</param>
-		/// <param name='referenceViewController'>The current (opened) PageView controller.</param>
-		/// <returns>The next page view controller.</returns>
 		private UIViewController GetNextPageViewController(UIPageViewController pageController, UIViewController referenceViewController)
 		{			
 			var curPageCntr = referenceViewController as PageViewController;
@@ -263,12 +172,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			return GetPageViewController(pageNumber);
 		}	
 
-		/// <summary>
-		/// Gets the spine location.
-		/// </summary>
-		/// <param name='pageController'>The book PageView controller.</param>
-		/// <param name='orientation'>The device orientation.</param>
-		/// <returns>The spine location.</returns>
 		private UIPageViewControllerSpineLocation GetSpineLocation(UIPageViewController pageViewController, UIInterfaceOrientation orientation)
 		{
 			var currentPageVC = _GetCurrentPageContentVC();
@@ -277,12 +180,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			return UIPageViewControllerSpineLocation.Min;
 		}
 
-		/// <summary>
-		/// Calls after finished open page animation.
-		/// </summary>
-		/// <param name='completed'>If set to <c>true</c> completed.</param>
-		/// <param name='finished'>If set to <c>true</c> finished.</param>
-		/// <param name='previousViewControllers'>Previous view controllers.</param>
 		private void PageFinishedAnimation(bool completed, bool finished, UIViewController[] previousViewControllers)
 		{
 			if (completed) {
@@ -292,9 +189,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 				
 		#region UI Logic		
-		/// <summary>
-		/// Presents popover.
-		/// </summary>
 		private void _PresentPopover(UIViewControllerWithPopover viewCtrl, RectangleF frame)
 		{
 			var popoverController = new UIPopoverController(viewCtrl);
@@ -302,10 +196,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			popoverController.PresentFromRect(frame, View, UIPopoverArrowDirection.Any, true);
 		}	
 		
-		/// <summary>
-		/// Gets the current device orientation.
-		/// </summary>
-		/// <returns>Current device orientation.</returns>
 		private UIInterfaceOrientation _GetDeviceOrientation()
 		{
 			switch (UIDevice.CurrentDevice.Orientation) {
@@ -321,20 +211,13 @@ namespace mTouchPDFReader.Library.Views.Core
 			return UIInterfaceOrientation.Portrait;
 		}
 		
-		/// <summary>
-		/// Updates the slider max value.
-		/// </summary>
 		private void _UpdateSliderMaxValue()
 		{
 			if (_Slider != null) {
 				_Slider.MaxValue = PDFDocument.PageCount;
 			}
 		}		
-		
-		/// <summary>
-		/// Creates the toolbar.
-		/// </summary>
-		/// <returns>The toolbar view.</returns>
+
 		protected virtual UIView _CreateToolbar()
 		{
 			// Create toolbar
@@ -390,24 +273,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			return toolBar;
 		}
 
-		/// <summary>
-		/// Creates separator item.
-		/// </summary>
-		/// <param name="frame">The frame.</param>
 		private void _CreateToolbarSeparator(ref RectangleF frame)
 		{
 			frame.Offset(22, 0);
 		}
 
-		/// <summary>
-		/// Creates the toolbar button.
-		/// </summary>
-		/// <param name="toolbar">The toolbar view.</param>
-		/// <param name="actionType">The document action type.</param>
-		/// <param name="frame">The button frame.</param>
-		/// <param name="imagePath">The image button path.</param>
-		/// <param name="action">The button action.</param>
-		/// <returns>The button view.</returns>
 		protected virtual UIButton _CreateToolbarButton(UIView toolbar, DocumentActionTypes actionType, ref RectangleF frame, string imagePath, Action action)
 		{
 			var btn = new UIButton(frame);
@@ -420,20 +290,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			return btn;
 		}
 
-		/// <summary>
-		/// Creates the user defined toolbar items.
-		/// </summary>
-		/// <param name="toolbar">The toolbar view.</param>
-		/// <param name="frame">The button frame.</param>
 		protected virtual void _CreateUserDefinedToolbarItems(UIView toolbar, ref RectangleF frame)
 		{
 			// Nothing. Should be overrided in child classes.
 		}
-		
-		/// <summary>
-		/// Creates the bottom bar.
-		/// </summary>
-		/// <returns>The bottom bar view.</returns>
+
 		protected virtual UIView _CreateBottomBar()
 		{
 			// Create bottom bar	
@@ -498,10 +359,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 
 		#region PDFDocument logic
-		/// <summary>
-		/// Gets the book view frame rect.
-		/// </summary>
-		/// <returns>The PageView frame rect.</returns>
 		private RectangleF _GetBookViewFrameRect()
 		{
 			var rect = View.Bounds;
@@ -515,18 +372,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			return rect;
 		}
 		
-		/// <summary>
-		/// Gets the page view frame rect.
-		/// </summary>
-		/// <returns>The PageView frame rect.</returns>
 		private RectangleF _GetPageViewFrameRect()
 		{
 			return _BookPageViewController.View.Bounds; 
 		}
 
-		/// <summary>
-		/// Updates the page view autoscale mode.
-		/// </summary>
 		private void _UpdatePageViewAutoScaleMode()
 		{
 			var pageVCs = _BookPageViewController.ViewControllers
@@ -540,29 +390,16 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 
-		/// <summary>
-		/// Gets the get current PageView controller.
-		/// </summary>
-		/// <returns>The current PageView controller.</returns>
 		private PageViewController _GetCurrentPageContentVC()
 		{
 			return (PageViewController)_BookPageViewController.ViewControllers[0];
 		}
 
-		/// <summary>
-		/// Gets the empty PageView controller.
-		/// </summary>
-		/// <returns>The empty PageView controller.</returns>
 		private PageViewController _GetEmptyPageContentVC()
 		{
 			return new PageViewController(_GetPageViewFrameRect(), _AutoScaleMode, -1);
 		}
 
-		/// <summary>
-		/// Gets the PageView controller by the <see cref="pageNumber"/>.
-		/// </summary>
-		/// <param name='pageNumber'>The page number.</param>
-		/// <returns>The PageView controller.</returns>
 		private PageViewController GetPageViewController(int pageNumber)
 		{
 			if (!PDFDocument.DocumentHasLoaded || pageNumber < 1 || pageNumber > PDFDocument.PageCount || pageNumber == PDFDocument.CurrentPageNumber) {
@@ -571,20 +408,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			return new PageViewController(_GetPageViewFrameRect(), _AutoScaleMode, pageNumber);
 		}
 
-		/// <summary>
-		/// Gets the page incremented value.
-		/// </summary>
-		/// <returns>The page incremented value.</returns>
 		private int _GetPageIncValue()
 		{
 			return _BookPageViewController.SpineLocation == UIPageViewControllerSpineLocation.Mid ? 2 : 1;
 		}
 
-		/// <summary>
-		/// Gets the image path for the button.
-		/// </summary>
-		/// <param name="actionType">The action type.</param>
-		/// <returns>The image path for the button.</returns> 
 		private string _GetImagePathForButton(DocumentActionTypes actionType)
 		{
 			var ret = "";
@@ -601,10 +429,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			return ret;
 		}
 
-		/// <summary>
-		/// Opens the document page.
-		/// </summary>
-		/// <param name="pageNumber">The document page number.</param>
 		public virtual void OpenDocumentPage(int pageNumber)
 		{
 			if (pageNumber < 1 || pageNumber > PDFDocument.PageCount) {
@@ -627,9 +451,6 @@ namespace mTouchPDFReader.Library.Views.Core
 				s => { ExecAfterOpenPageActions(); });
 		}		
 
-		/// <summary>
-		/// Executes the after open page actions.
-		/// </summary>
 		private void ExecAfterOpenPageActions()
 		{
 			// Set current page
@@ -648,41 +469,26 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region Events			
-		/// <summary>
-		/// Opens the document first page.
-		/// </summary>
 		protected virtual void _OpenFirstPage()
 		{
 			OpenDocumentPage(1);
 		}
 		
-		/// <summary>
-		/// Opens the document prior page.
-		/// </summary>
 		protected virtual void _OpenPriorPage()
 		{
 			OpenDocumentPage(PDFDocument.CurrentPageNumber - _GetPageIncValue());
 		}
 		
-		/// <summary>
-		/// Opens the document next page.
-		/// </summary>
 		protected virtual void _OpenNextPage()
 		{
 			OpenDocumentPage(PDFDocument.CurrentPageNumber + _GetPageIncValue());
 		}
 		
-		/// <summary>
-		/// Opens the document last page. 
-		/// </summary>
 		protected virtual void _OpenLastPage()
 		{
 			OpenDocumentPage(PDFDocument.PageCount);
 		}
 		
-		/// <summary>
-		/// Zooming out the page.
-		/// </summary>
 		protected virtual void ZoomOut()
 		{
 			var pageVC = _GetCurrentPageContentVC();
@@ -691,9 +497,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 		
-		/// <summary>
-		/// Zooming in the page.
-		/// </summary>
 		protected virtual void _ZoomIn()
 		{
 			var pageVC = _GetCurrentPageContentVC();
@@ -702,10 +505,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 
-		/// <summary>
-		/// Sets the auto scale mode.
-		/// </summary>
-		/// <param name="autoScaleMode">The new auto scale mode.</param>
 		public void SetAutoScaleMode(AutoScaleModes autoScaleMode)
 		{
 			_AutoScaleMode = autoScaleMode;
@@ -714,17 +513,11 @@ namespace mTouchPDFReader.Library.Views.Core
 			_UpdatePageViewAutoScaleMode();
 		}
 
-		/// <summary>
-		/// Sets the page auto width.
-		/// </summary>
 		public virtual void SetAutoWidth()
 		{
 			SetAutoScaleMode(AutoScaleModes.AutoWidth);
 		}
 
-		/// <summary>
-		/// Sets the page auto height.
-		/// </summary>
 		public virtual void SetAutoHeight()
 		{
 			SetAutoScaleMode(AutoScaleModes.AutoHeight);

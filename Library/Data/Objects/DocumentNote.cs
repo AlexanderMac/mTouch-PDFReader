@@ -21,25 +21,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-
 namespace mTouchPDFReader.Library.Data.Objects
 {
 	public class DocumentNote
 	{
-		/// <summary>
-		/// Get the note Id.
-		/// </summary>
 		public int Id { get; set; }
-		
-		/// <summary>
-		/// Gets the document Id.
-		/// </summary>
 		public int DocId { get; set; }
-		
-		/// <summary>
-		/// Get the note.
-		/// </summary>
 		public string Note { get; set; }
 	}
 }

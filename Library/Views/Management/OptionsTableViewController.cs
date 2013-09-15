@@ -22,12 +22,9 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Utils;
-using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Data.Enums;
@@ -42,18 +39,14 @@ namespace mTouchPDFReader.Library.Views.Management
 		#endregion
 		
 		#region Fields		
-		// Page transition style and navigation orientation
 		private UITableViewCell _PageTransitionStyleCell;
 		private UITableViewCell _PageNavigationOrientationCell;
 		private UITableViewCell _AutoScaleMode;
-		// Visibility
 		private UITableViewCell _ToolbarVisibilityCell;
 		private UITableViewCell _BottombarVisibilityCell;
 		private UITableViewCell _PageNumberVisibilityCell;
-		// Zoom
 		private UITableViewCell _ZoomScaleLevelsCell;
 		private UITableViewCell _ZoomByDoubleTouchCell;
-		// Library info
 		private UITableViewCell _LibraryReleaseDateCell;
 		private UITableViewCell _LibraryVersionCell;		
 		#endregion
@@ -80,9 +73,6 @@ namespace mTouchPDFReader.Library.Views.Management
 		}		
 		#endregion	
 		
-		/// <summary>
-		/// Calls when view has loaded
-		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -102,124 +92,98 @@ namespace mTouchPDFReader.Library.Views.Management
 			// Library info
 			_LibraryReleaseDateCell = _CreateLibraryReleaseDateCell();
 			_LibraryVersionCell = _CreateLibraryVersionCell();
-			
-			TableView = new UITableView(View.Bounds, UITableViewStyle.Grouped);
-			TableView.BackgroundView = null;
-			TableView.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			TableView.Source = new DataSource(this);        	
+
+			TableView = new UITableView(View.Bounds, UITableViewStyle.Grouped)
+			            {
+				            BackgroundView = null, 
+							AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight, 
+							Source = new DataSource(this)
+			            };
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
 		
 		#region Helpers		
-		/// <summary>
-		/// Creates table cell 
-		/// </summary>
-		/// <param name="id">Cell UID</param>
-		/// <returns>Table cell</returns>
 		private UITableViewCell CreateCell(string id)
 		{
-			var cell = new UITableViewCell(UITableViewCellStyle.Default, id);
-			cell.Frame = new RectangleF(0, 0, DefaultCellWidth, DefaultCellHeight);
-			cell.BackgroundColor = UIColor.White;
-			cell.SelectionStyle = UITableViewCellSelectionStyle.None;
+			var cell = new UITableViewCell(UITableViewCellStyle.Default, id)
+			           {
+				           Frame = new RectangleF(0, 0, DefaultCellWidth, DefaultCellHeight),
+				           BackgroundColor = UIColor.White,
+				           SelectionStyle = UITableViewCellSelectionStyle.None
+			           };
 			return cell;
 		}
 		
-		/// <summary>
-		/// Create title label control 
-		/// </summary>
-		/// <param name="title">Label title</param>
-		/// <returns>Label control</returns>
 		private UILabel CreateTitleLabelControl(string title)
 		{
-			var label = new UILabel(new RectangleF(60, 15, 400, 20));
-			label.AutoresizingMask = UIViewAutoresizing.FlexibleRightMargin;
-			label.BackgroundColor = UIColor.Clear;
-			label.Text = title;
-			label.Font = UIFont.BoldSystemFontOfSize(18.0f);
+			var label = new UILabel(new RectangleF(60, 15, 400, 20))
+			            {
+				            AutoresizingMask = UIViewAutoresizing.FlexibleRightMargin, 
+							BackgroundColor = UIColor.Clear, 
+							Text = title, 
+							Font = UIFont.BoldSystemFontOfSize(18.0f)
+			            };
 			return label;
 		}
 		
-		/// <summary>
-		/// Create value label control 
-		/// </summary>
-		/// <param name="title">Label title</param>
-		/// <returns>Label control</returns>
 		private UILabel CreateValueLabelControl(string title)
 		{
-			int width = 250;
-			var label = new UILabel(new RectangleF(DefaultCellWidth - width - 60, 15, width, 20));
-			label.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
-			label.BackgroundColor = UIColor.Clear;
-			label.TextAlignment = UITextAlignment.Right;
-			label.Text = title;	
+			const int width = 250;
+			var label = new UILabel(new RectangleF(DefaultCellWidth - width - 60, 15, width, 20))
+			            {
+				            AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin, 
+							BackgroundColor = UIColor.Clear, 
+							TextAlignment = UITextAlignment.Right, 
+							Text = title
+			            };
 			return label;
 		}
 		
-		/// <summary>
-		/// Creates segment control 
-		/// </summary>
-		/// <param name="values">Segment control values</param>
-		/// <param name="width">Control width</param>
-		/// <returns>Segment control</returns>
 		private UISegmentedControl CreateSegmentControl(string[] values, int width)
 		{
-			var seg = new UISegmentedControl(new RectangleF(DefaultCellWidth - width - 60, 10, width, 30));
-			seg.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
+			var seg = new UISegmentedControl(new RectangleF(DefaultCellWidth - width - 60, 10, width, 30))
+			          {
+				          AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
+			          };
 			for (int i = 0; i < values.Length; i++) {
 				seg.InsertSegment(values [i], i, false);
 			}
 			return seg;
 		}
 		
-		/// <summary>
-		/// Creates switch control
-		/// <param name="values">Switch control values</param>
-		/// <param name="width">Control width</param>
-		/// </summary>
-		/// <returns>Switch control</returns>
 		private UISwitch CreateSwitchControl(string[] values)
 		{
-			int width = 90;
-			var ctrl = new UISwitch(new RectangleF(DefaultCellWidth - width - 45, 10, width, 30));
-			ctrl.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
+			const int width = 90;
+			var ctrl = new UISwitch(new RectangleF(DefaultCellWidth - width - 45, 10, width, 30))
+			           {
+				           AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin
+			           };
 			return ctrl;
 		}
 		
-		/// <summary>
-		/// Creates slider control
-		/// </summary>
-		/// <param name="minValue">Slider minimum value</param>
-		/// <param name="maxValue">Slider maximum value</param>
-		/// <returns>Slider control</returns>
 		private UISlider CreateSliderControl(int minValue, int maxValue)
 		{
-			int width = 200;
-			var slider = new UISlider(new RectangleF(DefaultCellWidth - width - 55, 10, width, 30));
-			slider.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
-			slider.MinValue = minValue;
-			slider.MaxValue = maxValue;
+			const int width = 200;
+			var slider = new UISlider(new RectangleF(DefaultCellWidth - width - 55, 10, width, 30))
+			             {
+				             AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin, 
+							 MinValue = minValue, 
+							 MaxValue = maxValue
+			             };
 			return slider;
 		}
 		#endregion
 
 		#region Creating cells
-		/// <summary>
-		/// Creates the page transition style cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreatePageTransitionStyleCell()
 		{
 			var cell = CreateCell("PageTransitionStyleCell");
 			var label = CreateTitleLabelControl("Transition style".t());
-			var seg = CreateSegmentControl(new string[] { "Curl".t(), "Scroll".t() }, 300);
+			var seg = CreateSegmentControl(new[] { "Curl".t(), "Scroll".t() }, 300);
 			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
 			seg.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.PageTransitionStyle = (UIPageViewControllerTransitionStyle)seg.SelectedSegment;
@@ -230,15 +194,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 
-		/// <summary>
-		/// Creates the page navigation orientation cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreatePageNavigationOrientationCell()
 		{
 			var cell = CreateCell("PageNavigationOrientationCell");
 			var label = CreateTitleLabelControl("Navigation orientation".t());
-			var seg = CreateSegmentControl(new string[] { "Horizontal".t(), "Vertical".t() }, 300);
+			var seg = CreateSegmentControl(new[] { "Horizontal".t(), "Vertical".t() }, 300);
 			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.PageTransitionStyle;
 			seg.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)seg.SelectedSegment;
@@ -249,15 +209,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the toolbar visibility cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateToolbarVisibilityCell()
 		{
 			var cell = CreateCell("ToolbarVisibilityCell");
 			var label = CreateTitleLabelControl("Toolbar".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
+			var switchCtrl = CreateSwitchControl(new[] { "Yes".t(), "No".t() });
 			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.ToolbarVisible, false);
 			switchCtrl.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.ToolbarVisible = switchCtrl.On;
@@ -268,15 +224,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the bottombar visibility cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateBottombarVisibilityCell()
 		{
 			var cell = CreateCell("BottombarVisibilityCell");
 			var label = CreateTitleLabelControl("Bottombar".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
+			var switchCtrl = CreateSwitchControl(new[] { "Yes".t(), "No".t() });
 			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.BottombarVisible, false);
 			switchCtrl.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.BottombarVisible = switchCtrl.On;
@@ -287,15 +239,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the page number visibility cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreatePageNumberVisibilityCell()
 		{
 			var cell = CreateCell("PageNumberVisibilityCell");
 			var label = CreateTitleLabelControl("Page number".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
+			var switchCtrl = CreateSwitchControl(new[] { "Yes".t(), "No".t() });
 			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.PageNumberVisible, false);
 			switchCtrl.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.PageNumberVisible = switchCtrl.On;
@@ -306,15 +254,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 
-		/// <summary>
-		/// Creates the page auto scale mode cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateAutoScaleModeCell()
 		{
 			var cell = CreateCell("AutoScaleModelCell");
 			var label = CreateTitleLabelControl("Auto scale mode".t());
-			var seg = CreateSegmentControl(new string[] { "Auto width".t(), "Auto height".t() }, 250);
+			var seg = CreateSegmentControl(new[] { "Auto width".t(), "Auto height".t() }, 250);
 			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Options.AutoScaleMode;
 			seg.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.AutoScaleMode = (AutoScaleModes)seg.SelectedSegment;
@@ -325,10 +269,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 
-		/// <summary>
-		/// Creates the zoom scale levels cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateZoomScaleLevelsCell()
 		{
 			var cell = CreateCell("ZoomScaleLevelsCell");
@@ -344,15 +284,11 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the zoom by double touch cell.
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreatemZoomByDoubleTouchCell()
 		{
 			var cell = CreateCell("ZoomByDoubleTouchCell");
 			var label = CreateTitleLabelControl("Scale by double click".t());
-			var switchCtrl = CreateSwitchControl(new string[] { "Yes".t(), "No".t() });
+			var switchCtrl = CreateSwitchControl(new[] { "Yes".t(), "No".t() });
 			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.AllowZoomByDoubleTouch, false);
 			switchCtrl.ValueChanged += delegate {
 				MgrAccessor.OptionsMgr.Options.AllowZoomByDoubleTouch = switchCtrl.On;
@@ -363,10 +299,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the library release date cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateLibraryReleaseDateCell()
 		{
 			var cell = CreateCell("LibraryReleaseDateCell");
@@ -377,10 +309,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		/// <summary>
-		/// Creates the library version cell. 
-		/// </summary>
-		/// <returns>The table cell.</returns>
 		private UITableViewCell _CreateLibraryVersionCell()
 		{
 			var cell = CreateCell("LibraryVersionCell");
@@ -392,56 +320,34 @@ namespace mTouchPDFReader.Library.Views.Management
 		}		
 		#endregion
 		
-		/// <summary>
-		/// TableView datasource
-		/// </summary> 
 		class DataSource : UITableViewSource
 		{
 			private const int SectionsCount = 4;
-			private readonly int[] RowsInSections = new int[] { 2, 3, 3, 2 };
-			private readonly string[] SectionTitles = new string[] { "Transition style".t(), "Visibility".t(), "Scale".t(), "Library information".t() };
-			
-			/// <summary>
-			/// Parent table controller
-			/// </summary>
-			private OptionsTableViewController _Controller;
+			private readonly int[] _RowsInSections = new[] { 2, 3, 3, 2 };
+			private readonly string[] _SectionTitles = new[] { "Transition style".t(), "Visibility".t(), "Scale".t(), "Library information".t() };		
+			private readonly OptionsTableViewController _Controller;
 
-			/// <summary>
-			/// Work constructor
-			/// </summary>
 			public DataSource(OptionsTableViewController controller)
 			{
 				_Controller = controller;
 			}
 		
-			/// <summary>
-			/// Returns numbers of groups 
-			/// </summary>
 			public override int NumberOfSections(UITableView tableView)
 			{
 				return SectionsCount;
 			}
 			
-			/// <summary>
-			/// Returns rows count
-			/// </summary>
 			public override int RowsInSection(UITableView tableview, int section)
 			{
-				return RowsInSections [section];
-			}
-			
-			/// <summary>
-			/// Returns title four group
-			/// </summary>
-			public override string TitleForHeader(UITableView tableView, int section)
-			{
-				return SectionTitles [section];
+				return _RowsInSections [section];
 			}
 
-			/// <summary>
-			/// Returns row by id
-			/// </summary>
-			public override UITableViewCell GetCell(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			public override string TitleForHeader(UITableView tableView, int section)
+			{
+				return _SectionTitles [section];
+			}
+
+			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 			{
 				switch (indexPath.Section) {
 					case 0:

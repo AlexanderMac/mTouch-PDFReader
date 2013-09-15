@@ -30,9 +30,6 @@ namespace mTouchPDFReader.Library.Views.Core
 	public static class PDFDocument
 	{	
 		#region Fields		
-		/// <summary>
-		/// Indicates that the document has loaded.
-		/// </summary>
 		public static bool DocumentHasLoaded {
 			get {
 				return _DocumentHasLoaded;
@@ -40,14 +37,8 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		private static bool _DocumentHasLoaded;
 		
-		/// <summary>
-		/// The opened document.
-		/// </summary>
 		private static CGPDFDocument _Document;
-		
-		/// <summary>
-		/// The document name.
-		/// </summary>
+
 		public static string DocName {
 			get {
 				return _DocName;
@@ -55,9 +46,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		private static string _DocName;
 
-		/// <summary>
-		/// The document file path.
-		/// </summary>
 		public static string DocFilePath {
 			get {
 				return _DocFilePath;
@@ -65,9 +53,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		private static string _DocFilePath;
 		
-		/// <summary>
-		/// The current document page number.
-		/// </summary>
 		public static int CurrentPageNumber {
 			get { 
 				return _CurrentPageNumber; 
@@ -80,9 +65,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		private static int _CurrentPageNumber;
 		
-		/// <summary>
-		/// The document page count.
-		/// </summary>
 		public static int PageCount {
 			get {
 				if (_Document != null) {
@@ -93,20 +75,12 @@ namespace mTouchPDFReader.Library.Views.Core
 		}		
 		#endregion		
 		
-		/// <summary>
-		/// Static.
-		/// </summary>
 		static PDFDocument()
 		{
 			_DocumentHasLoaded = false;
 			_CurrentPageNumber = -1;
 		}
 		
-		/// <summary>
-		/// Opens document
-		/// </summary>
-		/// <param name="docName">Document name</param>
-		/// <param name="docFilePath">Path to document file</param>
 		public static void OpenDocument(string docName, string docFilePath)
 		{
 			// Close previous opened document
@@ -126,9 +100,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			}			
 		}	
 		
-		/// <summary>
-		/// Dispose opened PDFDocument data
-		/// </summary>
 		public static void CloseDocument()
 		{
 			if (_Document != null) {
@@ -137,11 +108,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			}
 		}
 		
-		/// <summary>
-		/// Gets CGPDFPage by naumber
-		/// </summary>
-		/// <param name="pageNumber">Page number</param>
-		/// <returns>Reference to CGPDFPage or null</returns>
 		public static CGPDFPage GetPage(int pageNumber)
 		{
 			if ((_Document != null) && (pageNumber > 0) && (pageNumber <= PageCount)) {

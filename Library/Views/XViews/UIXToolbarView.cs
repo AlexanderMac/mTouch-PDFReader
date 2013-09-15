@@ -21,7 +21,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Drawing;
 using MonoTouch.CoreAnimation;
 using MonoTouch.CoreGraphics;
@@ -33,23 +32,14 @@ namespace mTouchPDFReader.Library.XViews
 {
 	public class UIXToolbarView : UIView
 	{	
-		/// <summary>
-		/// The width of the toolbar. 
-		/// </summary>
 		private int _ToolbarWidth;
 		
-		/// <summary>
-		/// Gets the layer class.
-		/// </summary>
 		[Export("layerClass")]
 		public static Class LayerClass()
 		{			
 			return new Class(typeof(CAGradientLayer));
 		}
 		
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public UIXToolbarView(RectangleF frame, float fromWhite, float toWhite, float alpha) : base(frame)
 		{
 			_ToolbarWidth = -1;
@@ -70,9 +60,6 @@ namespace mTouchPDFReader.Library.XViews
 			layer.ShadowPath = UIBezierPath.FromRect(Bounds).CGPath;
 		}
 		
-		/// <summary>
-		/// Draws view.
-		/// </summary>
 		public override void Draw(RectangleF rect)
 		{
 			base.Draw(rect);

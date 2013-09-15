@@ -21,17 +21,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using MonoTouch.Foundation;
 
 namespace mTouchPDFReader.Library.Managers
 {
 	public static class LocalizationManager
 	{
-		/// <summary>
-		/// Gets the translated string by the <see cref="key"/>.
-		/// </summary>
-		/// <param name='key'>The key.</param>
 		public static string t(this string key)
 		{
 			return NSBundle.MainBundle.LocalizedString(key, "", "");

@@ -21,8 +21,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-
 namespace mTouchPDFReader.Library.Data.Enums
 {
 	public enum AutoScaleModes

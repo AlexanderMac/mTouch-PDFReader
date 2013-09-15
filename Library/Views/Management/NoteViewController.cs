@@ -22,12 +22,8 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.Drawing;
-using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Utils;
-using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.XViews;
@@ -37,22 +33,12 @@ namespace mTouchPDFReader.Library.Views.Management
 	public class NoteViewController : UIViewControllerWithPopover
 	{				
 		#region Fields		
-		/// <summary>
-		/// The editing note.
-		/// </summary>
 		private DocumentNote _Note;
-		
-		/// <summary>
-		/// The note text view.
-		/// </summary>
 		private UITextView _TxtNote;		
 		#endregion
 
 		#region Constructors
-		/// <summary>
-		/// Working.
-		/// </summary>
-		public NoteViewController(DocumentNote note, Action<object> callbackAction) : base(null, null, callbackAction)
+		public NoteViewController(DocumentNote note, Action<object> callbackAction) : base(null, null, callbackAction) 
 		{
 			_Note = note;
 		}

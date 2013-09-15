@@ -22,7 +22,6 @@
 //
 
 using System;
-using System.Collections.Generic;
 using System.IO;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
@@ -48,75 +47,46 @@ namespace mTouchPDFReader.Demo
 		}	
 		#endregion	
 		
-		/// <summary>
-		/// Calls when view are loaded
-		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			Title = "Documents";
-			PDFFile.FillFromDirectories(new string[] {
+			PDFFile.FillFromDirectories(new[] {
 				Path.Combine(NSBundle.MainBundle.BundlePath, "Resource"),
 				Environment.GetFolderPath(Environment.SpecialFolder.Personal)
 			});
 			TableView.Source = new DataSource(this);
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
 		
-		/// <summary>
-		/// TableView datasource
-		/// </summary> 
 		class DataSource : UITableViewSource
 		{
-			/// <summary>
-			/// Default cell id
-			/// </summary>
 			const string DefaultCellIdentifier = "DefaultCellIdentifier";
-			
-			/// <summary>
-			/// Parent table controller
-			/// </summary>
-			private DocumentsTableController _Controller;
+			private readonly DocumentsTableController _Controller;
 
-			/// <summary>
-			/// Work constructor
-			/// </summary>
 			public DataSource(DocumentsTableController controller)
 			{
 				_Controller = controller;
 			}
 
-			/// <summary>
-			/// Opens view assotiated with row 
-			/// </summary>
 			private void OpenDocument(int rowId)
 			{				
 				var docViewController = new DocumentViewController(PDFFile.PDFFiles[rowId].Id, PDFFile.PDFFiles[rowId].Name, PDFFile.PDFFiles[rowId].FilePath);
 				_Controller.NavigationController.PushViewController(docViewController, true);
 			}
 
-			/// <summary>
-			/// Returns rows count
-			/// </summary>
 			public override int RowsInSection(UITableView tableview, int section)
 			{
 				return PDFFile.PDFFiles.Count;
 			}
 
-			/// <summary>
-			/// Returns row by id
-			/// </summary>
-			public override UITableViewCell GetCell(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
 			{
-				UITableViewCell cell = null;
-				cell = tableView.DequeueReusableCell(DefaultCellIdentifier);
+				var cell = tableView.DequeueReusableCell(DefaultCellIdentifier);
 				if (cell == null) {
 					cell = new UITableViewCell(UITableViewCellStyle.Subtitle, DefaultCellIdentifier);
 				}
@@ -126,19 +96,13 @@ namespace mTouchPDFReader.Demo
 				return cell;
 			}
 
-			/// <summary>
-			/// Selects theme when user clicked by row
-			/// </summary>
-			public override void RowSelected(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
 			{
 				OpenDocument(indexPath.Row);
 				tableView.DeselectRow(indexPath, true);
 			}
 
-			/// <summary>
-			/// Selectes theme when user clicked by accessory button
-			/// </summary>
-			public override void AccessoryButtonTapped(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
+			public override void AccessoryButtonTapped(UITableView tableView, NSIndexPath indexPath)
 			{
 				OpenDocument(indexPath.Row);
 				tableView.DeselectRow(indexPath, true);

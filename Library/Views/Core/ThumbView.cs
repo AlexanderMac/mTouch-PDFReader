@@ -30,9 +30,6 @@ namespace mTouchPDFReader.Library.Views.Core
 	public class ThumbView : UIView
 	{							
 		#region Fields		
-		/// <summary>
-		/// Gets or sets the thumb page.
-		/// </summary>
 		public int PageNumber {
 			get { 
 				return _PageNumber; 
@@ -46,21 +43,11 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		private int _PageNumber;
 		
-		/// <summary>
-		/// The thumb content size.
-		/// </summary>
-		private float _ThumbContentSize;
-		
-		/// <summary>
-		/// The thumb image view.
-		/// </summary>
-		private UIImageView _ImageView;		
+		private readonly float _ThumbContentSize;
+		private readonly UIImageView _ImageView;		
 		#endregion
 		
 		#region UIView methods		
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public ThumbView(RectangleF frame, float thumbContentSize, int pageNumber) : base(frame)
 		{
 			_PageNumber = pageNumber;			
@@ -87,12 +74,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region Logic		
-		/// <summary>
-		/// Returns thumb image object for page 
-		/// </summary>
-		/// <param name="thumbContentSize">Thumb content size</param>
-		/// <param name="pageNumber">Page number for what will created image object</param>
-		/// <returns>Page image object</returns>
 		private static UIImage GetThumbImage(float thumbContentSize, int pageNumber)
 		{
 			if ((pageNumber <= 0) || (pageNumber > PDFDocument.PageCount)) {

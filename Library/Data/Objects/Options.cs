@@ -22,7 +22,6 @@
 //
 
 using System;
-using System.Xml;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Data.Enums;
 
@@ -55,41 +54,13 @@ namespace mTouchPDFReader.Library.Data.Objects
 		#endregion
 		
 		#region Fields	
-		/// <summary>
-		/// Gets or sets the type of the page transition style.
-		/// </summary>
 		public UIPageViewControllerTransitionStyle PageTransitionStyle { get; set; }
-
-		/// <summary>
-		/// Gets or sets the type of the page navigation orientation.
-		/// </summary>
 		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
-		
-		/// <summary>
-		/// Gets or sets a value indicating whether the toolbar is visible.
-		/// </summary>
 		public bool ToolbarVisible { get; set; }
-
-		/// <summary>
-		/// Gets or sets a value indicating whether the bottombar is visible.
-		/// </summary>
 		public bool BottombarVisible { get; set; }
-		
-		/// <summary>
-		/// Gets or sets a value indicating whether the pageNumber label is visible.
-		/// number visible.
-		/// </summary>
 		public bool PageNumberVisible { get; set; }
-
-		/// <summary>
-		/// Gets or sets the type of the auto scale mode.
-		/// </summary>
 		public AutoScaleModes AutoScaleMode { get; set; }
 
-		/// <summary>
-		/// Gets or sets the zoom scale levels.
-		/// </summary>
-		/// <value>
 		public int ZoomScaleLevels {
 			get {
 				return _ZoomScaleLevels;
@@ -108,15 +79,8 @@ namespace mTouchPDFReader.Library.Data.Objects
 		}
 		private int _ZoomScaleLevels;
 		
-		/// <summary>
-		/// Gets or sets a value indicating whether the double touch is allowed.
-		/// by double touch.
-		/// </summary>
 		public bool AllowZoomByDoubleTouch { get; set; }
 
-		/// <summary>
-		/// Gets or sets the size of the thumbs buffer.
-		/// </summary>
 		public int ThumbsBufferSize {
 			get {
 				return _ThumbsBufferSize;
@@ -135,10 +99,6 @@ namespace mTouchPDFReader.Library.Data.Objects
 		}
 		private int _ThumbsBufferSize;
 
-		/// <summary>
-		/// Gets or sets the size of the thumb.
-		/// </summary>
-		/// <value>
 		public int ThumbSize {
 			get {
 				return _ThumbSize;
@@ -157,20 +117,12 @@ namespace mTouchPDFReader.Library.Data.Objects
 		}
 		private int _ThumbSize;
 
-		/// <summary>
-		/// Gets the library release date.
-		/// </summary>
-		/// <value>
 		public DateTime LibraryReleaseDate {
 			get {
 				return SystemInfo.ReleaseDate;
 			}
 		}
 
-		/// <summary>
-		/// Gets the library version.
-		/// </summary>
-		/// <value>
 		public string LibraryVersion {
 			get {
 				return SystemInfo.Version;
@@ -179,9 +131,6 @@ namespace mTouchPDFReader.Library.Data.Objects
 		#endregion	
 		
 		#region Logic		
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public Options()
 		{
 			PageTransitionStyle = DefaultPageTransitionStyle;

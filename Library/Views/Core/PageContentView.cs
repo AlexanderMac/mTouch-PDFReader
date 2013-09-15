@@ -32,18 +32,12 @@ namespace mTouchPDFReader.Library.Views.Core
 	public class PageContentView : UIView
 	{			
 		#region Fields		
-		/// <summary>
-		/// Gets the layer class.
-		/// </summary>
 		[Export("layerClass")]
 		public static Class LayerClass()
 		{
 			return new Class(typeof(PageContentTile));
 		}
-		
-		/// <summary>
-		/// Gets or sets the opened page number.
-		/// </summary>
+
 		public int PageNumber {
 			get { 
 				return _PageNumber; 
@@ -56,9 +50,6 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 		
 		#region UIView methods		
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public PageContentView(RectangleF frame, int pageNumber) : base(frame)
 		{
 			_PageNumber = pageNumber;
@@ -71,11 +62,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			(Layer as PageContentTile).OnDraw = Draw;
 		}		
 		
-		/// <summary>
-		/// Gets the view size for the opened PDF page.
-		/// </summary>
-		/// <param name="pageNumber">The page number,</param>
-		/// <returns>The page view rect.</returns>
 		public static RectangleF GetPageViewSize(int pageNumber)
 		{
 			RectangleF pageRect = RectangleF.Empty;
@@ -121,16 +107,12 @@ namespace mTouchPDFReader.Library.Views.Core
 			return pageRect;
 		}
 		
-		/// <summary>
-		/// Draws the page.
-		/// </summary>		
 		private void Draw(CGContext context)
 		{
 			if (!PDFDocument.DocumentHasLoaded) {
 				return;
 			}
 
-			// Draw page
 			context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
 			using (CGPDFPage pdfPage = PDFDocument.GetPage(_PageNumber)) {
 				context.TranslateCTM(0, Bounds.Height);

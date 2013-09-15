@@ -19,7 +19,8 @@
 //
 //  You should have received a copy of the GNU General Public License
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
-using System;
+//
+
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Utils;
 
@@ -27,42 +28,19 @@ namespace mTouchPDFReader.Library.Managers
 {
 	public static class MgrAccessor
 	{
-		/// <summary>
-		/// 
-		/// </summary>
 		public static IDocumentNoteManager DocumentNoteMgr {
-			get {
-				if (_DocumentNoteMgr == null) {
-					_DocumentNoteMgr = RC.Get<IDocumentNoteManager>();
-				}
-				return _DocumentNoteMgr;
-			}
+			get { return _DocumentNoteMgr ?? (_DocumentNoteMgr = RC.Get<IDocumentNoteManager>()); }
 		}
 		private static IDocumentNoteManager _DocumentNoteMgr; 
 
-		/// <summary>
-		/// 
-		/// </summary>
+	
 		public static IDocumentBookmarkManager DocumentBookmarkMgr {
-			get {
-				if (_DocumentBookmarkMgr == null) {
-					_DocumentBookmarkMgr = RC.Get<IDocumentBookmarkManager>();
-				}
-				return _DocumentBookmarkMgr;
-			}
+			get { return _DocumentBookmarkMgr ?? (_DocumentBookmarkMgr = RC.Get<IDocumentBookmarkManager>()); }
 		}
 		private static IDocumentBookmarkManager _DocumentBookmarkMgr;
 
-		/// <summary>
-		/// 
-		/// </summary>
 		public static IOptionsManager OptionsMgr {
-			get {
-				if (_OptionsMgr == null) {
-					_OptionsMgr = RC.Get<IOptionsManager>();
-				}
-				return _OptionsMgr;
-			}
+			get { return _OptionsMgr ?? (_OptionsMgr = RC.Get<IOptionsManager>()); }
 		}
 		private static IOptionsManager _OptionsMgr;
 	}

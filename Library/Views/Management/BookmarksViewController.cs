@@ -26,8 +26,6 @@ using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Utils;
-using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.XViews;
@@ -37,46 +35,16 @@ namespace mTouchPDFReader.Library.Views.Management
 	public class BookmarksViewController : UIViewControllerWithPopover
 	{		
 		#region Fields		
-		/// <summary>
-		/// The document id. 
-		/// </summary>
-		private int _DocumentId;
-		
-		/// <summary>
-		/// The bookmarks list.
-		/// </summary>
+		private int _DocumentId;	
 		private List<DocumentBookmark> _Bookmarks;
-
-		/// <summary>
-		/// The opened document page number. 
-		/// </summary>
 		private int _CurrentPageNumber;
-		
-		/// <summary>
-		/// The bookmarks table view.
-		/// </summary>
 		private UITableView _BookmarksTable;
-		
-		/// <summary>
-		/// The new bookmarks cell view.
-		/// </summary>
 		private UITableViewCell _NewBookmarkCell;
-		
-		/// <summary>
-		/// The new bookmark name text view.
-		/// </summary>
 		private UITextField _NewBookmarkNameTxt;
-		
-		/// <summary>
-		/// The tableView edit mode.
-		/// </summary>
 		private UITableViewCellEditingStyle _EditMode;		
 		#endregion
 
 		#region Constructors	
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public BookmarksViewController(int docId, List<DocumentBookmark> bookmarks, int currentPageNumber, Action<object> callbackAction) : base(null, null, callbackAction)
 		{
 			_DocumentId = docId;
@@ -173,25 +141,16 @@ namespace mTouchPDFReader.Library.Views.Management
 			const string CellIdentifier = "Cell";
 			private BookmarksViewController _Controller;
 
-			/// <summary>
-			/// Work constructor
-			/// </summary>
 			public DataSource(BookmarksViewController controller)
 			{
 				_Controller = controller;
 			}
 
-			/// <summary>
-			/// Gets correct row index for insert and delete modes
-			/// </summary>
 			private int GetCorrectRowIndex(int rowIndex)
 			{
 				return (_Controller._EditMode == UITableViewCellEditingStyle.Insert) ? rowIndex - 1 : rowIndex;
 			}
 
-			/// <summary>
-			/// Adds new row
-			/// </summary>
 			private void AddNewRow(UITableView tableView, NSIndexPath indexPath)
 			{
 				string bookmakrName = string.IsNullOrEmpty(_Controller._NewBookmarkNameTxt.Text) 
@@ -207,9 +166,6 @@ namespace mTouchPDFReader.Library.Views.Management
 				_Controller.SetEditingMode(UITableViewCellEditingStyle.None);
 			}
 
-			/// <summary>
-			/// Deletes row
-			/// </summary>
 			private void DeleteRow(UITableView tableView, NSIndexPath indexPath)
 			{
 				MgrAccessor.DocumentBookmarkMgr.Delete(_Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].Id);
@@ -218,32 +174,23 @@ namespace mTouchPDFReader.Library.Views.Management
 				_Controller.SetEditingMode(UITableViewCellEditingStyle.None);
 			}
 
-			/// <summary>
-			/// Returns rows count
-			/// </summary>
 			public override int RowsInSection(UITableView tableview, int section)
 			{
 				return (_Controller._EditMode == UITableViewCellEditingStyle.Insert) ? _Controller._Bookmarks.Count + 1 : _Controller._Bookmarks.Count;
 			}
 
-			/// <summary>
-			/// Sets edit mode: delete or insert
-			/// </summary>
 			public override UITableViewCellEditingStyle EditingStyleForRow(UITableView tableView, NSIndexPath indexPath)
 			{
 				// Insert button alwasy should be at the top 
 				if ((_Controller._EditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
 					return UITableViewCellEditingStyle.Insert;
-				} else if (_Controller._EditMode == UITableViewCellEditingStyle.Delete) {
-					return UITableViewCellEditingStyle.Delete;
-				} else {
-					return UITableViewCellEditingStyle.None;
 				}
+				if (_Controller._EditMode == UITableViewCellEditingStyle.Delete) {
+					return UITableViewCellEditingStyle.Delete;
+				}
+				return UITableViewCellEditingStyle.None;
 			}
 
-			/// <summary>
-			/// Execute edit operation
-			/// </summary>
 			public override void CommitEditingStyle(UITableView tableView, UITableViewCellEditingStyle editingStyle, NSIndexPath indexPath)
 			{
 				if (editingStyle == UITableViewCellEditingStyle.Insert) {
@@ -254,17 +201,11 @@ namespace mTouchPDFReader.Library.Views.Management
 				}
 			}
 
-			/// <summary>
-			/// Returns title for deleted row
-			/// </summary>
 			public override string TitleForDeleteConfirmation(UITableView tableView, NSIndexPath indexPath)
 			{
 				return "Delete bookmark?".t();
 			}
 
-			/// <summary>
-			/// Returns row by id
-			/// </summary>
 			public override UITableViewCell GetCell(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
 				UITableViewCell cell;
@@ -282,13 +223,9 @@ namespace mTouchPDFReader.Library.Views.Management
 				return cell;
 			}
 
-			/// <summary>
-			/// Opens view assotiated with row 
-			/// </summary>
 			public override void RowSelected(UITableView tableView, MonoTouch.Foundation.NSIndexPath indexPath)
 			{
 				if ((_Controller._EditMode == UITableViewCellEditingStyle.Insert) && (indexPath.Row == 0)) {
-					// Insert button always at the top
 					AddNewRow(tableView, indexPath);
 				} else {
 					int pageNumber = _Controller._Bookmarks [GetCorrectRowIndex(indexPath.Row)].PageNumber;

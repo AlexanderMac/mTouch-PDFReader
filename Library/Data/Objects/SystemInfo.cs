@@ -27,18 +27,12 @@ namespace mTouchPDFReader.Library.Data.Objects
 {
 	public static class SystemInfo
 	{		
-		/// <summary>
-		/// Release date
-		/// </summary>
 		public static DateTime ReleaseDate {
 			get {
 				return new DateTime(2013, 04, 30);
 			}
 		}
 		
-		/// <summary>
-		/// Version
-		/// </summary>
 		public static string Version {
 			get {
 				return "2.1.358";

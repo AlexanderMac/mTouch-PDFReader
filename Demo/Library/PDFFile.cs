@@ -21,7 +21,6 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Collections.Generic;
 using System.IO;
 
@@ -29,9 +28,6 @@ namespace mTouchPDFReader.Demo.Library
 {
 	public class PDFFile
 	{
-		/// <summary>
-		/// Gets the PDF document id.
-		/// </summary>
 		public int Id {
 			get {
 				return _Id;
@@ -39,9 +35,6 @@ namespace mTouchPDFReader.Demo.Library
 		}
 		private int _Id;
 		
-		/// <summary>
-		/// Gets the PDF file name.
-		/// </summary>
 		public string Name {
 			get {
 				return _Name;
@@ -49,9 +42,6 @@ namespace mTouchPDFReader.Demo.Library
 		}
 		private string _Name;
 		
-		/// <summary>
-		/// Gets the PDF file path.
-		/// </summary>
 		public string FilePath {
 			get {
 				return _FilePath;
@@ -59,9 +49,6 @@ namespace mTouchPDFReader.Demo.Library
 		}
 		private string _FilePath;
 		
-		/// <summary>
-		/// Gets the PDF file size in bytes.
-		/// </summary>
 		public int FileSize {
 			get {
 				return _FileSize;
@@ -69,27 +56,18 @@ namespace mTouchPDFReader.Demo.Library
 		}
 		private int _FileSize;
 
-		/// <summary>
-		/// Gets the PDF file size in kbytes.
-		/// </summary>
 		public float FileSizeKb {
 			get {
 				return (float)_FileSize / 1024f;
 			}
 		}
 
-		/// <summary>
-		/// Gets the PDF file size in mbytes.
-		/// </summary>
 		public float FileSizeMb {
 			get {
 				return (float)_FileSize / (1024f * 1024f);
 			}
 		}
 		
-		/// <summary>
-		/// Gets the loaded pdf files info list.
-		/// </summary>
 		public static List<PDFFile> PDFFiles {
 			get {
 				return _PDFFilesInfo;
@@ -97,17 +75,11 @@ namespace mTouchPDFReader.Demo.Library
 		}
 		private static List<PDFFile> _PDFFilesInfo;
 		
-		/// <summary>
-		/// Static.
-		/// </summary>
 		static PDFFile()
 		{
 			_PDFFilesInfo = new List<PDFFile>();
 		}
 		
-		/// <summary>
-		/// Working.
-		/// </summary>
 		public PDFFile(string name, int id, string filePath, int fileSize)
 		{
 			_Name = name;
@@ -116,10 +88,6 @@ namespace mTouchPDFReader.Demo.Library
 			_FileSize = fileSize;
 		}
 		
-		/// <summary>
-		/// Fills DocumentInfo list from passed directories
-		/// </summary>
-		/// <param name="dirs">Array of directories pathes</param>
 		public static void FillFromDirectories(string[] dirs)
 		{
 			foreach (var dir in dirs) {

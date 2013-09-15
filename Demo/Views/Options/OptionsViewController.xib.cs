@@ -22,7 +22,6 @@
 //
 
 using System;
-using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Views.Management;
@@ -46,9 +45,6 @@ namespace mTouchPDFReader.Demo
 		}
 		#endregion Constructors
 		
-		/// <summary>
-		/// Calls when view are loaded
-		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
@@ -57,9 +53,6 @@ namespace mTouchPDFReader.Demo
 			View.AddSubview(optionsView.View);
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;

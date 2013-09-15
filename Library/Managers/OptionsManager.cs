@@ -34,16 +34,10 @@ namespace mTouchPDFReader.Library.Managers
 	public class OptionsManager : IOptionsManager
 	{		
 		#region Constants		
-		/// <summary>
-		/// The options file name. 
-		/// </summary>
 		private const string OptionsFileName = "mTouchPDFReader.Options.xml";		
 		#endregion
 		
 		#region Fields					
-		/// <summary>
-		/// Gets the options. 
-		/// </summary>
 		public Options Options {
 			get {
 				if (_Options == null) {
@@ -55,21 +49,12 @@ namespace mTouchPDFReader.Library.Managers
 		}
 		private Options _Options;
 		
-		/// <summary>
-		/// Initialized flag 
-		/// </summary>
 		private bool _Initialized;		
 		#endregion
 		
 		#region Logic
-		/// <summary>
-		/// Hidden constructor to create instance only from RC.
-		/// </summary>
 		protected OptionsManager()	{}
 
-		/// <summary>
-		/// Loads options 
-		/// </summary>
 		public void Load()
 		{
 			if (_Initialized) {
@@ -130,9 +115,6 @@ namespace mTouchPDFReader.Library.Managers
 			}
 		}
 		
-		/// <summary>
-		/// Saves options 
-		/// </summary>
 		public void Save()
 		{
 			if (!_Initialized) {
@@ -164,13 +146,6 @@ namespace mTouchPDFReader.Library.Managers
 			}			
 		}
 		
-		/// <summary>
-		/// Returns node value 
-		/// </summary>
-		/// <param name="optionsXmlDoc">Options XML document</param>
-		/// <param name="nodePath">XPath to node</param>
-		/// <param name="valType">Value type</param>
-		/// <returns>Node value</returns>
 		private string GetNodeValue(XmlDocument optionsXmlDoc, string nodePath, Type valType)
 		{
 			try {

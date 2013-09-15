@@ -36,27 +36,12 @@ namespace mTouchPDFReader.Library.Utils
 		}
 		#endregion static
 
-		/// <summary>
-		/// Lock object for access to objects collection.
-		/// </summary>
 		private readonly object _LockObject = new object();
 
-		/// <summary>
-		/// Collection of the created objects.
-		/// </summary>
 		private readonly Dictionary<string, object> _Objects = new Dictionary<string, object>();
 
-		/// <summary>
-		/// Collection of the registered references.
-		/// </summary>
 		private readonly Dictionary<string, Type> _References = new Dictionary<string, Type>();
 
-		/// <summary>
-		/// Registers a reference. 
-		/// Adds the reference between the class type and the each allowed, implemented interface.
-		/// </summary>
-		/// <typeparam name="TInterface">The registered interface type.</typeparam>
-		/// <typeparam name="TClass">The registered class type.</typeparam>
 		public static void RegisterReference<TInterface, TClass>() where TClass : TInterface
 		{
 			var interfaceInfo = typeof(TInterface);
@@ -72,22 +57,11 @@ namespace mTouchPDFReader.Library.Utils
 			}
 		}
 
-		/// <summary>
-		/// Gets the object of the type <see cref="T"/>. If it isn't already created, firstly creates it.>
-		/// </summary>
-		/// <typeparam name="T">The requested class type.</typeparam>
-		/// <returns>The class instance.</returns>
 		public static T Get<T>() where T : class
 		{							 
 			return _Instance.GetObject<T>(typeof(T).FullName);
 		}
 
-		/// <summary>
-		/// Gets the object of the type <see cref="T"/> by type <see cref="fullName"/>. If it isn't already created, firstly creates it.> 
-		/// </summary>
-		/// <typeparam name="T">The requested class type.</typeparam>
-		/// <param name="fullName">The requested class type fullName.</param>
-		/// <returns>The class instance.</returns>
 		private T GetObject<T>(string fullName) where T : class
 		{
 			T obj;

@@ -31,9 +31,6 @@ namespace mTouchPDFReader.Library.XViews
 	public abstract class UIViewControllerWithPopover : UIViewController
 	{
 		#region Fields
-		/// <summary>
-		/// The callback action. 
-		/// </summary>
 		protected Action<object> CallbackAction {
 			get {
 				return _CallbackAction;
@@ -42,9 +39,6 @@ namespace mTouchPDFReader.Library.XViews
 		private Action<object> _CallbackAction;
 		#endregion
 		
-		/// <summary>
-		/// The Popover controller.
-		/// </summary>
 		public UIPopoverController PopoverController {
 			set {
 				_PopoverController = value;
@@ -69,27 +63,17 @@ namespace mTouchPDFReader.Library.XViews
 		}		
 		#endregion
 		
-		/// <summary>
-		/// Calls when view are loaded 
-		/// </summary>
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			ContentSizeForViewInPopover = GetPopoverSize();		
 		}
 
-		/// <summary>
-		/// Called when permission is shought to rotate
-		/// </summary>
 		public override bool ShouldAutorotateToInterfaceOrientation(UIInterfaceOrientation toInterfaceOrientation)
 		{
 			return true;
 		}
 		
-		/// <summary>
-		/// Returns popover size, must be override in child classes
-		/// </summary>
-		/// <returns>Popover size</returns>
 		protected abstract SizeF GetPopoverSize();
 	}
 }

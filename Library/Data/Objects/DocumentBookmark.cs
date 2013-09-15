@@ -21,30 +21,13 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
-
 namespace mTouchPDFReader.Library.Data.Objects
 {
 	public class DocumentBookmark
 	{
-		/// <summary>
-		/// Gets the bookmark Id.
-		/// </summary>
 		public int Id { get; set; }
-		
-		/// <summary>
-		/// Gets the document Id.
-		/// </summary>
 		public int DocId { get; set; }	
-		
-		/// <summary>
-		/// Gets the bookmark name.
-		/// </summary>
 		public string Name { get; set; }
-		
-		/// <summary>
-		/// Gets the bookmark page number.
-		/// </summary>
 		public int PageNumber { get; set; }
 	}
 }
