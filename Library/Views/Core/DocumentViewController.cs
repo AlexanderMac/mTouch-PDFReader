@@ -94,11 +94,10 @@ namespace mTouchPDFReader.Library.Views.Core
 				View.AddSubview(_Toolbar);
 			}
 			
-			// Create bottom bar (with slider)
-			if (MgrAccessor.OptionsMgr.Options.BottombarVisible) {
+			// Create bottom bar
+			if (MgrAccessor.OptionsMgr.Options.SliderVisible || MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
 				_BottomBar = _CreateBottomBar();
 				View.AddSubview(_BottomBar);
-				// Update Slider Max value
 				_UpdateSliderMaxValue();
 			}
 			
@@ -297,7 +296,6 @@ namespace mTouchPDFReader.Library.Views.Core
 
 		protected virtual UIView _CreateBottomBar()
 		{
-			// Create bottom bar	
 			var bottomBarFrame = View.Bounds;
 			bottomBarFrame.X += BarPaddingH;
 			bottomBarFrame.Y = bottomBarFrame.Size.Height - BarPaddingV - BottombarHeight;
@@ -305,29 +303,29 @@ namespace mTouchPDFReader.Library.Views.Core
 			bottomBarFrame.Height = BottombarHeight;
 			var bottomBar = new UIXToolbarView(bottomBarFrame, 0.92f, 0.32f, 0.8f);
 			bottomBar.AutoresizingMask = UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth;
-			
-			// Create slider
-			float sliderWidth = bottomBarFrame.Width - 15;
-			if (MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
-				sliderWidth -= PageNumberLabelSize.Width;
-			}
-			var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
-			_Slider = new UISlider(pageSliderFrame);
-			_Slider.MinValue = 1;
-			_Slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			_Slider.ValueChanged += delegate {
-				if (_PageNumberLabel != null) {
-					_PageNumberLabel.Text = string.Format(@"{0}/{1}", (int)_Slider.Value, PDFDocument.PageCount);
-				}
-			};
-			_Slider.TouchUpInside += delegate(object sender, EventArgs e) {
-				OpenDocumentPage((int)_Slider.Value);
-			};
-			bottomBar.AddSubview(_Slider);
 
-			// Create page number view		
+			if (MgrAccessor.OptionsMgr.Options.SliderVisible) {
+				float sliderWidth = bottomBarFrame.Width - 15;
+				if (MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
+					sliderWidth -= PageNumberLabelSize.Width;
+				}
+				var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
+				_Slider = new UISlider(pageSliderFrame);
+				_Slider.MinValue = 1;
+				_Slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+				_Slider.ValueChanged += delegate {
+					if (_PageNumberLabel != null) {
+						_PageNumberLabel.Text = string.Format(@"{0}/{1}", (int)_Slider.Value, PDFDocument.PageCount);
+					}
+				};
+				_Slider.TouchUpInside += delegate(object sender, EventArgs e) {
+					OpenDocumentPage((int)_Slider.Value);
+				};
+				bottomBar.AddSubview(_Slider);
+			}
+
 			if (MgrAccessor.OptionsMgr.Options.PageNumberVisible) {
-				var pageNumberViewFrame = new RectangleF(pageSliderFrame.Width + 10, 5, PageNumberLabelSize.Width, PageNumberLabelSize.Height);
+				var pageNumberViewFrame = new RectangleF(bottomBarFrame.Width - PageNumberLabelSize.Width - 5, 5, PageNumberLabelSize.Width, PageNumberLabelSize.Height);
 				var pageNumberView = new UIView(pageNumberViewFrame);
 				pageNumberView.AutosizesSubviews = false;
 				pageNumberView.UserInteractionEnabled = false;

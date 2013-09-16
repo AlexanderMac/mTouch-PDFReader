@@ -55,7 +55,7 @@ namespace mTouchPDFReader.Library.Managers
 		#region Logic
 		protected OptionsManager()	{}
 
-		public void Load()
+		public virtual void Load()
 		{
 			if (_Initialized) {
 				return;
@@ -78,15 +78,14 @@ namespace mTouchPDFReader.Library.Managers
 				if (val != null) {
 					_Options.ToolbarVisible = Convert.ToBoolean(val);
 				}
-				val = GetNodeValue(optionsXmlDoc, "/Options/BottombarVisible", typeof(bool));
+				val = GetNodeValue(optionsXmlDoc, "/Options/SliderVisible", typeof(bool));
 				if (val != null) {
-					_Options.BottombarVisible = Convert.ToBoolean(val);
+					_Options.SliderVisible = Convert.ToBoolean(val);
 				}
 				val = GetNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", typeof(bool));
 				if (val != null) {
 					_Options.PageNumberVisible = Convert.ToBoolean(val);
 				}
-
 
 				val = GetNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", typeof(bool));
 				if (val != null) {
@@ -115,7 +114,7 @@ namespace mTouchPDFReader.Library.Managers
 			}
 		}
 		
-		public void Save()
+		public virtual void Save()
 		{
 			if (!_Initialized) {
 				return;
@@ -129,7 +128,7 @@ namespace mTouchPDFReader.Library.Managers
 					"	<PageTransitionStyle>" + (int)_Options.PageTransitionStyle + "</PageTransitionStyle>" +
 					"	<PageNavigationOrientation>" + (int)_Options.PageNavigationOrientation + "</PageNavigationOrientation>" +
 					"	<ToolbarVisible>" + _Options.ToolbarVisible + "</ToolbarVisible>" +
-					"	<BottombarVisible>" + _Options.BottombarVisible + "</BottombarVisible>" + 
+					"	<SliderVisible>" + _Options.SliderVisible + "</SliderVisible>" + 
 					"	<PageNumberVisible>" + _Options.PageNumberVisible + "</PageNumberVisible>" +
 					"	<AllowZoomByDoubleTouch>" + _Options.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
 					"	<ZoomScaleLevels>" + _Options.ZoomScaleLevels + "</ZoomScaleLevels>" +

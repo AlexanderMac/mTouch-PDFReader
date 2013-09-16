@@ -43,7 +43,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		private UITableViewCell _PageNavigationOrientationCell;
 		private UITableViewCell _AutoScaleMode;
 		private UITableViewCell _ToolbarVisibilityCell;
-		private UITableViewCell _BottombarVisibilityCell;
+		private UITableViewCell _SliderVisibility;
 		private UITableViewCell _PageNumberVisibilityCell;
 		private UITableViewCell _ZoomScaleLevelsCell;
 		private UITableViewCell _ZoomByDoubleTouchCell;
@@ -52,44 +52,31 @@ namespace mTouchPDFReader.Library.Views.Management
 		#endregion
 		
 		#region Constructors		
-		public OptionsTableViewController(IntPtr handle) : base(handle)
-		{
-			Initialize();
-		}
+		public OptionsTableViewController(IntPtr handle) : base(handle) { }
 
 		[Export("initWithCoder:")]
-		public OptionsTableViewController(NSCoder coder) : base(coder)
-		{
-			Initialize();
-		}
+		public OptionsTableViewController(NSCoder coder) : base(coder) { }
 
-		public OptionsTableViewController() : base(null, null)
-		{
-			Initialize();
-		}
-
-		void Initialize()
-		{
-		}		
+		public OptionsTableViewController() : base(null, null) { }
 		#endregion	
-		
+
+		#region UIViewController members
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
    
-			// Page transition style and navigation orientation
 			_PageTransitionStyleCell = _CreatePageTransitionStyleCell();
 			_PageNavigationOrientationCell = _CreatePageNavigationOrientationCell();
 			_AutoScaleMode = _CreateAutoScaleModeCell();
-			// Visibility
+
 			_ToolbarVisibilityCell = _CreateToolbarVisibilityCell();
-			_BottombarVisibilityCell = _CreateBottombarVisibilityCell();
+			_SliderVisibility = _CreateSliderVisibilityCell();
 			_PageNumberVisibilityCell = _CreatePageNumberVisibilityCell();
-			// Zoom
+
 			_ZoomScaleLevelsCell = _CreateZoomScaleLevelsCell();
 			_ZoomByDoubleTouchCell = _CreatemZoomByDoubleTouchCell();
-			// Library info
+
 			_LibraryReleaseDateCell = _CreateLibraryReleaseDateCell();
 			_LibraryVersionCell = _CreateLibraryVersionCell();
 
@@ -105,6 +92,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			return true;
 		}
+		#endregion
 		
 		#region Helpers		
 		private UITableViewCell CreateCell(string id)
@@ -224,14 +212,14 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		private UITableViewCell _CreateBottombarVisibilityCell()
+		private UITableViewCell _CreateSliderVisibilityCell()
 		{
-			var cell = CreateCell("BottombarVisibilityCell");
-			var label = CreateTitleLabelControl("Bottombar".t());
+			var cell = CreateCell("SliderVisibilityCell");
+			var label = CreateTitleLabelControl("Slider".t());
 			var switchCtrl = CreateSwitchControl(new[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.BottombarVisible, false);
+			switchCtrl.SetState(MgrAccessor.OptionsMgr.Options.SliderVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Options.BottombarVisible = switchCtrl.On;
+				MgrAccessor.OptionsMgr.Options.SliderVisible = switchCtrl.On;
 				MgrAccessor.OptionsMgr.Save();
 			};
 			cell.AddSubview(label);
@@ -320,7 +308,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		}		
 		#endregion
 		
-		class DataSource : UITableViewSource
+		protected class DataSource : UITableViewSource
 		{
 			private const int SectionsCount = 4;
 			private readonly int[] _RowsInSections = new[] { 2, 3, 3, 2 };
@@ -339,12 +327,12 @@ namespace mTouchPDFReader.Library.Views.Management
 			
 			public override int RowsInSection(UITableView tableview, int section)
 			{
-				return _RowsInSections [section];
+				return _RowsInSections[section];
 			}
 
 			public override string TitleForHeader(UITableView tableView, int section)
 			{
-				return _SectionTitles [section];
+				return _SectionTitles[section];
 			}
 
 			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -363,7 +351,7 @@ namespace mTouchPDFReader.Library.Views.Management
 							case 0:
 								return _Controller._ToolbarVisibilityCell;
 							case 1:
-								return _Controller._BottombarVisibilityCell;
+								return _Controller._SliderVisibility;
 							case 2:
 								return _Controller._PageNumberVisibilityCell;
 						}

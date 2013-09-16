@@ -57,7 +57,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		public UIPageViewControllerTransitionStyle PageTransitionStyle { get; set; }
 		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
 		public bool ToolbarVisible { get; set; }
-		public bool BottombarVisible { get; set; }
+		public bool SliderVisible { get; set; }
 		public bool PageNumberVisible { get; set; }
 		public AutoScaleModes AutoScaleMode { get; set; }
 
@@ -136,7 +136,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 			PageTransitionStyle = DefaultPageTransitionStyle;
 			PageNavigationOrientation = DefaultPageNavigationOrientation;
 			ToolbarVisible = DefaultToolbarVisible;
-			BottombarVisible = DefaultStatusbarVisible;
+			SliderVisible = DefaultStatusbarVisible;
 			PageNumberVisible = DefaultPageNumberVisible;
 			AutoScaleMode = DefaultAutoScaleMode;
 			ZoomScaleLevels = DefaultZoomScaleLevels;
