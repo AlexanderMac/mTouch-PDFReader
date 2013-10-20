@@ -440,6 +440,9 @@ namespace mTouchPDFReader.Library.Views.Core
 
 			// Create single PageView
 			var pageVC = GetPageViewController(pageNumber);
+			if (pageVC == null) {
+				return;
+			}
 
 			// Open page
 			_BookPageViewController.SetViewControllers(
