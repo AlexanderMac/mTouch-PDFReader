@@ -52,6 +52,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		private readonly int _DocumentId;
 		private readonly string _DocumentName;
 		private readonly string _DocumentPath;
+		private readonly byte[] _DocumentBytes;
 		private UIPageViewController _BookPageViewController;
 		private UIView _Toolbar;
 		private UIButton _BtnNavigateToPage;
@@ -72,6 +73,15 @@ namespace mTouchPDFReader.Library.Views.Core
 			_DocumentId = docId;
 			_DocumentName = docName;
 			_DocumentPath = docPath;
+			_DocumentBytes = null;
+		}
+
+		public DocumentViewController(int docId, string docName, byte[] docBytes) : base(null, null)
+		{
+			_DocumentId = docId;
+			_DocumentName = docName;
+			_DocumentBytes = docBytes;
+			_DocumentPath = null;
 		}
 		#endregion
 		
@@ -81,7 +91,10 @@ namespace mTouchPDFReader.Library.Views.Core
 			base.ViewDidLoad();
 
 			// Load document
-			PDFDocument.OpenDocument(_DocumentName, _DocumentPath);
+			if (_DocumentPath != null)
+				PDFDocument.OpenDocument(_DocumentName, _DocumentPath);
+			else
+				PDFDocument.OpenDocument(_DocumentName, _DocumentBytes);
 			
 			// Init View	
 			Title = _DocumentName;

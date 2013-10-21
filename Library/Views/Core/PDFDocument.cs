@@ -99,6 +99,26 @@ namespace mTouchPDFReader.Library.Views.Core
 				}
 			}			
 		}	
+
+		public static void OpenDocument(string docName, byte[] buffer)
+		{
+			// Close previous opened document
+			CloseDocument();
+			// Open new document
+			_CurrentPageNumber = -1;
+			_DocName = docName;
+			_DocFilePath = String.Empty;
+
+			try {
+				_Document = new CGPDFDocument(new CGDataProvider(buffer, 0, buffer.Length));
+				_DocumentHasLoaded = true;
+			} catch (Exception) {
+				_DocumentHasLoaded = false;
+				using (var alert = new UIAlertView("Error", "Open PDF document error", null, "Ok")) {
+					alert.Show();
+				}
+			}			
+		}
 		
 		public static void CloseDocument()
 		{
