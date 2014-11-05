@@ -5,7 +5,7 @@
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
 //
-//  Copyright (c) 2012 Alexander Matsibarov
+//  Copyright (c) 2014 Alexander Matsibarov
 //
 //  This program is free software: you can redistribute it and/or modify
 //  it under the terms of the GNU General Public License as published by
