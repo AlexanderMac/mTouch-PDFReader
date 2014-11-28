@@ -178,7 +178,22 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		#endregion
 				
-		#region UI Logic		
+		#region UI Logic
+		private RectangleF getActualViewFrameRect()
+		{
+			var rect = View.Bounds;
+
+			if (NavigationController != null) {
+				rect.Y += NavigationController.NavigationBar.Frame.Bottom;
+				rect.Height -= NavigationController.NavigationBar.Frame.Bottom;
+			}
+			if (TabBarController != null) {
+				rect.Height -= (View.Bounds.Bottom - TabBarController.TabBar.Frame.Top);
+			}
+
+			return rect;
+		}
+
 		private void presentPopover(UIViewControllerWithPopover viewCtrl, RectangleF frame)
 		{
 			var popoverController = new UIPopoverController(viewCtrl);
@@ -210,11 +225,12 @@ namespace mTouchPDFReader.Library.Views.Core
 
 		protected virtual UIView createToolbar()
 		{
-			var toolBarFrame = View.Bounds;
+			var toolBarFrame = getActualViewFrameRect();
 			toolBarFrame.X += BarPaddingH;
 			toolBarFrame.Y += BarPaddingV;
 			toolBarFrame.Width -= BarPaddingH * 2;
 			toolBarFrame.Height = ToolbarHeight;
+
 			var toolBar = new UIXToolbarView(toolBarFrame, 0.92f, 0.32f, 0.8f);
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleWidth;
 
@@ -285,11 +301,12 @@ namespace mTouchPDFReader.Library.Views.Core
 
 		protected virtual UIView createBottomBar()
 		{
-			var bottomBarFrame = View.Bounds;
+			var bottomBarFrame = getActualViewFrameRect();
 			bottomBarFrame.X += BarPaddingH;
-			bottomBarFrame.Y = bottomBarFrame.Size.Height - BarPaddingV - BottombarHeight;
+			bottomBarFrame.Y += bottomBarFrame.Height - (BottombarHeight + BarPaddingV);
 			bottomBarFrame.Width -= BarPaddingH * 2;
 			bottomBarFrame.Height = BottombarHeight;
+
 			var bottomBar = new UIXToolbarView(bottomBarFrame, 0.92f, 0.32f, 0.8f);
 			bottomBar.AutoresizingMask = UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth;
 
@@ -350,23 +367,15 @@ namespace mTouchPDFReader.Library.Views.Core
 		#region PDFDocument logic
 		private RectangleF getBookViewFrameRect()
 		{
-			var rect = View.Frame;
+			var rect = getActualViewFrameRect();
 
-			if (NavigationController != null) {
-				rect.Y = NavigationController.NavigationBar.Frame.Bottom;
-				rect.Height -= NavigationController.NavigationBar.Frame.Bottom;
-			}
-			if (TabBarController != null) {
-				rect.Height -= TabBarController.TabBar.Frame.Height;
-			}
-			/* TODO
 			if (_toolbar != null) {
-				rect.Y -= _toolbar.Frame.Bottom;
-				rect.Height -= _toolbar.Bounds.Height + BarPaddingV;
+				rect.Y = _toolbar.Frame.Bottom;
+				rect.Height -= _toolbar.Frame.Height + BarPaddingV;
 			}
 			if (_bottomBar != null) {
-				rect.Height -= _bottomBar.Bounds.Height + BarPaddingV;
-			}*/
+				rect.Height -= (rect.Bottom - _bottomBar.Frame.Top) + BarPaddingV;
+			}
 
 			return rect;
 		}
