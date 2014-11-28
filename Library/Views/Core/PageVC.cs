@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-//   PageViewController.cs
+// PageVC.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -31,9 +31,9 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class PageVC : UIViewController
 	{
-		#region Fields
-		private readonly RectangleF _ViewFrame;
-		private readonly AutoScaleModes _AutoScaleMode;
+		#region Data
+		private readonly RectangleF _viewFrame;
+		private readonly AutoScaleModes _autoScaleMode;
 		public int PageNumber { get; private set; }
 
 		public PageView PageView {
@@ -49,7 +49,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		}
 		#endregion
 
-		#region Constructors
+		#region Logic
 		public PageVC(IntPtr handle) : base(handle)
 		{
 		}
@@ -61,23 +61,21 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		public PageVC(RectangleF viewFrame, AutoScaleModes autoScaleMode, int pageNumber) : base(null, null)
 		{
-			_ViewFrame = viewFrame;
-			_AutoScaleMode = autoScaleMode;
+			_viewFrame = viewFrame;
+			_autoScaleMode = autoScaleMode;
 			PageNumber = pageNumber;
 		}	
-		#endregion
 
-		#region UIViewController
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+
 			if (PageNumber == -1) {
 				View.BackgroundColor = UIColor.Clear;
 			} else {
-				View = new PageView(_ViewFrame, _AutoScaleMode, PageNumber);
+				View = new PageView(_viewFrame, _autoScaleMode, PageNumber);
 			}
 		}
 		#endregion
 	}
 }
-

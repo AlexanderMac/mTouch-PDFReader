@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader demo
-// PDFFile.cs (PDF file)
+// PDFDocumentFile.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -26,66 +26,66 @@ using System.IO;
 
 namespace mTouchPDFReader.Demo.Data
 {
-	public class PDFFile // TODO: Rename to PDFDocument
+	public class PDFDocumentFile 
 	{
 		public int Id {
 			get {
-				return _Id;
+				return _id;
 			}
 		}
-		private int _Id;
+		private int _id;
 		
 		public string Name {
 			get {
-				return _Name;
+				return _name;
 			}
 		}
-		private string _Name;
+		private string _name;
 		
 		public string FilePath {
 			get {
-				return _FilePath;
+				return _filePath;
 			}
 		}
-		private string _FilePath;
+		private string _filePath;
 		
 		public int FileSize {
 			get {
-				return _FileSize;
+				return _fileSize;
 			}
 		}
-		private int _FileSize;
+		private int _fileSize;
 
 		public float FileSizeKb {
 			get {
-				return (float)_FileSize / 1024f;
+				return (float)_fileSize / 1024f;
 			}
 		}
 
 		public float FileSizeMb {
 			get {
-				return (float)_FileSize / (1024f * 1024f);
+				return (float)_fileSize / (1024f * 1024f);
 			}
 		}
 		
-		public static List<PDFFile> PDFFiles {
+		public static List<PDFDocumentFile> PDFFiles {
 			get {
-				return _PDFFilesInfo;
+				return _pdfFilesInfo;
 			}
 		}
-		private static List<PDFFile> _PDFFilesInfo;
+		private static List<PDFDocumentFile> _pdfFilesInfo;
 		
-		static PDFFile()
+		static PDFDocumentFile()
 		{
-			_PDFFilesInfo = new List<PDFFile>();
+			_pdfFilesInfo = new List<PDFDocumentFile>();
 		}
 		
-		public PDFFile(string name, int id, string filePath, int fileSize)
+		public PDFDocumentFile(string name, int id, string filePath, int fileSize)
 		{
-			_Name = name;
-			_Id = id;
-			_FilePath = filePath;
-			_FileSize = fileSize;
+			_name = name;
+			_id = id;
+			_filePath = filePath;
+			_fileSize = fileSize;
 		}
 		
 		public static void FillFromDirectories(string[] dirs)
@@ -94,16 +94,17 @@ namespace mTouchPDFReader.Demo.Data
 				if (!Directory.Exists(dir)) {
 					continue;
 				}
+
 				int i = 1; // Very simple document ID
-				var files = Directory.GetFiles(dir, "*.pdf");				
+				var files = Directory.GetFiles(dir, "*.pdf");
+
 				foreach (var file in files) {
 					FileInfo fi = new FileInfo(file);
-					var docInfo = new PDFFile(fi.Name, i, fi.FullName, (int)fi.Length);
-					_PDFFilesInfo.Add(docInfo);
+					var docInfo = new PDFDocumentFile(fi.Name, i, fi.FullName, (int)fi.Length);
+					_pdfFilesInfo.Add(docInfo);
 					i++;
 				}
 			}
 		}
 	}
 }
-

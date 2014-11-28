@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// GotoPageViewController.cs (Goto page view controller)
+// GotoPageVC.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -32,7 +32,7 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class GotoPageVC : UIViewControllerWithPopover
 	{			
-		private UITextField _PageNumberTxt;		
+		private UITextField _txtPageNumber;		
 
 		public GotoPageVC(Action<object> callbackAction) : base(null, null, callbackAction)	{}
 		
@@ -40,7 +40,6 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			base.ViewDidLoad();
 			
-			// Create toolbar, title label and button
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
 			toolBar.BarStyle = UIBarStyle.Black;
@@ -55,7 +54,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/NavigateToPage32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
 				int pageNumber;
-				int.TryParse(_PageNumberTxt.Text, out pageNumber);
+				int.TryParse(_txtPageNumber.Text, out pageNumber);
 				if ((pageNumber <= 0) || (pageNumber > PDFDocument.PageCount)) {
 					using (var alert = new UIAlertView("Error".t(), "Invalid page number".t(), null, "Ok")) {
 						alert.Show();
@@ -63,23 +62,22 @@ namespace mTouchPDFReader.Library.Views.Management
 				} else {
 					CallbackAction(pageNumber);
 				}
-				_PopoverController.Dismiss(true);
+				_popoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
-			// Create PageNumber text field
-			_PageNumberTxt = new UITextField(new RectangleF(20, 58, View.Bounds.Width - 40, 31));
-			_PageNumberTxt.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			_PageNumberTxt.BorderStyle = UITextBorderStyle.RoundedRect;
-			_PageNumberTxt.KeyboardType = UIKeyboardType.NumberPad;
-			_PageNumberTxt.Font = UIFont.SystemFontOfSize(17.0f);
-			_PageNumberTxt.Text = PDFDocument.CurrentPageNumber.ToString();
-			View.AddSubview(_PageNumberTxt);
+			_txtPageNumber = new UITextField(new RectangleF(20, 58, View.Bounds.Width - 40, 31));
+			_txtPageNumber.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			_txtPageNumber.BorderStyle = UITextBorderStyle.RoundedRect;
+			_txtPageNumber.KeyboardType = UIKeyboardType.NumberPad;
+			_txtPageNumber.Font = UIFont.SystemFontOfSize(17.0f);
+			_txtPageNumber.Text = PDFDocument.CurrentPageNumber.ToString();
+			View.AddSubview(_txtPageNumber);
 		}
 		
-		protected override SizeF GetPopoverSize()
+		protected override SizeF getPopoverSize()
 		{
 			return new SizeF(200, 100);
 		}

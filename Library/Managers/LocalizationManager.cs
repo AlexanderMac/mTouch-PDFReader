@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// LocalizationManager.cs (Localization manager)
+// LocalizationManager.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -33,4 +33,3 @@ namespace mTouchPDFReader.Library.Managers
 		}		
 	}
 }
-

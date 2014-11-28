@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader demo
-// 	 DocumentsTableVC.cs
+// DocumentsTableVC.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -45,7 +45,7 @@ namespace mTouchPDFReader.Demo
 		{
 			base.ViewDidLoad();
 
-			PDFFile.FillFromDirectories(new[] {
+			PDFDocumentFile.FillFromDirectories(new[] {
 				Path.Combine(NSBundle.MainBundle.BundlePath, "Documents"),
 				Environment.GetFolderPath(Environment.SpecialFolder.Personal)
 			});
@@ -64,15 +64,15 @@ namespace mTouchPDFReader.Demo
 				_vc = vc;
 			}
 
-			private void OpenDocument(int rowId)
+			private void openDocument(int rowId)
 			{				
-				var docViewController = new DocumentVC(PDFFile.PDFFiles[rowId].Id, PDFFile.PDFFiles[rowId].Name, PDFFile.PDFFiles[rowId].FilePath);
+				var docViewController = new DocumentVC(PDFDocumentFile.PDFFiles[rowId].Id, PDFDocumentFile.PDFFiles[rowId].Name, PDFDocumentFile.PDFFiles[rowId].FilePath);
 				_vc.NavigationController.PushViewController(docViewController, true);
 			}
 
 			public override int RowsInSection(UITableView tableview, int section)
 			{
-				return PDFFile.PDFFiles.Count;
+				return PDFDocumentFile.PDFFiles.Count;
 			}
 
 			public override UITableViewCell GetCell(UITableView tableView, NSIndexPath indexPath)
@@ -82,22 +82,22 @@ namespace mTouchPDFReader.Demo
 					cell = new UITableViewCell(UITableViewCellStyle.Subtitle, DefaultCellIdentifier);
 				}
 
-				cell.TextLabel.Text = PDFFile.PDFFiles [indexPath.Row].Name;
-				cell.DetailTextLabel.Text = string.Format("Size: {0:f} Mb", PDFFile.PDFFiles [indexPath.Row].FileSizeMb);
-				cell.Accessory = UITableViewCellAccessory.DetailDisclosureButton;
+				cell.TextLabel.Text = PDFDocumentFile.PDFFiles [indexPath.Row].Name;
+				cell.DetailTextLabel.Text = string.Format("Size: {0:f} Mb", PDFDocumentFile.PDFFiles [indexPath.Row].FileSizeMb);
+				cell.Accessory = UITableViewCellAccessory.DisclosureIndicator;
 
 				return cell;
 			}
 
 			public override void RowSelected(UITableView tableView, NSIndexPath indexPath)
 			{
-				OpenDocument(indexPath.Row);
+				openDocument(indexPath.Row);
 				tableView.DeselectRow(indexPath, true);
 			}
 
 			public override void AccessoryButtonTapped(UITableView tableView, NSIndexPath indexPath)
 			{
-				OpenDocument(indexPath.Row);
+				openDocument(indexPath.Row);
 				tableView.DeselectRow(indexPath, true);
 			}
 		}

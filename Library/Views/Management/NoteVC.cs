@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// NoteViewController.cs (Note view controller)
+// NoteVC.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -32,24 +32,21 @@ namespace mTouchPDFReader.Library.Views.Management
 {
 	public class NoteVC : UIViewControllerWithPopover
 	{				
-		#region Fields		
-		private DocumentNote _Note;
-		private UITextView _TxtNote;		
+		#region Data		
+		private DocumentNote _note;
+		private UITextView _txtNote;		
 		#endregion
 
-		#region Constructors
+		#region logic
 		public NoteVC(DocumentNote note, Action<object> callbackAction) : base(null, null, callbackAction) 
 		{
-			_Note = note;
+			_note = note;
 		}
-		#endregion
 
-		#region UI logic
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
 			
-			// Create toolbar, title label and button
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
 			toolBar.BarStyle = UIBarStyle.Black;
@@ -63,23 +60,22 @@ namespace mTouchPDFReader.Library.Views.Management
 			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
-				_Note.Note = _TxtNote.Text;
-				MgrAccessor.DocumentNoteMgr.Save(_Note);
-				_PopoverController.Dismiss(true);
+				_note.Note = _txtNote.Text;
+				MgrAccessor.DocumentNoteMgr.Save(_note);
+				_popoverController.Dismiss(true);
 			};
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
-			// Create text note
-			_TxtNote = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
-			_TxtNote.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
-			_TxtNote.Font = UIFont.SystemFontOfSize(17.0f);
-			_TxtNote.Text = _Note.Note;
-			View.AddSubview(_TxtNote);
+			_txtNote = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
+			_txtNote.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;	
+			_txtNote.Font = UIFont.SystemFontOfSize(17.0f);
+			_txtNote.Text = _note.Note;
+			View.AddSubview(_txtNote);
 		}
 		
-		protected override SizeF GetPopoverSize()
+		protected override SizeF getPopoverSize()
 		{
 			return new SizeF(400, 400);
 		}

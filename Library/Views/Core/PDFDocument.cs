@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// PDFDocument.cs (Store and manage opened PDF document)
+// PDFDocument.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -29,71 +29,71 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public static class PDFDocument
 	{	
-		#region Fields		
+		#region Data		
 		public static bool DocumentHasLoaded {
 			get {
-				return _DocumentHasLoaded;
+				return _documentHasLoaded;
 			}
 		}
-		private static bool _DocumentHasLoaded;
+		private static bool _documentHasLoaded;
 		
-		private static CGPDFDocument _Document;
+		private static CGPDFDocument _document;
 
 		public static string DocName {
 			get {
-				return _DocName;
+				return _docName;
 			}
 		}
-		private static string _DocName;
+		private static string _docName;
 
 		public static string DocFilePath {
 			get {
-				return _DocFilePath;
+				return _docFilePath;
 			}
 		}
-		private static string _DocFilePath;
+		private static string _docFilePath;
 		
 		public static int CurrentPageNumber {
 			get { 
-				return _CurrentPageNumber; 
+				return _currentPageNumber; 
 			}
 			set {
-				if ((_Document != null) && (value >= 1) && (value <= _Document.Pages)) {
-					_CurrentPageNumber = value;
+				if ((_document != null) && (value >= 1) && (value <= _document.Pages)) {
+					_currentPageNumber = value;
 				}
 			}
 		}
-		private static int _CurrentPageNumber;
+		private static int _currentPageNumber;
 		
 		public static int PageCount {
 			get {
-				if (_Document != null) {
-					return _Document.Pages;
+				if (_document != null) {
+					return _document.Pages;
 				}
 				return 0;
 			}
 		}		
 		#endregion		
-		
+
+		#region Logic
 		static PDFDocument()
 		{
-			_DocumentHasLoaded = false;
-			_CurrentPageNumber = -1;
+			_documentHasLoaded = false;
+			_currentPageNumber = -1;
 		}
 		
 		public static void OpenDocument(string docName, string docFilePath)
 		{
-			// Close previous opened document
 			CloseDocument();
-			// Open new document
-			_CurrentPageNumber = -1;
-			_DocName = docName;
-			_DocFilePath = docFilePath;
+
+			_currentPageNumber = -1;
+			_docName = docName;
+			_docFilePath = docFilePath;
 			try {
-				_Document = CGPDFDocument.FromFile(_DocFilePath);
-				_DocumentHasLoaded = true;
+				_document = CGPDFDocument.FromFile(_docFilePath);
+				_documentHasLoaded = true;
 			} catch (Exception) {
-				_DocumentHasLoaded = false;
+				_documentHasLoaded = false;
 				using (var alert = new UIAlertView("Error", "Open PDF document error", null, "Ok")) {
 					alert.Show();
 				}
@@ -102,18 +102,19 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		public static void CloseDocument()
 		{
-			if (_Document != null) {
-				_DocumentHasLoaded = false;
-				_Document.Dispose();
+			if (_document != null) {
+				_documentHasLoaded = false;
+				_document.Dispose();
 			}
 		}
 		
 		public static CGPDFPage GetPage(int pageNumber)
 		{
-			if ((_Document != null) && (pageNumber > 0) && (pageNumber <= PageCount)) {
-				return _Document.GetPage(pageNumber);
+			if ((_document != null) && (pageNumber > 0) && (pageNumber <= PageCount)) {
+				return _document.GetPage(pageNumber);
 			}
 			return null;
 		}
+		#endregion
 	}
 }

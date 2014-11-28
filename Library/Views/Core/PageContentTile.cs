@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// PageContentTile.cs (Page content view extended layer )
+// PageContentTile.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -33,17 +33,20 @@ namespace mTouchPDFReader.Library.Views.Core
 	[Register("PageContentTile")]
 	public class PageContentTile : CATiledLayer
 	{		
+		#region Data
 		public Action<CGContext> OnDraw {
-			get { return _OnDraw; }
-			set { _OnDraw = value; }
+			get { return _onDraw; }
+			set { _onDraw = value; }
 		}
-		private Action<CGContext> _OnDraw;
+		private Action<CGContext> _onDraw;
 		
 		[Export("fadeDuration")]
 		public static new double FadeDuration {
 			get { return 0.001; }
 		}
-		
+		#endregion
+
+		#region Logic
 		public PageContentTile()
 		{
 			Initialize();
@@ -67,7 +70,8 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		public override void DrawInContext(CGContext ctx)
 		{
-			_OnDraw(ctx);
+			_onDraw(ctx);
 		}
+		#endregion
 	}
 }

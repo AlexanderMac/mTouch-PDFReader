@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// ThumbView.cs (Page content thumb View)
+// ThumbView.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -29,29 +29,29 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class ThumbView : UIView
 	{							
-		#region Fields		
+		#region Data		
 		public int PageNumber {
 			get { 
-				return _PageNumber; 
+				return _pageNumber; 
 			}
 			set {
-				if (value != _PageNumber) {
-					_PageNumber = value;
-					_ImageView.Image = GetThumbImage(_ThumbContentSize, _PageNumber);
+				if (value != _pageNumber) {
+					_pageNumber = value;
+					_imageView.Image = GetThumbImage(_thumbContentSize, _pageNumber);
 				}
 			}
 		}
-		private int _PageNumber;
+		private int _pageNumber;
 		
-		private readonly float _ThumbContentSize;
-		private readonly UIImageView _ImageView;		
+		private readonly float _thumbContentSize;
+		private readonly UIImageView _imageView;		
 		#endregion
 		
-		#region UIView methods		
+		#region UIView members		
 		public ThumbView(RectangleF frame, float thumbContentSize, int pageNumber) : base(frame)
 		{
-			_PageNumber = pageNumber;			
-			_ThumbContentSize = thumbContentSize;
+			_pageNumber = pageNumber;			
+			_thumbContentSize = thumbContentSize;
 			
 			AutosizesSubviews = false;
 			UserInteractionEnabled = false;
@@ -59,17 +59,16 @@ namespace mTouchPDFReader.Library.Views.Core
 			AutoresizingMask = UIViewAutoresizing.None;
 			BackgroundColor = UIColor.Clear;
 			
-			// Create and init thumb image view
-			_ImageView = new UIImageView(Bounds);
-			_ImageView.AutosizesSubviews = false;
-			_ImageView.UserInteractionEnabled = false;
-			_ImageView.ContentMode = UIViewContentMode.ScaleAspectFit;
-			_ImageView.AutoresizingMask = UIViewAutoresizing.None;
-			_ImageView.BackgroundColor = UIColor.Clear;
-			_ImageView.ClipsToBounds = true;
-			_ImageView.Image = GetThumbImage(_ThumbContentSize, _PageNumber);
+			_imageView = new UIImageView(Bounds);
+			_imageView.AutosizesSubviews = false;
+			_imageView.UserInteractionEnabled = false;
+			_imageView.ContentMode = UIViewContentMode.ScaleAspectFit;
+			_imageView.AutoresizingMask = UIViewAutoresizing.None;
+			_imageView.BackgroundColor = UIColor.Clear;
+			_imageView.ClipsToBounds = true;
+			_imageView.Image = GetThumbImage(_thumbContentSize, _pageNumber);
 
-			AddSubview(_ImageView);
+			AddSubview(_imageView);
 		}				
 		#endregion
 		
@@ -80,7 +79,6 @@ namespace mTouchPDFReader.Library.Views.Core
 				return null;
 			}
 			
-			// Calc page view size
 			var pageSize = PageContentView.GetPageViewSize(pageNumber);
 			if (pageSize.Width % 2 > 0) {
 				pageSize.Width--;
@@ -89,15 +87,12 @@ namespace mTouchPDFReader.Library.Views.Core
 				pageSize.Height--;
 			}
 			
-			// Calc target size	
 			var targetSize = new Size((int)pageSize.Width, (int)pageSize.Height);
 			
-			// Draw page on CGImage
 			CGImage pageImage;
 			using (CGColorSpace rgb = CGColorSpace.CreateDeviceRGB()) {
 				using (var context = new CGBitmapContext(null, targetSize.Width, targetSize.Height, 8, 0, rgb, CGBitmapFlags.ByteOrder32Little | CGBitmapFlags.NoneSkipFirst)) {
 					using (var pdfPage = PDFDocument.GetPage(pageNumber)) {
-						// Draw page on custom CGBitmap context
 						var thumbRect = new RectangleF(0.0f, 0.0f, targetSize.Width, targetSize.Height);
 						context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
 						context.FillRect(thumbRect);
@@ -105,7 +100,7 @@ namespace mTouchPDFReader.Library.Views.Core
 						context.SetRenderingIntent(CGColorRenderingIntent.Default);
 						context.InterpolationQuality = CGInterpolationQuality.Default;
 						context.DrawPDFPage(pdfPage);
-						// Create CGImage from custom CGBitmap context
+
 						pageImage = context.ToImage();
 					}
 				}

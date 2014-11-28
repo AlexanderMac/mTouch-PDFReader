@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// Options.cs (DOptions)
+// Settings.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -27,9 +27,9 @@ using mTouchPDFReader.Library.Data.Enums;
 
 namespace mTouchPDFReader.Library.Data.Objects
 {
-	public class Options
+	public class Settings
 	{
-		#region Default constants	
+		#region Constants	
 		private const UIPageViewControllerTransitionStyle DefaultPageTransitionStyle = UIPageViewControllerTransitionStyle.PageCurl;
 		private const UIPageViewControllerNavigationOrientation DefaultPageNavigationOrientation = UIPageViewControllerNavigationOrientation.Horizontal;
 
@@ -37,7 +37,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		private const bool DefaultStatusbarVisible = true;
 		private const bool DefaultPageNumberVisible = true;
 
-		private const AutoScaleModes DefaultAutoScaleMode = AutoScaleModes.AutoWidth;
+		private const AutoScaleModes DefaultAutoScaleMode = AutoScaleModes.AutoHeight;
 		private const int DefaultZoomScaleLevels = 10;
 		private const bool DefaultAllowZoomByDoubleTouch = true;
 		private const int DefaultThumbsBufferSize = 20;
@@ -51,7 +51,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		public const int MaxThumbSize = 200;	
 		#endregion
 		
-		#region Fields	
+		#region Data
 		public UIPageViewControllerTransitionStyle PageTransitionStyle { get; set; }
 		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
 		public bool ToolbarVisible { get; set; }
@@ -61,59 +61,59 @@ namespace mTouchPDFReader.Library.Data.Objects
 
 		public int ZoomScaleLevels {
 			get {
-				return _ZoomScaleLevels;
+				return _zoomScaleLevels;
 			}
 			set {
-				if (_ZoomScaleLevels != value) {
-					_ZoomScaleLevels = value;
-					if (_ZoomScaleLevels < MinZoomScaleLevels) {
-						_ZoomScaleLevels = MinZoomScaleLevels;
+				if (_zoomScaleLevels != value) {
+					_zoomScaleLevels = value;
+					if (_zoomScaleLevels < MinZoomScaleLevels) {
+						_zoomScaleLevels = MinZoomScaleLevels;
 					}
-					if (_ZoomScaleLevels > MaxZoomScaleLevels) {
-						_ZoomScaleLevels = MaxZoomScaleLevels;
+					if (_zoomScaleLevels > MaxZoomScaleLevels) {
+						_zoomScaleLevels = MaxZoomScaleLevels;
 					}
 				}
 			}
 		}
-		private int _ZoomScaleLevels;
+		private int _zoomScaleLevels;
 		
 		public bool AllowZoomByDoubleTouch { get; set; }
 
 		public int ThumbsBufferSize {
 			get {
-				return _ThumbsBufferSize;
+				return _thumbsBufferSize;
 			}
 			set {
-				if (_ThumbsBufferSize != value) {
-					_ThumbsBufferSize = value;
-					if (_ThumbsBufferSize < MinThumbsBufferSize) {
-						_ThumbsBufferSize = MinThumbsBufferSize;
+				if (_thumbsBufferSize != value) {
+					_thumbsBufferSize = value;
+					if (_thumbsBufferSize < MinThumbsBufferSize) {
+						_thumbsBufferSize = MinThumbsBufferSize;
 					}
-					if (_ThumbsBufferSize > MaxThumbsBufferSize) {
-						_ThumbsBufferSize = MaxThumbsBufferSize;
+					if (_thumbsBufferSize > MaxThumbsBufferSize) {
+						_thumbsBufferSize = MaxThumbsBufferSize;
 					}
 				}
 			}
 		}
-		private int _ThumbsBufferSize;
+		private int _thumbsBufferSize;
 
 		public int ThumbSize {
 			get {
-				return _ThumbSize;
+				return _thumbSize;
 			}
 			set {
-				if (_ThumbSize != value) {
-					_ThumbSize = value;
-					if (_ThumbSize < MinThumbSize) {
-						_ThumbSize = MinThumbSize;
+				if (_thumbSize != value) {
+					_thumbSize = value;
+					if (_thumbSize < MinThumbSize) {
+						_thumbSize = MinThumbSize;
 					}
-					if (_ThumbSize > MaxThumbSize) {
-						_ThumbSize = MaxThumbSize;
+					if (_thumbSize > MaxThumbSize) {
+						_thumbSize = MaxThumbSize;
 					}
 				}
 			}
 		}
-		private int _ThumbSize;
+		private int _thumbSize;
 
 		public DateTime LibraryReleaseDate {
 			get {
@@ -129,7 +129,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		#endregion	
 		
 		#region Logic		
-		public Options()
+		public Settings()
 		{
 			PageTransitionStyle = DefaultPageTransitionStyle;
 			PageNavigationOrientation = DefaultPageNavigationOrientation;
@@ -139,8 +139,8 @@ namespace mTouchPDFReader.Library.Data.Objects
 			AutoScaleMode = DefaultAutoScaleMode;
 			ZoomScaleLevels = DefaultZoomScaleLevels;
 			AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
-			_ThumbsBufferSize = DefaultThumbsBufferSize;
-			_ThumbSize = DefaultThumbSize;
+			_thumbsBufferSize = DefaultThumbsBufferSize;
+			_thumbSize = DefaultThumbSize;
 		}
 		#endregion
 	}

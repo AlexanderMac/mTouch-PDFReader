@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// PageContentView.cs (Page content View )
+// PageContentView.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -31,7 +31,7 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class PageContentView : UIView
 	{			
-		#region Fields		
+		#region Data		
 		[Export("layerClass")]
 		public static Class LayerClass()
 		{
@@ -40,48 +40,46 @@ namespace mTouchPDFReader.Library.Views.Core
 
 		public int PageNumber {
 			get { 
-				return _PageNumber; 
+				return _pageNumber; 
 			}
 			set {
-				_PageNumber = value;
+				_pageNumber = value;
 			}
 		}	
-		private int _PageNumber;
+		private int _pageNumber;
 		#endregion
 		
-		#region UIView methods		
+		#region Logic		
 		public PageContentView(RectangleF frame, int pageNumber) : base(frame)
 		{
-			_PageNumber = pageNumber;
+			_pageNumber = pageNumber;
 			AutosizesSubviews = false;
 			UserInteractionEnabled = false;
 			ClearsContextBeforeDrawing = false;
 			ContentMode = UIViewContentMode.Redraw;
 			AutoresizingMask = UIViewAutoresizing.None;
 			BackgroundColor = UIColor.Clear;
-			(Layer as PageContentTile).OnDraw = Draw;
+			(Layer as PageContentTile).OnDraw = draw;
 		}		
 		
 		public static RectangleF GetPageViewSize(int pageNumber)
 		{
 			RectangleF pageRect = RectangleF.Empty;
 			if (PDFDocument.DocumentHasLoaded) {
-				// Check the lower page bounds
 				if (pageNumber < 1) {
 					pageNumber = 1;
 				}
-				// Check the upper page bounds
+
 				if (pageNumber > PDFDocument.PageCount) {
 					pageNumber = PDFDocument.PageCount;
 				}
+
 				using (CGPDFPage pdfPage = PDFDocument.GetPage(pageNumber)) {
 					if (pdfPage != null) {
-						// Calc effective rect
 						RectangleF cropBoxRect = pdfPage.GetBoxRect(CGPDFBox.Crop);
 						RectangleF mediaBoxRect = pdfPage.GetBoxRect(CGPDFBox.Media);
 						RectangleF effectiveRect = RectangleF.Intersect(cropBoxRect, mediaBoxRect);
 			
-						// Calc page width and height, accoring by rotation
 						switch (pdfPage.RotationAngle) {
 							default:
 							case 0:
@@ -107,14 +105,14 @@ namespace mTouchPDFReader.Library.Views.Core
 			return pageRect;
 		}
 		
-		private void Draw(CGContext context)
+		private void draw(CGContext context)
 		{
 			if (!PDFDocument.DocumentHasLoaded) {
 				return;
 			}
 
 			context.SetFillColor(1.0f, 1.0f, 1.0f, 1.0f);
-			using (CGPDFPage pdfPage = PDFDocument.GetPage(_PageNumber)) {
+			using (CGPDFPage pdfPage = PDFDocument.GetPage(_pageNumber)) {
 				context.TranslateCTM(0, Bounds.Height);
 				context.ScaleCTM(1.0f, -1.0f);
 				context.ConcatCTM(pdfPage.GetDrawingTransform(CGPDFBox.Crop, Bounds, 0, true));

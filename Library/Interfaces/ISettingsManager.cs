@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-//   IOptionsManager.cs
+// ISettingsManager.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -25,11 +25,10 @@ using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Library.Interfaces
 {
-	public interface IOptionsManager
+	public interface ISettingsManager
 	{
-		Options Options { get; }
+		Settings Settings { get; }
 		void Load();
 		void Save();
 	}
 }
-

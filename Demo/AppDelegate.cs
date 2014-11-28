@@ -1,9 +1,9 @@
 ﻿//
 // mTouch-PDFReader demo
-//   AppDelegate.cs
+// AppDelegate.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -40,9 +40,9 @@ namespace mTouchPDFReader.Demo
 
 		public AppDelegate()
 		{
-			RC.RegisterReference<IDocumentBookmarkManager, MyDocumentBookmarkManager>();
+			RC.RegisterReference<IDocumentBookmarksManager, MyDocumentBookmarksManager>();
 			RC.RegisterReference<IDocumentNoteManager, MyDocumentNoteManager>();
-			RC.RegisterReference<IOptionsManager, OptionsManager>();
+			RC.RegisterReference<ISettingsManager, SettingsManager>();
 		}
 
 		// This method is invoked when the application is about to move from active to inactive state.

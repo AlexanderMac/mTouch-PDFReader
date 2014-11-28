@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// DocumentBookmark.cs (Document bookmark)
+// DocumentBookmark.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -31,4 +31,3 @@ namespace mTouchPDFReader.Library.Data.Objects
 		public int PageNumber { get; set; }
 	}
 }
-

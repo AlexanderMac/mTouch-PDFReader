@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-//   IBookmarkManager.cs
+// DocumentBookmarksManager.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -22,16 +22,40 @@
 //
 
 using System.Collections.Generic;
+using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Library.Interfaces
+namespace mTouchPDFReader.Library.Managers
 {
-	public interface IDocumentBookmarkManager
+	public class DocumentBookmarksManager : IDocumentBookmarksManager
 	{
-		DocumentBookmark GetNew(int docId, string name, int pageNumber);
-		List<DocumentBookmark> LoadList(int docId); // TODO: Rename to GetAllForDocument
-		void Save(DocumentBookmark bookmark);		// TODO: Rename to Create
-		void Delete(int bookmarkId);
+		protected DocumentBookmarksManager()	{}
+
+		#region IDocumentBookmarkManager members
+		public virtual DocumentBookmark GetNew(int docId, string name, int pageNumber)
+		{
+			return new DocumentBookmark {
+				Id = -1,
+				DocId = docId, 
+				Name = name,
+				PageNumber = pageNumber
+			};
+		}
+
+		public virtual List<DocumentBookmark> LoadList(int docId)
+		{
+			return new List<DocumentBookmark>();
+		}
+		
+		public virtual void Save(DocumentBookmark bookmark)
+		{
+			// Noting
+		}	
+		
+		public virtual void Delete(int bookmarkId)
+		{
+			// Nothing
+		}		
+		#endregion
 	}
 }
-

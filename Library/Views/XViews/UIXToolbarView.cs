@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// UIXToolbarView.cs (Extended gradient toolbar with shadow)
+// UIXToolbarView.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -33,7 +33,7 @@ namespace mTouchPDFReader.Library.XViews
 {
 	public class UIXToolbarView : UIView
 	{	
-		private int _ToolbarWidth;
+		private int _toolbarWidth;
 		
 		[Export("layerClass")]
 		public static Class LayerClass()
@@ -43,7 +43,7 @@ namespace mTouchPDFReader.Library.XViews
 		
 		public UIXToolbarView(RectangleF frame, float fromWhite, float toWhite, float alpha) : base(frame)
 		{
-			_ToolbarWidth = -1;
+			_toolbarWidth = -1;
 			AutosizesSubviews = true;
 			UserInteractionEnabled = true;
 			ContentMode = UIViewContentMode.Redraw;
@@ -54,6 +54,7 @@ namespace mTouchPDFReader.Library.XViews
         		UIColor.FromWhiteAlpha(fromWhite, alpha).CGColor,
         		UIColor.FromWhiteAlpha(toWhite, alpha).CGColor
         	};
+
 			layer.CornerRadius = 5;
 			layer.ShadowOffset = new SizeF(2.0f, 2.0f);
 			layer.ShadowRadius = 4.0f;
@@ -64,8 +65,8 @@ namespace mTouchPDFReader.Library.XViews
 		public override void Draw(RectangleF rect)
 		{
 			base.Draw(rect);
-			// Recalc size of the layer shadow, if the toolbar width was changed
-			if (_ToolbarWidth != rect.Width) {
+
+			if (_toolbarWidth != rect.Width) {
 				Layer.ShadowPath = UIBezierPath.FromRect(Bounds).CGPath;
 			}
 		}

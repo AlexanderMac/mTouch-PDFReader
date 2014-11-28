@@ -49,20 +49,15 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="Managers\DocumentBookmarkManager.cs" />
     <Compile Include="Managers\DocumentNoteManager.cs" />
     <Compile Include="Managers\LocalizationManager.cs" />
     <Compile Include="Managers\MgrAccessor.cs" />
-    <Compile Include="Managers\OptionsManager.cs" />
     <Compile Include="Data\Enums\AutoScaleModes.cs" />
     <Compile Include="Data\Enums\DocumentActionTypes.cs" />
     <Compile Include="Data\Objects\DocumentBookmark.cs" />
     <Compile Include="Data\Objects\DocumentNote.cs" />
-    <Compile Include="Data\Objects\Options.cs" />
     <Compile Include="Data\Objects\SystemInfo.cs" />
-    <Compile Include="Interfaces\IDocumentBookmarkManager.cs" />
     <Compile Include="Interfaces\IDocumentNoteManager.cs" />
-    <Compile Include="Interfaces\IOptionsManager.cs" />
     <Compile Include="Utils\RC.cs" />
     <Compile Include="Views\Management\SettingsTableVC.cs" />
     <Compile Include="Views\Core\PageContentTile.cs" />
@@ -79,6 +74,11 @@
     <Compile Include="Views\Core\DocumentVC.cs" />
     <Compile Include="Views\Core\PageVC.cs" />
     <Compile Include="Views\Core\ThumbsVC.cs" />
+    <Compile Include="Interfaces\ISettingsManager.cs" />
+    <Compile Include="Data\Objects\Settings.cs" />
+    <Compile Include="Interfaces\IDocumentBookmarksManager.cs" />
+    <Compile Include="Managers\DocumentBookmarksManager.cs" />
+    <Compile Include="Managers\SettingsManager.cs" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>

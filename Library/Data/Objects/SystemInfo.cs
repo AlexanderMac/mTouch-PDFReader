@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// SystemInfo.cs (System info)
+// SystemInfo.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -40,4 +40,3 @@ namespace mTouchPDFReader.Library.Data.Objects
 		}
 	}
 }
-

@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// ThumbWithPageNumberView.cs (Page content thumb view with page number label
+// ThumbWithPageNumberView.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -30,59 +30,55 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class ThumbWithPageNumberView : UIView
 	{
-		#region Constants		
+		#region Data		
 		private const int Padding = 5;
 		private const int PageNumberLabelHeight = 20;		
-		#endregion
-			
-		#region Fields
+
 		public int PageNumber {
 			get { 
-				return _ThumbView.PageNumber; 
+				return _thumbView.PageNumber; 
 			}
 			set {
-				_ThumbView.PageNumber = value;
-				_PageNumberLabel.Text = value.ToString();
+				_thumbView.PageNumber = value;
+				_pageNumberLabel.Text = value.ToString();
 			}
 		}
 		
-		private readonly ThumbView _ThumbView;	
-		private readonly UILabel _PageNumberLabel;
-		private readonly Action<ThumbWithPageNumberView> _ThumbSelectedCallback;				
+		private readonly ThumbView _thumbView;	
+		private readonly UILabel _pageNumberLabel;
+		private readonly Action<ThumbWithPageNumberView> _thumbSelectedCallback;				
 		#endregion
 		
-		#region UIView methods		
+		#region UIView members		
 		public ThumbWithPageNumberView(RectangleF frame, int pageNumber, Action<ThumbWithPageNumberView> thumbSelectedCallback) : base(frame)
 		{
-			_ThumbSelectedCallback = thumbSelectedCallback;
+			_thumbSelectedCallback = thumbSelectedCallback;
 			SetAsUnselected();
 			
-			// Create and init page thumb view
 			int thumbContentSize = (int)Bounds.Size.Width;
 			var thumbViewFrame = new RectangleF(0, Padding, Bounds.Size.Width, Bounds.Size.Height - 2 * Padding - PageNumberLabelHeight);
-			_ThumbView = new ThumbView(thumbViewFrame, thumbContentSize, pageNumber);
+			_thumbView = new ThumbView(thumbViewFrame, thumbContentSize, pageNumber);
 			
-			// Create and init page number label		
 			var pageNumberLabelFrame = new RectangleF(0, 2 * Padding + thumbViewFrame.Height, Bounds.Size.Width, PageNumberLabelHeight);
-			_PageNumberLabel = new UILabel(pageNumberLabelFrame);
-			_PageNumberLabel.TextAlignment = UITextAlignment.Center;
-			_PageNumberLabel.BackgroundColor = UIColor.Clear;
-			_PageNumberLabel.TextColor = UIColor.White;
-			_PageNumberLabel.Font = UIFont.SystemFontOfSize(16.0f);
-			_PageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
-			_PageNumberLabel.ShadowColor = UIColor.Black;
-			_PageNumberLabel.AdjustsFontSizeToFitWidth = true;
-			_PageNumberLabel.MinimumFontSize = 12.0f;
-			_PageNumberLabel.Text = pageNumber.ToString();
+			_pageNumberLabel = new UILabel(pageNumberLabelFrame);
+			_pageNumberLabel.TextAlignment = UITextAlignment.Center;
+			_pageNumberLabel.BackgroundColor = UIColor.Clear;
+			_pageNumberLabel.TextColor = UIColor.White;
+			_pageNumberLabel.Font = UIFont.SystemFontOfSize(16.0f);
+			_pageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
+			_pageNumberLabel.ShadowColor = UIColor.Black;
+			_pageNumberLabel.AdjustsFontSizeToFitWidth = true;
+			_pageNumberLabel.MinimumFontSize = 12.0f;
+			_pageNumberLabel.Text = pageNumber.ToString();
 			
-			AddSubview(_ThumbView);
-			AddSubview(_PageNumberLabel);
+			AddSubview(_thumbView);
+			AddSubview(_pageNumberLabel);
 		}
 			
 		public override void TouchesBegan(NSSet touches, UIEvent evt)
 		{
 			base.TouchesBegan(touches, evt);
-			_ThumbSelectedCallback(this);
+			_thumbSelectedCallback(this);
 		} 		
 		#endregion
 		

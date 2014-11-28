@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader demo
-// MyDocumentBookmarkManager.cs (Simple document bookmarks manager)
+// MyDocumentBookmarksManager.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -28,42 +28,41 @@ using mTouchPDFReader.Library.Data.Objects;
 
 namespace mTouchPDFReader.Demo.Managers
 {
-	public class MyDocumentBookmarkManager : DocumentBookmarkManager
+	public class MyDocumentBookmarksManager : DocumentBookmarksManager
 	{
-		#region Fields		
-		private static readonly List<DocumentBookmark> _AllBookmarks;		
+		#region Data
+		private static readonly List<DocumentBookmark> _allBookmarks;		
 		#endregion
 		
 		#region Logic	
-		protected MyDocumentBookmarkManager() {}
+		protected MyDocumentBookmarksManager() {}
 
-		static MyDocumentBookmarkManager()
+		static MyDocumentBookmarksManager()
 		{
-			_AllBookmarks = new List<DocumentBookmark>();
+			_allBookmarks = new List<DocumentBookmark>();
 		}
 		
 		public override List<DocumentBookmark> LoadList(int docId)
 		{
-			var retValue = _AllBookmarks.Where(d => d.DocId == docId).ToList();
+			var retValue = _allBookmarks.Where(d => d.DocId == docId).ToList();
 			return retValue;
 		}
 		
 		public override void Save(DocumentBookmark bookmark)
 		{
-			if (!_AllBookmarks.Contains(bookmark)) {
-				bookmark.Id = _AllBookmarks.Count + 1;
-				_AllBookmarks.Add(bookmark);
+			if (!_allBookmarks.Contains(bookmark)) {
+				bookmark.Id = _allBookmarks.Count + 1;
+				_allBookmarks.Add(bookmark);
 			}
 		}	
 		
 		public override void Delete(int bookmarkId)
 		{
-			var bookmark = _AllBookmarks.First(d => d.Id == bookmarkId);
+			var bookmark = _allBookmarks.First(d => d.Id == bookmarkId);
 			if (bookmark != null) {
-				_AllBookmarks.Remove(bookmark);
+				_allBookmarks.Remove(bookmark);
 			}
 		}		
 		#endregion
 	}
 }
-

@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader library
-// MgrAccessor.cs (Document bookmarks manager)
+// MgrAccessor.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -34,15 +34,14 @@ namespace mTouchPDFReader.Library.Managers
 		private static IDocumentNoteManager _DocumentNoteMgr; 
 
 	
-		public static IDocumentBookmarkManager DocumentBookmarkMgr {
-			get { return _DocumentBookmarkMgr ?? (_DocumentBookmarkMgr = RC.Get<IDocumentBookmarkManager>()); }
+		public static IDocumentBookmarksManager DocumentBookmarkMgr {
+			get { return _DocumentBookmarkMgr ?? (_DocumentBookmarkMgr = RC.Get<IDocumentBookmarksManager>()); }
 		}
-		private static IDocumentBookmarkManager _DocumentBookmarkMgr;
+		private static IDocumentBookmarksManager _DocumentBookmarkMgr;
 
-		public static IOptionsManager OptionsMgr {
-			get { return _OptionsMgr ?? (_OptionsMgr = RC.Get<IOptionsManager>()); }
+		public static ISettingsManager OptionsMgr {
+			get { return _OptionsMgr ?? (_OptionsMgr = RC.Get<ISettingsManager>()); }
 		}
-		private static IOptionsManager _OptionsMgr;
+		private static ISettingsManager _OptionsMgr;
 	}
 }
-

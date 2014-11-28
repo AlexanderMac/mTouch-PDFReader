@@ -99,9 +99,7 @@
   <ItemGroup>
     <Compile Include="Main.cs" />
     <Compile Include="AppDelegate.cs" />
-    <Compile Include="Managers\MyDocumentBookmarkManager.cs" />
     <Compile Include="Managers\MyDocumentNoteManager.cs" />
-    <Compile Include="Data\PDFFile.cs" />
     <Compile Include="Views\DocumentsTableVC.cs" />
     <Compile Include="Views\DocumentsTableVC.designer.cs">
       <DependentUpon>DocumentsTableVC.cs</DependentUpon>
@@ -110,6 +108,8 @@
     <Compile Include="Views\SettingsVC.designer.cs">
       <DependentUpon>SettingsVC.cs</DependentUpon>
     </Compile>
+    <Compile Include="Data\PDFDocumentFile.cs" />
+    <Compile Include="Managers\MyDocumentBookmarksManager.cs" />
   </ItemGroup>
   <ItemGroup>
     <InterfaceDefinition Include="MainStoryboard_iPhone.storyboard" />

@@ -1,9 +1,9 @@
 //
 // mTouch-PDFReader demo
-// MyDocumentNoteManager.cs (Simple document note manager)
+// MyDocumentNoteManager.cs
 //
 //  Author:
-//       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
+//       Alexander Matsibarov <amatsibarov@gmail.com>
 //
 //  Copyright (c) 2014 Alexander Matsibarov
 //
@@ -30,8 +30,8 @@ namespace mTouchPDFReader.Demo.Managers
 {
 	public class MyDocumentNoteManager : DocumentNoteManager
 	{
-		#region Fields		
-		private static readonly List<DocumentNote> _AllNotes;		
+		#region Data		
+		private static readonly List<DocumentNote> _allNotes;		
 		#endregion
 		
 		#region Logic
@@ -39,12 +39,12 @@ namespace mTouchPDFReader.Demo.Managers
 
 		static MyDocumentNoteManager()
 		{
-			_AllNotes = new List<DocumentNote>();
+			_allNotes = new List<DocumentNote>();
 		}
 		
 		public override DocumentNote Load(int docId)
 		{
-			var note = _AllNotes.FirstOrDefault(n => n.DocId == docId);
+			var note = _allNotes.FirstOrDefault(n => n.DocId == docId);
 			if (note == null) {
 				note = new DocumentNote { Id = -1, DocId = docId, Note = string.Empty };
 			}			
@@ -53,12 +53,11 @@ namespace mTouchPDFReader.Demo.Managers
 
 		public override void Save(DocumentNote note)
 		{
-			if (!_AllNotes.Contains(note)) {
-				note.Id = _AllNotes.Count + 1;
-				_AllNotes.Add(note);
+			if (!_allNotes.Contains(note)) {
+				note.Id = _allNotes.Count + 1;
+				_allNotes.Add(note);
 			}
 		}		
 		#endregion
 	}
 }
-
