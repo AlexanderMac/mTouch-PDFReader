@@ -29,12 +29,10 @@ namespace mTouchPDFReader.Library.Utils
 {
 	public class RC
 	{
-		#region Singleton logic
 		private static readonly RC _Instance = new RC();
 		public static RC Instance {
 			get { return _Instance; }
 		}
-		#endregion static
 
 		private readonly object _LockObject = new object();
 

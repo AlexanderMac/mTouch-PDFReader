@@ -42,9 +42,7 @@ namespace mTouchPDFReader.Library.Data.Objects
 		private const bool DefaultAllowZoomByDoubleTouch = true;
 		private const int DefaultThumbsBufferSize = 20;
 		private const int DefaultThumbSize = 125;		
-		#endregion
-		
-		#region Constants allowable minimum/maximum values		
+	
 		public const int MinZoomScaleLevels = 2;
 		public const int MaxZoomScaleLevels = 10;
 		public const int MinThumbsBufferSize = 15;

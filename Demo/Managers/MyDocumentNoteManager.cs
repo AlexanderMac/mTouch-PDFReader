@@ -1,6 +1,6 @@
-﻿//
+//
 // mTouch-PDFReader demo
-//   Main.cs
+// MyDocumentNoteManager.cs (Simple document note manager)
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -21,19 +21,44 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using MonoTouch.Foundation;
-using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Managers;
+using mTouchPDFReader.Library.Data.Objects;
 
-namespace mTouchPDFReader.Demo
+namespace mTouchPDFReader.Demo.Managers
 {
-	public class Application
+	public class MyDocumentNoteManager : DocumentNoteManager
 	{
-		static void Main(string[] args)
+		#region Fields		
+		private static readonly List<DocumentNote> _AllNotes;		
+		#endregion
+		
+		#region Logic
+		protected MyDocumentNoteManager() {}
+
+		static MyDocumentNoteManager()
 		{
-			UIApplication.Main(args, null, "AppDelegate");
+			_AllNotes = new List<DocumentNote>();
 		}
+		
+		public override DocumentNote Load(int docId)
+		{
+			var note = _AllNotes.FirstOrDefault(n => n.DocId == docId);
+			if (note == null) {
+				note = new DocumentNote { Id = -1, DocId = docId, Note = string.Empty };
+			}			
+			return note;
+		}
+
+		public override void Save(DocumentNote note)
+		{
+			if (!_AllNotes.Contains(note)) {
+				note.Id = _AllNotes.Count + 1;
+				_AllNotes.Add(note);
+			}
+		}		
+		#endregion
 	}
 }
+

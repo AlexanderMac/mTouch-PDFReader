@@ -1,6 +1,6 @@
 //
 // mTouch-PDFReader library
-// UIViewControllerWithPopover.cs (Extended View with popover showing support)
+//   PageViewController.cs
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -25,52 +25,59 @@ using System;
 using System.Drawing;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using mTouchPDFReader.Library.Data.Enums;
 
-// TODO: Required!? 
-namespace mTouchPDFReader.Library.XViews
+namespace mTouchPDFReader.Library.Views.Core
 {
-	public abstract class UIViewControllerWithPopover : UIViewController
+	public class PageVC : UIViewController
 	{
 		#region Fields
-		protected Action<object> CallbackAction {
+		private readonly RectangleF _ViewFrame;
+		private readonly AutoScaleModes _AutoScaleMode;
+		public int PageNumber { get; private set; }
+
+		public PageView PageView {
 			get {
-				return _CallbackAction;
+				return View as PageView;
 			}
-		}
-		private Action<object> _CallbackAction;
-		#endregion
-		
-		public UIPopoverController PopoverController {
-			set {
-				_PopoverController = value;
-			}
-		}
-		protected UIPopoverController _PopoverController;
-		
-		#region Constructors		
-		public UIViewControllerWithPopover(IntPtr handle) : base(handle)
-		{
 		}
 
-		[Export("initWithCoder:")]
-		public UIViewControllerWithPopover(NSCoder coder) : base(coder)
+		public bool IsNotEmptyPage {
+			get {
+				return PageView != null;
+			}
+		}
+		#endregion
+
+		#region Constructors
+		public PageVC(IntPtr handle) : base(handle)
 		{
 		}
 		
-		public UIViewControllerWithPopover(string nibName, NSBundle bundle, Action<object> callbackAction) 
-			: base(nibName, bundle)
+		[Export("initWithCoder:")]
+		public PageVC(NSCoder coder) : base(coder)
 		{
-			_CallbackAction = callbackAction;	
-		}		
-		#endregion
+		}
 		
+		public PageVC(RectangleF viewFrame, AutoScaleModes autoScaleMode, int pageNumber) : base(null, null)
+		{
+			_ViewFrame = viewFrame;
+			_AutoScaleMode = autoScaleMode;
+			PageNumber = pageNumber;
+		}	
+		#endregion
+
+		#region UIViewController
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			ContentSizeForViewInPopover = GetPopoverSize();		
+			if (PageNumber == -1) {
+				View.BackgroundColor = UIColor.Clear;
+			} else {
+				View = new PageView(_ViewFrame, _AutoScaleMode, PageNumber);
+			}
 		}
-
-		protected abstract SizeF GetPopoverSize();
+		#endregion
 	}
 }
 

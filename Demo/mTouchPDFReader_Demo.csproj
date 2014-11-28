@@ -1,74 +1,90 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project DefaultTargets="Build" ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">iPhoneSimulator</Platform>
-    <ProductVersion>10.0.0</ProductVersion>
-    <SchemaVersion>2.0</SchemaVersion>
-    <ProjectGuid>{2070FC24-3BB7-4747-99FC-6D314234C3DE}</ProjectGuid>
     <ProjectTypeGuids>{6BC8ED88-2882-458C-8E55-DFD12B67127B};{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}</ProjectTypeGuids>
+    <ProductVersion>8.0.30703</ProductVersion>
+    <SchemaVersion>2.0</SchemaVersion>
+    <ProjectGuid>{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}</ProjectGuid>
     <OutputType>Exe</OutputType>
     <RootNamespace>mTouchPDFReader.Demo</RootNamespace>
-    <ReleaseVersion>1.0</ReleaseVersion>
-    <SynchReleaseVersion>False</SynchReleaseVersion>
+    <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
     <AssemblyName>mTouchPDFReader_Demo</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhoneSimulator' ">
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\iPhoneSimulator\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
     <MtouchLink>None</MtouchLink>
-    <MtouchDebug>True</MtouchDebug>
-    <ConsolePause>False</ConsolePause>
-    <MtouchI18n />
-    <DebugSymbols>True</DebugSymbols>
-    <MtouchSdkVersion>5.0</MtouchSdkVersion>
-    <CustomCommands>
-      <CustomCommands>
-        <Command type="AfterBuild" command="../Tools/autoinc_vnumber.sh" workingdir="${ProjectDir}" />
-      </CustomCommands>
-    </CustomCommands>
-    <MtouchArch>ARMv7</MtouchArch>
-    <NoWarn>618,672</NoWarn>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchDebug>true</MtouchDebug>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhoneSimulator' ">
-    <DebugType>none</DebugType>
-    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\iPhoneSimulator\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
     <MtouchLink>None</MtouchLink>
-    <ConsolePause>False</ConsolePause>
-    <MtouchArch>ARMv7</MtouchArch>
+    <ConsolePause>false</ConsolePause>
+    <CodesignKey>iPhone Developer</CodesignKey>
+    <MtouchI18n>
+    </MtouchI18n>
+    <MtouchArch>i386</MtouchArch>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|iPhone' ">
-    <DebugSymbols>True</DebugSymbols>
+    <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
-    <Optimize>False</Optimize>
+    <Optimize>false</Optimize>
     <OutputPath>bin\iPhone\Debug</OutputPath>
-    <DefineConstants>DEBUG</DefineConstants>
+    <DefineConstants>DEBUG;</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <MtouchDebug>True</MtouchDebug>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <MtouchDebug>true</MtouchDebug>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <ConsolePause>False</ConsolePause>
-    <IpaPackageName />
-    <MtouchLink>None</MtouchLink>
-    <MtouchI18n />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|iPhone' ">
-    <DebugType>none</DebugType>
-    <Optimize>False</Optimize>
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
     <OutputPath>bin\iPhone\Release</OutputPath>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
-    <ConsolePause>False</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <ConsolePause>false</ConsolePause>
     <CodesignKey>iPhone Developer</CodesignKey>
-    <MtouchI18n />
-    <IpaPackageName />
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Ad-Hoc|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\Ad-Hoc</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <ConsolePause>false</ConsolePause>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <BuildIpa>true</BuildIpa>
+    <CodesignProvision>Automatic:AdHoc</CodesignProvision>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'AppStore|iPhone' ">
+    <DebugType>full</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\iPhone\AppStore</OutputPath>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+    <CodesignKey>iPhone Distribution</CodesignKey>
+    <CodesignEntitlements>Entitlements.plist</CodesignEntitlements>
+    <ConsolePause>false</ConsolePause>
+    <CodesignProvision>Automatic:AppStore</CodesignProvision>
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="System" />
@@ -78,64 +94,54 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Info.plist" />
-    <None Include="Images\MainIcon.png" />
     <None Include="Entitlements.plist" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Main.cs" />
+    <Compile Include="AppDelegate.cs" />
+    <Compile Include="Managers\MyDocumentBookmarkManager.cs" />
+    <Compile Include="Managers\MyDocumentNoteManager.cs" />
+    <Compile Include="Data\PDFFile.cs" />
+    <Compile Include="Views\DocumentsTableVC.cs" />
+    <Compile Include="Views\DocumentsTableVC.designer.cs">
+      <DependentUpon>DocumentsTableVC.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Views\SettingsVC.cs" />
+    <Compile Include="Views\SettingsVC.designer.cs">
+      <DependentUpon>SettingsVC.cs</DependentUpon>
+    </Compile>
+  </ItemGroup>
+  <ItemGroup>
+    <InterfaceDefinition Include="MainStoryboard_iPhone.storyboard" />
+    <InterfaceDefinition Include="MainStoryboard_iPad.storyboard" />
+  </ItemGroup>
+  <ItemGroup>
+    <BundleResource Include="Resources\documents.png" />
+    <BundleResource Include="Resources\documents%402x.png" />
+    <BundleResource Include="Resources\documents%403x.png" />
+    <BundleResource Include="Resources\settings.png" />
+    <BundleResource Include="Resources\settings%402x.png" />
+    <BundleResource Include="Resources\settings%403x.png" />
+    <BundleResource Include="Resources\Icon-72.png" />
+    <BundleResource Include="Resources\Icon.png" />
+    <BundleResource Include="Resources\Icon%402x.png" />
+    <BundleResource Include="Resources\Icon-60%402x.png" />
+    <BundleResource Include="Resources\Icon-72%402x.png" />
+    <BundleResource Include="Resources\Icon-76.png" />
+    <BundleResource Include="Resources\Icon-76%402x.png" />
   </ItemGroup>
   <Import Project="$(MSBuildExtensionsPath)\Xamarin\iOS\Xamarin.MonoTouch.CSharp.targets" />
   <ItemGroup>
-    <Content Include="Resource\sample.pdf" />
-    <Content Include="Images\Tabbar\Documents24.png" />
-    <Content Include="Images\Tabbar\DocumentsHistories24.png" />
-    <Content Include="Images\Tabbar\Options24.png" />
-    <Content Include="Images\Tabbar\Search24.png" />
+    <Folder Include="Data\" />
+    <Folder Include="Views\" />
+    <Folder Include="Documents\" />
   </ItemGroup>
   <ItemGroup>
-    <InterfaceDefinition Include="Views\Navigation\DocumentsNavigationController.xib" />
-    <InterfaceDefinition Include="Views\Navigation\DocumentsTableController.xib" />
-    <InterfaceDefinition Include="Views\MainTabbarController.xib" />
-    <InterfaceDefinition Include="Views\MainWindow.xib" />
-    <InterfaceDefinition Include="Views\Options\OptionsViewController.xib" />
-  </ItemGroup>
-  <ItemGroup>
-    <Compile Include="Views\Navigation\DocumentsNavigationController.xib.designer.cs">
-      <DependentUpon>DocumentsNavigationController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Navigation\DocumentsNavigationController.xib.cs">
-      <DependentUpon>DocumentsNavigationController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Navigation\DocumentsTableController.xib.designer.cs">
-      <DependentUpon>DocumentsTableController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Navigation\DocumentsTableController.xib.cs">
-      <DependentUpon>DocumentsTableController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainTabbarController.xib.designer.cs">
-      <DependentUpon>MainTabbarController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainTabbarController.xib.cs">
-      <DependentUpon>MainTabbarController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\MainWindow.xib.designer.cs">
-      <DependentUpon>MainWindow.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Options\OptionsViewController.xib.designer.cs">
-      <DependentUpon>OptionsViewController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Views\Options\OptionsViewController.xib.cs">
-      <DependentUpon>OptionsViewController.xib</DependentUpon>
-    </Compile>
-    <Compile Include="Main.cs" />
-    <Compile Include="Library\PDFFile.cs" />
-    <Compile Include="Library\MyDocumentBookmarkManager.cs" />
-    <Compile Include="Library\MyDocumentNoteManager.cs" />
-  </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Views\Options\" />
-    <Folder Include="Library\" />
+    <Content Include="Documents\sample.pdf" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Library\mTouchPDFReader_Library.csproj">
-      <Project>{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}</Project>
+      <Project>{9DAD0158-D923-48BF-BC35-1014C00B7C95}</Project>
       <Name>mTouchPDFReader_Library</Name>
     </ProjectReference>
   </ItemGroup>

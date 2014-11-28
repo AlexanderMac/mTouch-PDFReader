@@ -29,8 +29,8 @@ namespace mTouchPDFReader.Library.Interfaces
 	public interface IDocumentBookmarkManager
 	{
 		DocumentBookmark GetNew(int docId, string name, int pageNumber);
-		List<DocumentBookmark> LoadList(int docId);
-		void Save(DocumentBookmark bookmark);
+		List<DocumentBookmark> LoadList(int docId); // TODO: Rename to GetAllForDocument
+		void Save(DocumentBookmark bookmark);		// TODO: Rename to Create
 		void Delete(int bookmarkId);
 	}
 }

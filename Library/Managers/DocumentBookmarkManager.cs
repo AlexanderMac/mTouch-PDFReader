@@ -31,7 +31,7 @@ namespace mTouchPDFReader.Library.Managers
 	{
 		protected DocumentBookmarkManager()	{}
 
-		#region IDocumentBookmarkManager memebers
+		#region IDocumentBookmarkManager members
 		public virtual DocumentBookmark GetNew(int docId, string name, int pageNumber)
 		{
 			return new DocumentBookmark {

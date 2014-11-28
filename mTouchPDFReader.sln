@@ -1,9 +1,9 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Demo", "Demo\mTouchPDFReader_Demo.csproj", "{2070FC24-3BB7-4747-99FC-6D314234C3DE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Library", "Library\mTouchPDFReader_Library.csproj", "{9DAD0158-D923-48BF-BC35-1014C00B7C95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Library", "Library\mTouchPDFReader_Library.csproj", "{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Demo", "Demo\mTouchPDFReader_Demo.csproj", "{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,24 +11,34 @@ Global
 		Release|iPhoneSimulator = Release|iPhoneSimulator
 		Debug|iPhone = Debug|iPhone
 		Release|iPhone = Release|iPhone
+		Ad-Hoc|iPhone = Ad-Hoc|iPhone
+		AppStore|iPhone = AppStore|iPhone
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhone.Build.0 = Debug|iPhone
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhone.ActiveCfg = Release|iPhone
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhone.Build.0 = Release|iPhone
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{2070FC24-3BB7-4747-99FC-6D314234C3DE}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhone.ActiveCfg = Debug|iPhone
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhone.Build.0 = Debug|iPhone
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhone.ActiveCfg = Release|iPhone
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhone.Build.0 = Release|iPhone
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
-		{7515AD42-FDA0-46A4-A88E-FC09B164FBA1}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Ad-Hoc|iPhone.ActiveCfg = Ad-Hoc|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Ad-Hoc|iPhone.Build.0 = Ad-Hoc|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.AppStore|iPhone.ActiveCfg = AppStore|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.AppStore|iPhone.Build.0 = AppStore|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Debug|iPhone.ActiveCfg = Debug|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Debug|iPhone.Build.0 = Debug|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Debug|iPhoneSimulator.ActiveCfg = Debug|iPhoneSimulator
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Debug|iPhoneSimulator.Build.0 = Debug|iPhoneSimulator
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Release|iPhone.ActiveCfg = Release|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Release|iPhone.Build.0 = Release|iPhone
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Release|iPhoneSimulator.ActiveCfg = Release|iPhoneSimulator
+		{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}.Release|iPhoneSimulator.Build.0 = Release|iPhoneSimulator
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Ad-Hoc|iPhone.ActiveCfg = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Ad-Hoc|iPhone.Build.0 = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.AppStore|iPhone.ActiveCfg = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.AppStore|iPhone.Build.0 = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Debug|iPhone.ActiveCfg = Debug|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Debug|iPhone.Build.0 = Debug|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Debug|iPhoneSimulator.ActiveCfg = Debug|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Debug|iPhoneSimulator.Build.0 = Debug|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Release|iPhone.ActiveCfg = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Release|iPhone.Build.0 = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Release|iPhoneSimulator.ActiveCfg = Release|Any CPU
+		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
 		StartupItem = Demo\mTouchPDFReader_Demo.csproj
@@ -66,16 +76,8 @@ Global
 		$7.scope = text/x-csharp
 		$0.CSharpFormattingPolicy = $8
 		$8.IndentSwitchBody = True
-		$8.AllowPropertyGetBlockInline = False
-		$8.AllowPropertySetBlockInline = False
 		$8.AllowEventAddBlockInline = False
 		$8.AllowEventRemoveBlockInline = False
-		$8.IfElseBraceForcement = AddBraces
-		$8.ForBraceForcement = AddBraces
-		$8.WhileBraceForcement = AddBraces
-		$8.UsingBraceForcement = AddBraces
-		$8.FixedBraceForcement = AddBraces
-		$8.ElseIfNewLinePlacement = SameLine
 		$8.ArrayInitializerWrapping = DoNotChange
 		$8.ArrayInitializerBraceStyle = NextLine
 		$8.BeforeMethodDeclarationParentheses = False

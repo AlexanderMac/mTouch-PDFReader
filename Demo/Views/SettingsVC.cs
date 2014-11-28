@@ -1,6 +1,6 @@
-﻿//
+//
 // mTouch-PDFReader demo
-//   Main.cs
+//	 SettingsVC.cs
 //
 //  Author:
 //       Alexander Matsibarov (macasun) <amatsibarov@gmail.com>
@@ -22,18 +22,26 @@
 //
 
 using System;
-using System.Collections.Generic;
-using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
+using System.CodeDom.Compiler;
+using mTouchPDFReader.Library.Views.Management;
 
 namespace mTouchPDFReader.Demo
 {
-	public class Application
+	partial class SettingsVC : UIViewController
 	{
-		static void Main(string[] args)
+		public SettingsVC (IntPtr handle) : base (handle)
 		{
-			UIApplication.Main(args, null, "AppDelegate");
+		}
+
+		public override void ViewDidLoad()
+		{
+			base.ViewDidLoad();
+
+			var settingsVC = new SettingsTableVC();
+			settingsVC.View.Frame = View.Bounds;
+			View.AddSubview(settingsVC.View);
 		}
 	}
 }
