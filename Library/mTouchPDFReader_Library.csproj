@@ -45,7 +45,6 @@
     <Folder Include="Resources\" />
     <Folder Include="Views\" />
     <Folder Include="Views\Management\" />
-    <Folder Include="Images\" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
@@ -67,7 +66,6 @@
     <Compile Include="Views\Core\ThumbView.cs" />
     <Compile Include="Views\Core\ThumbWithPageNumberView.cs" />
     <Compile Include="Views\XViews\UIViewControllerWithPopover.cs" />
-    <Compile Include="Views\XViews\UIXToolbarView.cs" />
     <Compile Include="Views\Management\BookmarksVC.cs" />
     <Compile Include="Views\Management\GotoPageVC.cs" />
     <Compile Include="Views\Management\NoteVC.cs" />
@@ -86,25 +84,49 @@
     <Content Include="ru.lproj\Localizable.strings" />
   </ItemGroup>
   <ItemGroup>
-    <BundleResource Include="Images\Background\OnePageBg.png" />
-    <BundleResource Include="Images\Background\TwoPageBg.png" />
-    <BundleResource Include="Images\Toolbar\AutoHeight48.png" />
-    <BundleResource Include="Images\Toolbar\AutoHeight_Selected48.png" />
-    <BundleResource Include="Images\Toolbar\AutoWidth48.png" />
-    <BundleResource Include="Images\Toolbar\AutoWidth_Selected48.png" />
-    <BundleResource Include="Images\Toolbar\BookmarkAdd32.png" />
-    <BundleResource Include="Images\Toolbar\BookmarkDelete32.png" />
-    <BundleResource Include="Images\Toolbar\BookmarksList48.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToFirst48.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToLast48.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToNext48.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToPage32.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToPage48.png" />
-    <BundleResource Include="Images\Toolbar\NavigateToPrior48.png" />
-    <BundleResource Include="Images\Toolbar\Note48.png" />
-    <BundleResource Include="Images\Toolbar\Save32.png" />
-    <BundleResource Include="Images\Toolbar\Thumbs48.png" />
-    <BundleResource Include="Images\Toolbar\ZoomIn48.png" />
-    <BundleResource Include="Images\Toolbar\ZoomOut48.png" />
+    <BundleResource Include="Resources\navigateToFirst.png" />
+    <BundleResource Include="Resources\navigateToFirst%402x.png" />
+    <BundleResource Include="Resources\navigateToFirst%403x.png" />
+    <BundleResource Include="Resources\navigateToNext.png" />
+    <BundleResource Include="Resources\navigateToNext%402x.png" />
+    <BundleResource Include="Resources\navigateToNext%403x.png" />
+    <BundleResource Include="Resources\autoHeight.png" />
+    <BundleResource Include="Resources\autoWidth.png" />
+    <BundleResource Include="Resources\bookmarkAdd.png" />
+    <BundleResource Include="Resources\bookmarkDelete.png" />
+    <BundleResource Include="Resources\bookmarksList.png" />
+    <BundleResource Include="Resources\navigateToLast.png" />
+    <BundleResource Include="Resources\navigateToPage.png" />
+    <BundleResource Include="Resources\navigateToPrior.png" />
+    <BundleResource Include="Resources\note.png" />
+    <BundleResource Include="Resources\thumbs.png" />
+    <BundleResource Include="Resources\zoomIn.png" />
+    <BundleResource Include="Resources\zoomOut.png" />
+    <BundleResource Include="Resources\autoHeight%402x.png" />
+    <BundleResource Include="Resources\autoHeight%403x.png" />
+    <BundleResource Include="Resources\autoWidth%402x.png" />
+    <BundleResource Include="Resources\autoWidth%403x.png" />
+    <BundleResource Include="Resources\bookmarksList%402x.png" />
+    <BundleResource Include="Resources\bookmarksList%403x.png" />
+    <BundleResource Include="Resources\navigateToLast%402x.png" />
+    <BundleResource Include="Resources\navigateToLast%403x.png" />
+    <BundleResource Include="Resources\navigateToPage%402x.png" />
+    <BundleResource Include="Resources\navigateToPage%403x.png" />
+    <BundleResource Include="Resources\navigateToPrior%402x.png" />
+    <BundleResource Include="Resources\navigateToPrior%403x.png" />
+    <BundleResource Include="Resources\note%402x.png" />
+    <BundleResource Include="Resources\note%403x.png" />
+    <BundleResource Include="Resources\thumbs%402x.png" />
+    <BundleResource Include="Resources\thumbs%403x.png" />
+    <BundleResource Include="Resources\zoomIn%402x.png" />
+    <BundleResource Include="Resources\zoomIn%403x.png" />
+    <BundleResource Include="Resources\zoomOut%402x.png" />
+    <BundleResource Include="Resources\zoomOut%403x.png" />
+    <BundleResource Include="Resources\autoHeight_Selected.png" />
+    <BundleResource Include="Resources\autoHeight_Selected%402x.png" />
+    <BundleResource Include="Resources\autoHeight_Selected%403x.png" />
+    <BundleResource Include="Resources\autoWidth_Selected.png" />
+    <BundleResource Include="Resources\autoWidth_Selected%402x.png" />
+    <BundleResource Include="Resources\autoWidth_Selected%403x.png" />
   </ItemGroup>
 </Project>

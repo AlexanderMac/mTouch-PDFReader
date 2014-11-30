@@ -29,19 +29,19 @@ namespace mTouchPDFReader.Library.Managers
 	public static class MgrAccessor
 	{
 		public static IDocumentNoteManager DocumentNoteMgr {
-			get { return _DocumentNoteMgr ?? (_DocumentNoteMgr = RC.Get<IDocumentNoteManager>()); }
+			get { return _documentNoteMgr ?? (_documentNoteMgr = RC.Get<IDocumentNoteManager>()); }
 		}
-		private static IDocumentNoteManager _DocumentNoteMgr; 
+		private static IDocumentNoteManager _documentNoteMgr; 
 
 	
 		public static IDocumentBookmarksManager DocumentBookmarkMgr {
-			get { return _DocumentBookmarkMgr ?? (_DocumentBookmarkMgr = RC.Get<IDocumentBookmarksManager>()); }
+			get { return _documentBookmarkMgr ?? (_documentBookmarkMgr = RC.Get<IDocumentBookmarksManager>()); }
 		}
-		private static IDocumentBookmarksManager _DocumentBookmarkMgr;
+		private static IDocumentBookmarksManager _documentBookmarkMgr;
 
-		public static ISettingsManager OptionsMgr {
-			get { return _OptionsMgr ?? (_OptionsMgr = RC.Get<ISettingsManager>()); }
+		public static ISettingsManager SettingsMgr {
+			get { return _settingsMgr ?? (_settingsMgr = RC.Get<ISettingsManager>()); }
 		}
-		private static ISettingsManager _OptionsMgr;
+		private static ISettingsManager _settingsMgr;
 	}
 }

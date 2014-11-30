@@ -116,7 +116,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		{
 			base.TouchesBegan(touches, evt);
 			
-			if (MgrAccessor.OptionsMgr.Settings.AllowZoomByDoubleTouch) {
+			if (MgrAccessor.SettingsMgr.Settings.AllowZoomByDoubleTouch) {
 				var touch = touches.AnyObject as UITouch; 
 				if (touch.TapCount == 2) { 
 					ZoomIncrement(); 
@@ -156,8 +156,8 @@ namespace mTouchPDFReader.Library.Views.Core
 			RectangleF targetRect = RectangleFExtensions.Inset(Bounds, ContentViewPadding, ContentViewPadding);
 			float zoomScale = getZoomScaleThatFits(targetRect.Size, _pageContentView.Bounds.Size);
 			MinimumZoomScale = zoomScale; 	
-			MaximumZoomScale = zoomScale * MgrAccessor.OptionsMgr.Settings.ZoomScaleLevels; 
-			_zoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / MgrAccessor.OptionsMgr.Settings.ZoomScaleLevels;
+			MaximumZoomScale = zoomScale * MgrAccessor.SettingsMgr.Settings.ZoomScaleLevels; 
+			_zoomScaleStep = (MaximumZoomScale - MinimumZoomScale) / MgrAccessor.SettingsMgr.Settings.ZoomScaleLevels;
 		}
 
 		private void resetScrollOffset()

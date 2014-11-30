@@ -50,6 +50,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
 			toolBar.BarStyle = UIBarStyle.Black;
+
 			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 			toolBarTitle.BackgroundColor = UIColor.Clear;
@@ -57,6 +58,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			toolBarTitle.TextColor = UIColor.White;
 			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
 			toolBarTitle.Text = "Note".t();
+
 			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
 			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
@@ -64,6 +66,7 @@ namespace mTouchPDFReader.Library.Views.Management
 				MgrAccessor.DocumentNoteMgr.Save(_note);
 				_popoverController.Dismiss(true);
 			};
+
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);

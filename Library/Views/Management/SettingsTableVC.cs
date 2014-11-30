@@ -39,9 +39,8 @@ namespace mTouchPDFReader.Library.Views.Management
 		private UITableViewCell _pageTransitionStyleCell;
 		private UITableViewCell _pageNavigationOrientationCell;
 		private UITableViewCell _autoScaleMode;
-		private UITableViewCell _toolbarVisibilityCell;
-		private UITableViewCell _sliderVisibility;
-		private UITableViewCell _pageNumberVisibilityCell;
+		private UITableViewCell _topToolbarVisibilityCell;
+		private UITableViewCell _bottomToolbarVisibilityCell;
 		private UITableViewCell _zoomScaleLevelsCell;
 		private UITableViewCell _zoomByDoubleTouchCell;
 		private UITableViewCell _libraryReleaseDateCell;
@@ -63,9 +62,8 @@ namespace mTouchPDFReader.Library.Views.Management
 			_pageNavigationOrientationCell = createPageNavigationOrientationCell();
 			_autoScaleMode = createAutoScaleModeCell();
 
-			_toolbarVisibilityCell = createToolbarVisibilityCell();
-			_sliderVisibility = createSliderVisibilityCell();
-			_pageNumberVisibilityCell = createPageNumberVisibilityCell();
+			_topToolbarVisibilityCell = createTopToolbarVisibilityCell();
+			_bottomToolbarVisibilityCell = createBottomBarVisibilityCell();
 
 			_zoomScaleLevelsCell = createZoomScaleLevelsCell();
 			_zoomByDoubleTouchCell = createmZoomByDoubleTouchCell();
@@ -159,10 +157,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = createCell("PageTransitionStyleCell");
 			var label = createTitleLabelControl("Transition style".t());
 			var seg = createSegmentControl(cell.Frame, new[] { "Curl".t(), "Scroll".t() }, 100);
-			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Settings.PageTransitionStyle;
+			seg.SelectedSegment = (int)MgrAccessor.SettingsMgr.Settings.PageTransitionStyle;
 			seg.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.PageTransitionStyle = (UIPageViewControllerTransitionStyle)seg.SelectedSegment;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.PageTransitionStyle = (UIPageViewControllerTransitionStyle)seg.SelectedSegment;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -175,10 +173,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = createCell("PageNavigationOrientationCell");
 			var label = createTitleLabelControl("Navigation orientation".t());
 			var seg = createSegmentControl(cell.Frame, new[] { "Horizontal".t(), "Vertical".t() }, 100);
-			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Settings.PageTransitionStyle;
+			seg.SelectedSegment = (int)MgrAccessor.SettingsMgr.Settings.PageTransitionStyle;
 			seg.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)seg.SelectedSegment;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)seg.SelectedSegment;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -186,15 +184,15 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		private UITableViewCell createToolbarVisibilityCell()
+		private UITableViewCell createTopToolbarVisibilityCell()
 		{
-			var cell = createCell("ToolbarVisibilityCell");
-			var label = createTitleLabelControl("Toolbar".t());
+			var cell = createCell("TopToolbarVisibilityCell");
+			var label = createTitleLabelControl("Top Toolbar".t());
 			var switchCtrl = createSwitchControl(cell.Frame, new[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Settings.ToolbarVisible, false);
+			switchCtrl.SetState(MgrAccessor.SettingsMgr.Settings.TopToolbarVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.ToolbarVisible = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.TopToolbarVisible = switchCtrl.On;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -202,31 +200,15 @@ namespace mTouchPDFReader.Library.Views.Management
 			return cell;
 		}
 		
-		private UITableViewCell createSliderVisibilityCell()
+		private UITableViewCell createBottomBarVisibilityCell()
 		{
-			var cell = createCell("SliderVisibilityCell");
-			var label = createTitleLabelControl("Slider".t());
+			var cell = createCell("BottomToolbarVisibilityCell");
+			var label = createTitleLabelControl("Bottom Toolbar".t());
 			var switchCtrl = createSwitchControl(cell.Frame, new[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Settings.SliderVisible, false);
+			switchCtrl.SetState(MgrAccessor.SettingsMgr.Settings.BottomToolbarVisible, false);
 			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.SliderVisible = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
-			};
-
-			cell.AddSubview(label);
-			cell.AddSubview(switchCtrl);
-			return cell;
-		}
-		
-		private UITableViewCell createPageNumberVisibilityCell()
-		{
-			var cell = createCell("PageNumberVisibilityCell");
-			var label = createTitleLabelControl("Page number".t());
-			var switchCtrl = createSwitchControl(cell.Frame, new[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Settings.PageNumberVisible, false);
-			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.PageNumberVisible = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.BottomToolbarVisible = switchCtrl.On;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -239,10 +221,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = createCell("AutoScaleModelCell");
 			var label = createTitleLabelControl("Auto scale mode".t());
 			var seg = createSegmentControl(cell.Frame, new[] { "Auto width".t(), "Auto height".t() }, 150);
-			seg.SelectedSegment = (int)MgrAccessor.OptionsMgr.Settings.AutoScaleMode;
+			seg.SelectedSegment = (int)MgrAccessor.SettingsMgr.Settings.AutoScaleMode;
 			seg.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.AutoScaleMode = (AutoScaleModes)seg.SelectedSegment;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.AutoScaleMode = (AutoScaleModes)seg.SelectedSegment;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -255,10 +237,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = createCell("ZoomScaleLevelsCell");
 			var label = createTitleLabelControl("Zoom scale levels".t());
 			var slider = createSliderControl(cell.Frame, Settings.MinZoomScaleLevels, Settings.MaxZoomScaleLevels);
-			slider.SetValue(MgrAccessor.OptionsMgr.Settings.ZoomScaleLevels, false);
+			slider.SetValue(MgrAccessor.SettingsMgr.Settings.ZoomScaleLevels, false);
 			slider.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.ZoomScaleLevels = (int)slider.Value;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.ZoomScaleLevels = (int)slider.Value;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -271,10 +253,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			var cell = createCell("ZoomByDoubleTouchCell");
 			var label = createTitleLabelControl("Scale by double click".t());
 			var switchCtrl = createSwitchControl(cell.Frame, new[] { "Yes".t(), "No".t() });
-			switchCtrl.SetState(MgrAccessor.OptionsMgr.Settings.AllowZoomByDoubleTouch, false);
+			switchCtrl.SetState(MgrAccessor.SettingsMgr.Settings.AllowZoomByDoubleTouch, false);
 			switchCtrl.ValueChanged += delegate {
-				MgrAccessor.OptionsMgr.Settings.AllowZoomByDoubleTouch = switchCtrl.On;
-				MgrAccessor.OptionsMgr.Save();
+				MgrAccessor.SettingsMgr.Settings.AllowZoomByDoubleTouch = switchCtrl.On;
+				MgrAccessor.SettingsMgr.Save();
 			};
 
 			cell.AddSubview(label);
@@ -286,7 +268,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			var cell = createCell("LibraryReleaseDateCell");
 			var label = createTitleLabelControl("Release date".t());
-			var labelInfo = createValueLabelControl(cell.Frame, MgrAccessor.OptionsMgr.Settings.LibraryReleaseDate.ToShortDateString());			
+			var labelInfo = createValueLabelControl(cell.Frame, MgrAccessor.SettingsMgr.Settings.LibraryReleaseDate.ToShortDateString());			
 
 			cell.AddSubview(label);
 			cell.AddSubview(labelInfo);
@@ -297,7 +279,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		{
 			var cell = createCell("LibraryVersionCell");
 			var label = createTitleLabelControl("Version".t());
-			var labelInfo = createValueLabelControl(cell.Frame, MgrAccessor.OptionsMgr.Settings.LibraryVersion);
+			var labelInfo = createValueLabelControl(cell.Frame, MgrAccessor.SettingsMgr.Settings.LibraryVersion);
 
 			cell.AddSubview(label);
 			cell.AddSubview(labelInfo);
@@ -309,7 +291,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		protected class DataSource : UITableViewSource
 		{
 			private const int SectionsCount = 4;
-			private readonly int[] RowsInSections = new[] { 2, 3, 3, 2 };
+			private readonly int[] RowsInSections = new[] { 2, 2, 3, 2 };
 			private readonly string[] SectionTitles = new[] { "Transition style".t(), "Visibility".t(), "Scale".t(), "Library information".t() };		
 			private readonly SettingsTableVC _vc;
 
@@ -347,11 +329,9 @@ namespace mTouchPDFReader.Library.Views.Management
 					case 1:
 						switch (indexPath.Row) {
 							case 0:
-								return _vc._toolbarVisibilityCell;
+								return _vc._topToolbarVisibilityCell;
 							case 1:
-								return _vc._sliderVisibility;
-							case 2:
-								return _vc._pageNumberVisibilityCell;
+								return _vc._bottomToolbarVisibilityCell;
 						}
 						break;
 					case 2:

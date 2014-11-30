@@ -24,6 +24,7 @@
 using System;
 using System.Drawing;
 using System.Linq;
+using System.Collections.Generic;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.XViews;
@@ -35,32 +36,23 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class DocumentVC : UIViewController
 	{			
-		#region Constants		
+		#region Data
+		private const float DefaultToolbarHeight = 44.0f;
+		private const float DefaultSpaceWidth = 5.0f;
+		private const float SliderLeft = 170.0f;
+		private const float SliderHeight = 30.0f;
+		private const float PageNumberWidth = 60.0f;
+		private const float PageNumberHeight = 50.0f;
 		private const int MaxPageViewsCount = 3;
-		private const int MaxToolbarButtonsCount = 15;
-		private const float BarPaddingH = 5.0f;
-		private const float BarPaddingV = 5.0f;
-		private const float ToolbarHeight = 50.0f;
-		private const float BottombarHeight = 45.0f;
-		private const float FirstToolButtonLeft = 20.0f;
-		private const float FirstToolButtonTop = 7.0f;
-		private const float ToolButtonSize = 36.0f;
-		private readonly SizeF PageNumberLabelSize = new SizeF(75.0f, 35.0f);		
-		#endregion
-		
-		#region Fields			
+
 		private readonly int _documentId;
 		private readonly string _documentName;
 		private readonly string _documentPath;
 		private UIPageViewController _bookPageViewController;
-		private UIView _toolbar;
-		private UIButton _btnNavigateToPage;
-		private UIButton _btnNote;
-		private UIButton _btnBookmarksList;
-		private UIButton _btnThumbs;
-		private UIButton _btnAutoWidth;
-		private UIButton _btnAutoHeight;
-		private UIView _bottomBar;
+		private UIView _topToolbar;
+		private UIBarButtonItem _btnAutoWidth;
+		private UIBarButtonItem _btnAutoHeight;
+		private UIView _bottomToolbar;
 		private UISlider _slider;
 		private UILabel _pageNumberLabel;
 		private AutoScaleModes _autoScaleMode;
@@ -82,22 +74,22 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			Title = _documentName;
 			View.BackgroundColor = UIColor.Gray;
-			_autoScaleMode = MgrAccessor.OptionsMgr.Settings.AutoScaleMode;
+			_autoScaleMode = MgrAccessor.SettingsMgr.Settings.AutoScaleMode;
 	
-			if (MgrAccessor.OptionsMgr.Settings.ToolbarVisible) {
-				_toolbar = createToolbar();
-				View.AddSubview(_toolbar);
+			if (MgrAccessor.SettingsMgr.Settings.TopToolbarVisible) {
+				_topToolbar = createTopToolbar();
+				View.AddSubview(_topToolbar);
 			}
 			
-			if (MgrAccessor.OptionsMgr.Settings.SliderVisible || MgrAccessor.OptionsMgr.Settings.PageNumberVisible) {
-				_bottomBar = createBottomBar();
-				View.AddSubview(_bottomBar);
+			if (MgrAccessor.SettingsMgr.Settings.BottomToolbarVisible) {
+				_bottomToolbar = createBottomToolbar();
+				View.AddSubview(_bottomToolbar);
 				updateSliderMaxValue();
 			}
 
 			_bookPageViewController = new UIPageViewController(
-				MgrAccessor.OptionsMgr.Settings.PageTransitionStyle,
-				MgrAccessor.OptionsMgr.Settings.PageNavigationOrientation, 
+				MgrAccessor.SettingsMgr.Settings.PageTransitionStyle,
+				MgrAccessor.SettingsMgr.Settings.PageNavigationOrientation, 
 				UIPageViewControllerSpineLocation.Min);		
 			_bookPageViewController.View.Frame = getBookViewFrameRect();
 			_bookPageViewController.View.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
@@ -122,6 +114,19 @@ namespace mTouchPDFReader.Library.Views.Core
 		public override void ViewDidLayoutSubviews()
 		{
 			base.ViewDidLayoutSubviews();
+
+			var actualFrameRect = getRootViewFrameRect();
+			if (_topToolbar != null) {
+				_topToolbar.Frame = new RectangleF(actualFrameRect.Left, actualFrameRect.Top, actualFrameRect.Width, DefaultToolbarHeight);
+			}
+			if (_bottomToolbar != null) {
+				_bottomToolbar.Frame = new RectangleF(actualFrameRect.Left, 
+					actualFrameRect.Bottom - DefaultToolbarHeight, 
+					actualFrameRect.Width, 
+					DefaultToolbarHeight);
+			}
+			_bookPageViewController.View.Frame = getBookViewFrameRect();
+
 			foreach (var pageVC in _bookPageViewController.ChildViewControllers.Cast<PageVC>()) {
 				pageVC.PageView.NeedUpdateZoomAndOffset = true;
 			}
@@ -179,7 +184,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		#endregion
 				
 		#region UI Logic
-		private RectangleF getActualViewFrameRect()
+		private RectangleF getRootViewFrameRect()
 		{
 			var rect = View.Bounds;
 
@@ -199,7 +204,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			var popoverController = new UIPopoverController(viewCtrl);
 			viewCtrl.PopoverController = popoverController;
 			popoverController.PresentFromRect(frame, View, UIPopoverArrowDirection.Any, true);
-		}	
+		}
 		
 		private UIInterfaceOrientation getDeviceOrientation()
 		{
@@ -221,160 +226,136 @@ namespace mTouchPDFReader.Library.Views.Core
 			if (_slider != null) {
 				_slider.MaxValue = PDFDocument.PageCount;
 			}
-		}		
+		}
 
-		protected virtual UIView createToolbar()
+		protected virtual UIView createTopToolbar()
 		{
-			var toolBarFrame = getActualViewFrameRect();
-			toolBarFrame.X += BarPaddingH;
-			toolBarFrame.Y += BarPaddingV;
-			toolBarFrame.Width -= BarPaddingH * 2;
-			toolBarFrame.Height = ToolbarHeight;
+			var toolBarFrame = getRootViewFrameRect();
+			toolBarFrame.Height = DefaultToolbarHeight;
 
-			var toolBar = new UIXToolbarView(toolBarFrame, 0.92f, 0.32f, 0.8f);
+			var toolBar = new UIToolbar(toolBarFrame);
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleBottomMargin | UIViewAutoresizing.FlexibleWidth;
 
-			var btnFrame = new RectangleF(FirstToolButtonLeft, FirstToolButtonTop, ToolButtonSize, ToolButtonSize);
+			createToolbarButton(toolBar, DocumentActionTypes.ZoomOut, "zoomOut.png", zoomOut);
+			createToolbarButton(toolBar, DocumentActionTypes.ZoomIn, "zoomIn.png", zoomIn);
+			createToolbarSeparator(toolBar);
 
-			createToolbarButton(toolBar, DocumentActionTypes.NavigateToFirstPage, ref btnFrame, "Images/Toolbar/NavigateToFirst48.png", openFirstPage);
-			createToolbarButton(toolBar, DocumentActionTypes.NavigateToPriorPage, ref btnFrame, "Images/Toolbar/NavigateToPrior48.png", openPriorPage);
-			_btnNavigateToPage = createToolbarButton(toolBar, DocumentActionTypes.NavigateToPage, ref btnFrame, "Images/Toolbar/NavigateToPage48.png", () => {
-				var view = new GotoPageVC(p => OpenDocumentPage((int)p));
-				presentPopover(view, _btnNavigateToPage.Frame);
-			});
-			createToolbarButton(toolBar, DocumentActionTypes.NavigateToNextPage, ref btnFrame, "Images/Toolbar/NavigateToNext48.png", openNextPage);
-			createToolbarButton(toolBar, DocumentActionTypes.NavigateToLastPage, ref btnFrame, "Images/Toolbar/NavigateToLast48.png", openLastPage);
-			createToolbarSeparator(ref btnFrame);
-
-			createToolbarButton(toolBar, DocumentActionTypes.ZoomOut, ref btnFrame, "Images/Toolbar/ZoomOut48.png", zoomOut);
-			createToolbarButton(toolBar, DocumentActionTypes.ZoomIn, ref btnFrame, "Images/Toolbar/ZoomIn48.png", zoomIn);
-			createToolbarSeparator(ref btnFrame);
-
-			_btnNote = createToolbarButton(toolBar, DocumentActionTypes.Note, ref btnFrame, "Images/Toolbar/Note48.png", () => {
+			createToolbarButton(toolBar, DocumentActionTypes.Note, "note.png", () => {
 				var note = MgrAccessor.DocumentNoteMgr.Load(_documentId);
-				var view = new NoteVC(note, null);
-				presentPopover(view, _btnNote.Frame);
+				var vc = new NoteVC(note, null);
+				presentPopover(vc, toolBar.Frame);
 			});
-			_btnBookmarksList = createToolbarButton(toolBar, DocumentActionTypes.Bookmarks, ref btnFrame, "Images/Toolbar/BookmarksList48.png", () => {
+			createToolbarButton(toolBar, DocumentActionTypes.Bookmarks, "bookmarksList.png", () => {
 				var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_documentId);
-				var view = new BookmarksVC(_documentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
-				presentPopover(view, _btnBookmarksList.Frame);
+				var vc = new BookmarksVC(_documentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
+				presentPopover(vc, toolBar.Frame);
 			});
-			_btnThumbs = createToolbarButton(toolBar, DocumentActionTypes.Thumbs, ref btnFrame, "Images/Toolbar/Thumbs48.png", () => {
-				var view = new ThumbsVC(View.Bounds.Width, p => OpenDocumentPage((int)p));
-				presentPopover(view, _btnThumbs.Frame);
-				view.InitThumbs();
+			createToolbarButton(toolBar, DocumentActionTypes.Thumbs, "thumbs.png", () => {
+				var vc = new ThumbsVC(View.Bounds.Width, p => OpenDocumentPage((int)p));
+				presentPopover(vc, toolBar.Frame);
+				vc.InitThumbs();
 			});
-			createToolbarSeparator(ref btnFrame);
+			createToolbarSeparator(toolBar);
 
-			_btnAutoWidth = createToolbarButton(toolBar, DocumentActionTypes.AutoWidth, ref btnFrame, getImagePathForButton(DocumentActionTypes.AutoWidth), () => setAutoWidth());
-			_btnAutoHeight = createToolbarButton(toolBar, DocumentActionTypes.AutoHeight, ref btnFrame, getImagePathForButton(DocumentActionTypes.AutoHeight), () => setAutoHeight());
-			createToolbarSeparator(ref btnFrame);
+			_btnAutoWidth = createToolbarButton(toolBar, DocumentActionTypes.AutoWidth, getImagePathForButton(DocumentActionTypes.AutoWidth), () => setAutoWidth());
+			_btnAutoHeight = createToolbarButton(toolBar, DocumentActionTypes.AutoHeight, getImagePathForButton(DocumentActionTypes.AutoHeight), () => setAutoHeight());
+			createToolbarSeparator(toolBar);
 
-			createUserDefinedToolbarItems(toolBar, ref btnFrame);
+			createUserDefinedToolbarItems(toolBar);
 
 			return toolBar;
 		}
 
-		private void createToolbarSeparator(ref RectangleF frame)
+		protected virtual UIView createBottomToolbar()
 		{
-			frame.Offset(22, 0);
+			var bottomBarFrame = getRootViewFrameRect();
+			bottomBarFrame.Y += bottomBarFrame.Height - DefaultToolbarHeight;
+			bottomBarFrame.Height = DefaultToolbarHeight;
+
+			var bottomBar = new UIToolbar(bottomBarFrame);
+			bottomBar.AutoresizingMask = UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth;
+
+			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToFirstPage, "navigateToFirst.png", openFirstPage);
+			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToPriorPage, "navigateToPrior.png", openPriorPage);
+			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToPage, "navigateToPage.png", () => {
+				var vc = new GotoPageVC(p => OpenDocumentPage((int)p));
+				presentPopover(vc, bottomBar.Frame);
+			});
+			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToNextPage, "navigateToNext.png", openNextPage);
+			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToLastPage, "navigateToLast.png", openLastPage);
+			createToolbarSeparator(bottomBar);
+
+			var pageNumberLeft = bottomBarFrame.Width - PageNumberWidth - DefaultSpaceWidth;
+			var pageNumberLabelFrame = new RectangleF(pageNumberLeft, (bottomBarFrame.Height - PageNumberHeight) / 2, PageNumberWidth, PageNumberHeight);
+			_pageNumberLabel = new UILabel(pageNumberLabelFrame);
+			_pageNumberLabel.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
+			_pageNumberLabel.Font = UIFont.SystemFontOfSize(12.0f);
+			_pageNumberLabel.TextAlignment = UITextAlignment.Center;
+			_pageNumberLabel.TextColor = UIColor.Gray;
+			bottomBar.AddSubview(_pageNumberLabel);
+
+			var sliderWidth = pageNumberLeft - SliderLeft - DefaultSpaceWidth;
+			var sliderFrame = new RectangleF(SliderLeft, (bottomBarFrame.Height - SliderHeight) / 2, sliderWidth, SliderHeight);
+			_slider = new UISlider(sliderFrame);
+			_slider.MinValue = 1;
+			_slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			_slider.ValueChanged += delegate {
+				if (_pageNumberLabel != null) {
+					_pageNumberLabel.Text = string.Format(@"{0}/{1}", (int)_slider.Value, PDFDocument.PageCount);
+				}
+			};
+			_slider.TouchUpInside += delegate(object sender, EventArgs e) {
+				OpenDocumentPage((int)_slider.Value);
+			};
+			bottomBar.AddSubview(_slider);
+			
+			return bottomBar;
 		}
 
-		protected virtual UIButton createToolbarButton(UIView toolbar, DocumentActionTypes actionType, ref RectangleF frame, string imagePath, Action action)
+		private void addButtonToToolbarBar(UIToolbar toolbar, UIBarButtonItem item)
 		{
-			var btn = new UIButton(frame);
-			btn.SetImage(UIImage.FromFile(imagePath), UIControlState.Normal);
-			btn.TouchUpInside += delegate { 
+			var items = toolbar.Items ?? new UIBarButtonItem[0];
+			var itemsList = items.ToList();
+			itemsList.Add(item);
+			toolbar.SetItems(itemsList.ToArray(), false);
+		}
+
+		private void createToolbarSeparator(UIToolbar toolbar)
+		{
+			var item = new UIBarButtonItem(UIBarButtonSystemItem.FixedSpace);
+			addButtonToToolbarBar(toolbar, item);
+		}
+
+		protected virtual UIBarButtonItem createToolbarButton(UIToolbar toolbar, DocumentActionTypes actionType, string imagePath, Action action)
+		{
+			var btn = new UIBarButtonItem();
+			btn.Image = UIImage.FromFile(imagePath);
+			btn.Clicked += delegate { 
 				action();
 			};
-			toolbar.AddSubview(btn);
-			frame.Offset(44, 0);
+
+			addButtonToToolbarBar(toolbar, btn);
 
 			return btn;
 		}
 
-		protected virtual void createUserDefinedToolbarItems(UIView toolbar, ref RectangleF frame)
+		protected virtual void createUserDefinedToolbarItems(UIToolbar toolbar)
 		{
 			// Nothing. Should be overrided in child class.
-		}
-
-		protected virtual UIView createBottomBar()
-		{
-			var bottomBarFrame = getActualViewFrameRect();
-			bottomBarFrame.X += BarPaddingH;
-			bottomBarFrame.Y += bottomBarFrame.Height - (BottombarHeight + BarPaddingV);
-			bottomBarFrame.Width -= BarPaddingH * 2;
-			bottomBarFrame.Height = BottombarHeight;
-
-			var bottomBar = new UIXToolbarView(bottomBarFrame, 0.92f, 0.32f, 0.8f);
-			bottomBar.AutoresizingMask = UIViewAutoresizing.FlexibleTopMargin | UIViewAutoresizing.FlexibleWidth;
-
-			if (MgrAccessor.OptionsMgr.Settings.SliderVisible) {
-				float sliderWidth = bottomBarFrame.Width - 15;
-				if (MgrAccessor.OptionsMgr.Settings.PageNumberVisible) {
-					sliderWidth -= PageNumberLabelSize.Width;
-				}
-				var pageSliderFrame = new RectangleF(5, 10, sliderWidth, 20);
-				_slider = new UISlider(pageSliderFrame);
-				_slider.MinValue = 1;
-				_slider.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-				_slider.ValueChanged += delegate {
-					if (_pageNumberLabel != null) {
-						_pageNumberLabel.Text = string.Format(@"{0}/{1}", (int)_slider.Value, PDFDocument.PageCount);
-					}
-				};
-				_slider.TouchUpInside += delegate(object sender, EventArgs e) {
-					OpenDocumentPage((int)_slider.Value);
-				};
-				bottomBar.AddSubview(_slider);
-			}
-
-			if (MgrAccessor.OptionsMgr.Settings.PageNumberVisible) {
-				var pageNumberViewFrame = new RectangleF(bottomBarFrame.Width - PageNumberLabelSize.Width - 5, 5, PageNumberLabelSize.Width, PageNumberLabelSize.Height);
-				var pageNumberView = new UIView(pageNumberViewFrame);
-				pageNumberView.AutosizesSubviews = false;
-				pageNumberView.UserInteractionEnabled = false;
-				pageNumberView.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
-				pageNumberView.BackgroundColor = UIColor.FromWhiteAlpha(0.4f, 0.5f);
-				pageNumberView.Layer.CornerRadius = 5.0f;
-				pageNumberView.Layer.ShadowOffset = new SizeF(0.0f, 0.0f);
-				pageNumberView.Layer.ShadowPath = UIBezierPath.FromRect(pageNumberView.Bounds).CGPath;
-				pageNumberView.Layer.ShadowRadius = 2.0f;
-				pageNumberView.Layer.ShadowOpacity = 1.0f;
-
-				var pageNumberLabelFrame = RectangleFExtensions.Inset(pageNumberView.Bounds, 4.0f, 2.0f);
-				_pageNumberLabel = new UILabel(pageNumberLabelFrame);
-				_pageNumberLabel.AutosizesSubviews = false;
-				_pageNumberLabel.AutoresizingMask = UIViewAutoresizing.None;
-				_pageNumberLabel.TextAlignment = UITextAlignment.Center;
-				_pageNumberLabel.BackgroundColor = UIColor.Clear;
-				_pageNumberLabel.TextColor = UIColor.White;
-				_pageNumberLabel.Font = UIFont.SystemFontOfSize(16.0f);
-				_pageNumberLabel.ShadowOffset = new SizeF(0.0f, 1.0f);
-				_pageNumberLabel.ShadowColor = UIColor.Black;
-				_pageNumberLabel.AdjustsFontSizeToFitWidth = true;
-				_pageNumberLabel.MinimumFontSize = 12.0f;
-				
-				pageNumberView.AddSubview(_pageNumberLabel);
-				bottomBar.AddSubview(pageNumberView);
-			}
-			
-			return bottomBar;
 		}
 		#endregion
 
 		#region PDFDocument logic
 		private RectangleF getBookViewFrameRect()
 		{
-			var rect = getActualViewFrameRect();
+			var rect = getRootViewFrameRect();
 
-			if (_toolbar != null) {
-				rect.Y = _toolbar.Frame.Bottom;
-				rect.Height -= _toolbar.Frame.Height + BarPaddingV;
+			if (_topToolbar != null) {
+				rect.Y = _topToolbar.Frame.Bottom;
+				rect.Height -= _topToolbar.Frame.Height;
 			}
-			if (_bottomBar != null) {
-				rect.Height -= (rect.Bottom - _bottomBar.Frame.Top) + BarPaddingV;
+			if (_bottomToolbar != null) {
+				rect.Height -= (rect.Bottom - _bottomToolbar.Frame.Top);
 			}
 
 			return rect;
@@ -426,12 +407,12 @@ namespace mTouchPDFReader.Library.Views.Core
 			var ret = "";
 			if (actionType == DocumentActionTypes.AutoWidth) {
 				ret = _autoScaleMode == AutoScaleModes.AutoWidth 
-					? "Images/Toolbar/AutoWidth_Selected48.png" 
-					: "Images/Toolbar/AutoWidth48.png";
+					? "autoWidth_Selected.png" 
+					: "autoWidth.png";
 			} else if (actionType == DocumentActionTypes.AutoHeight) {
 				ret = _autoScaleMode == AutoScaleModes.AutoHeight 
-					? "Images/Toolbar/AutoHeight_Selected48.png" 
-					: "Images/Toolbar/AutoHeight48.png";
+					? "autoHeight_Selected.png" 
+					: "autoHeight.png";
 			}
 		
 			return ret;
@@ -513,8 +494,9 @@ namespace mTouchPDFReader.Library.Views.Core
 		protected virtual void setAutoScaleMode(AutoScaleModes autoScaleMode)
 		{
 			_autoScaleMode = autoScaleMode;
-			_btnAutoWidth.SetImage(UIImage.FromFile(getImagePathForButton(DocumentActionTypes.AutoWidth)), UIControlState.Normal);
-			_btnAutoHeight.SetImage(UIImage.FromFile(getImagePathForButton(DocumentActionTypes.AutoHeight)), UIControlState.Normal);
+			_btnAutoWidth.Image = UIImage.FromFile(getImagePathForButton(DocumentActionTypes.AutoWidth));
+			_btnAutoHeight.Image = UIImage.FromFile(getImagePathForButton(DocumentActionTypes.AutoHeight));
+
 			updatePageViewAutoScaleMode();
 		}
 

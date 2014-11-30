@@ -60,6 +60,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
 			toolBar.BarStyle = UIBarStyle.Black;
+
 			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 			toolBarTitle.BackgroundColor = UIColor.Clear;
@@ -67,16 +68,19 @@ namespace mTouchPDFReader.Library.Views.Management
 			toolBarTitle.TextColor = UIColor.White;
 			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
 			toolBarTitle.Text = "Bookmarks".t();
+
 			var btnAddBookmark = new UIButton(new RectangleF(5, 5, 30, 30));
-			btnAddBookmark.SetImage(UIImage.FromFile("Images/Toolbar/BookmarkAdd32.png"), UIControlState.Normal);
+			btnAddBookmark.SetImage(UIImage.FromFile("bookmarksList.png"), UIControlState.Normal);
 			btnAddBookmark.TouchUpInside += delegate {
 				setEditMode(UITableViewCellEditingStyle.Insert);
 			};
+
 			var btnDeleteBookmark = new UIButton(new RectangleF(43, 5, 30, 30));
-			btnDeleteBookmark.SetImage(UIImage.FromFile("Images/Toolbar/BookmarkDelete32.png"), UIControlState.Normal);
+			btnDeleteBookmark.SetImage(UIImage.FromFile("bookmarksList.png"), UIControlState.Normal);
 			btnDeleteBookmark.TouchUpInside += delegate { 
 				setEditMode(UITableViewCellEditingStyle.Delete); 
 			};
+
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnAddBookmark);
 			toolBar.AddSubview(btnDeleteBookmark);

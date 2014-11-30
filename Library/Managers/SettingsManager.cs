@@ -59,56 +59,50 @@ namespace mTouchPDFReader.Library.Managers
 				return;
 			}
 			_initialized = true;
-			
-			var optionsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), SettingsFileName);
+
 			try {
-				var optionsXmlDoc = new XmlDocument();
-				optionsXmlDoc.Load(optionsFullFileName);
-				object val = getNodeValue(optionsXmlDoc, "/Options/PageTransitionStyle", typeof(int));
+				var settingsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), SettingsFileName);
+				var settingsXmlDoc = new XmlDocument();
+				settingsXmlDoc.Load(settingsFullFileName);
+
+				object val = getNodeValue(settingsXmlDoc, "/Settings/PageTransitionStyle", typeof(int));
 				if (val != null) {
 					_settings.PageTransitionStyle = (UIPageViewControllerTransitionStyle)Convert.ToInt32(val);
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/PageNavigationOrientation", typeof(int));
+				val = getNodeValue(settingsXmlDoc, "/Settings/PageNavigationOrientation", typeof(int));
 				if (val != null) {
 					_settings.PageNavigationOrientation = (UIPageViewControllerNavigationOrientation)Convert.ToInt32(val);
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/ToolbarVisible", typeof(bool));
+				val = getNodeValue(settingsXmlDoc, "/Settings/TopToolbarVisible", typeof(bool));
 				if (val != null) {
-					_settings.ToolbarVisible = Convert.ToBoolean(val);
+					_settings.TopToolbarVisible = Convert.ToBoolean(val);
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/SliderVisible", typeof(bool));
+				val = getNodeValue(settingsXmlDoc, "/Settings/BottomToolbarVisible", typeof(bool));
 				if (val != null) {
-					_settings.SliderVisible = Convert.ToBoolean(val);
+					_settings.BottomToolbarVisible = Convert.ToBoolean(val);
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/PageNumberVisible", typeof(bool));
-				if (val != null) {
-					_settings.PageNumberVisible = Convert.ToBoolean(val);
-				}
-
-				val = getNodeValue(optionsXmlDoc, "/Options/AllowZoomByDoubleTouch", typeof(bool));
+				val = getNodeValue(settingsXmlDoc, "/Settings/AllowZoomByDoubleTouch", typeof(bool));
 				if (val != null) {
 					_settings.AllowZoomByDoubleTouch = Convert.ToBoolean(val);
 				}
-
-				val = getNodeValue(optionsXmlDoc, "/Options/AutoScaleMode", typeof(int));
+				val = getNodeValue(settingsXmlDoc, "/Settings/AutoScaleMode", typeof(int));
 				if (val != null) {
 					_settings.AutoScaleMode = (AutoScaleModes)Convert.ToInt32(val);
 				}
-
-				val = getNodeValue(optionsXmlDoc, "/Options/ZoomScaleLevels", typeof(int));
+				val = getNodeValue(settingsXmlDoc, "/Settings/ZoomScaleLevels", typeof(int));
 				if (val != null) {
 					_settings.ZoomScaleLevels = Convert.ToInt32(val);	
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/ThumbsBufferSize", typeof(int));
+				val = getNodeValue(settingsXmlDoc, "/Settings/ThumbsBufferSize", typeof(int));
 				if (val != null) {
 					_settings.ThumbsBufferSize = Convert.ToInt32(val);
 				}
-				val = getNodeValue(optionsXmlDoc, "/Options/ThumbSize", typeof(int));
+				val = getNodeValue(settingsXmlDoc, "/Settings/ThumbSize", typeof(int));
 				if (val != null) {
 					_settings.ThumbSize = Convert.ToInt32(val);
 				}
-			} catch (Exception) {
-				// Nothing
+			} catch (Exception ex) {
+				Console.WriteLine("SettingsManager.Load exception: " + ex.ToString());
 			}
 		}
 		
@@ -117,29 +111,28 @@ namespace mTouchPDFReader.Library.Managers
 			if (!_initialized) {
 				return;
 			}
-			
-			var optionsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), SettingsFileName);
+
 			try {
 				string xmlRow = 
 					"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" + 
-					"<Options>" + 
+					"<Settings>" + 
 					"	<PageTransitionStyle>" + (int)_settings.PageTransitionStyle + "</PageTransitionStyle>" +
 					"	<PageNavigationOrientation>" + (int)_settings.PageNavigationOrientation + "</PageNavigationOrientation>" +
-					"	<ToolbarVisible>" + _settings.ToolbarVisible + "</ToolbarVisible>" +
-					"	<SliderVisible>" + _settings.SliderVisible + "</SliderVisible>" + 
-					"	<PageNumberVisible>" + _settings.PageNumberVisible + "</PageNumberVisible>" +
+					"	<TopToolbarVisible>" + _settings.TopToolbarVisible + "</TopToolbarVisible>" +
+					"	<BottomToolbarVisible>" + _settings.BottomToolbarVisible + "</BottomToolbarVisible>" +
 					"	<AllowZoomByDoubleTouch>" + _settings.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
 					"	<ZoomScaleLevels>" + _settings.ZoomScaleLevels + "</ZoomScaleLevels>" +
 					"	<AutoScaleMode>" + (int)_settings.AutoScaleMode + "</AutoScaleMode>" +
 					"	<ThumbsBufferSize>" + _settings.ThumbsBufferSize + "</ThumbsBufferSize>" +
 					"	<ThumbSize>" + _settings.ThumbSize + "</ThumbSize>" +
-					"</Options>";
-				
-				var optionsXmlDoc = new XmlDocument();
-				optionsXmlDoc.LoadXml(xmlRow);
-				optionsXmlDoc.Save(optionsFullFileName);
-			} catch (Exception) {
-				// Nothing
+					"</Settings>";
+
+				var settingsFullFileName = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), SettingsFileName);
+				var settingsXmlDoc = new XmlDocument();
+				settingsXmlDoc.LoadXml(xmlRow);
+				settingsXmlDoc.Save(settingsFullFileName);
+			} catch (Exception ex) {
+				Console.WriteLine("SettingsManager.Save exception: " + ex.ToString());
 			}			
 		}
 		
@@ -162,8 +155,8 @@ namespace mTouchPDFReader.Library.Managers
 					}
 					return xmlNode.InnerText;
 				}
-			} catch (Exception) {
-				// Nothing	
+			} catch (Exception ex) {
+				Console.WriteLine("SettingsManager.getNodeValue exception: " + ex.ToString());
 			}
 			return null;
 		}

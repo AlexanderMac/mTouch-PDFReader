@@ -43,6 +43,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
 			toolBar.BarStyle = UIBarStyle.Black;
+
 			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 			toolBarTitle.BackgroundColor = UIColor.Clear;
@@ -50,8 +51,9 @@ namespace mTouchPDFReader.Library.Views.Management
 			toolBarTitle.TextColor = UIColor.White;
 			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
 			toolBarTitle.Text = "Go...".t();
+
 			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
-			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/NavigateToPage32.png"), UIControlState.Normal);
+			btnNavigate.SetImage(UIImage.FromFile("NavigateToPage.png"), UIControlState.Normal);
 			btnNavigate.TouchUpInside += delegate {
 				int pageNumber;
 				int.TryParse(_txtPageNumber.Text, out pageNumber);
@@ -64,6 +66,7 @@ namespace mTouchPDFReader.Library.Views.Management
 				}
 				_popoverController.Dismiss(true);
 			};
+
 			toolBar.AddSubview(toolBarTitle);
 			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);

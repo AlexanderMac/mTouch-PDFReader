@@ -33,9 +33,8 @@ namespace mTouchPDFReader.Library.Data.Objects
 		private const UIPageViewControllerTransitionStyle DefaultPageTransitionStyle = UIPageViewControllerTransitionStyle.PageCurl;
 		private const UIPageViewControllerNavigationOrientation DefaultPageNavigationOrientation = UIPageViewControllerNavigationOrientation.Horizontal;
 
-		private const bool DefaultToolbarVisible = true;
-		private const bool DefaultStatusbarVisible = true;
-		private const bool DefaultPageNumberVisible = true;
+		private const bool DefaultTopToolbarVisible = true;
+		private const bool DefaultBottomToolbarVisible = true;
 
 		private const AutoScaleModes DefaultAutoScaleMode = AutoScaleModes.AutoHeight;
 		private const int DefaultZoomScaleLevels = 10;
@@ -54,9 +53,8 @@ namespace mTouchPDFReader.Library.Data.Objects
 		#region Data
 		public UIPageViewControllerTransitionStyle PageTransitionStyle { get; set; }
 		public UIPageViewControllerNavigationOrientation PageNavigationOrientation { get; set; }
-		public bool ToolbarVisible { get; set; }
-		public bool SliderVisible { get; set; }
-		public bool PageNumberVisible { get; set; }
+		public bool TopToolbarVisible { get; set; }
+		public bool BottomToolbarVisible { get; set; }
 		public AutoScaleModes AutoScaleMode { get; set; }
 
 		public int ZoomScaleLevels {
@@ -133,9 +131,8 @@ namespace mTouchPDFReader.Library.Data.Objects
 		{
 			PageTransitionStyle = DefaultPageTransitionStyle;
 			PageNavigationOrientation = DefaultPageNavigationOrientation;
-			ToolbarVisible = DefaultToolbarVisible;
-			SliderVisible = DefaultStatusbarVisible;
-			PageNumberVisible = DefaultPageNumberVisible;
+			TopToolbarVisible = DefaultTopToolbarVisible;
+			BottomToolbarVisible = DefaultBottomToolbarVisible;
 			AutoScaleMode = DefaultAutoScaleMode;
 			ZoomScaleLevels = DefaultZoomScaleLevels;
 			AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
