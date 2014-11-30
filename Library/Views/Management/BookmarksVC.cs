@@ -28,16 +28,16 @@ using MonoTouch.Foundation;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Managers;
-using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management
 {
-	public class BookmarksVC : UIViewControllerWithPopover
+	public class BookmarksVC : UIViewController
 	{		
 		#region Data		
 		private int _documentId;	
 		private List<DocumentBookmark> _bookmarks;
 		private int _currentPageNumber;
+		private Action<object> _callbackAction;
 		private UITableView _bookmarksTable;
 		private UITableViewCell _newBookmarkCell;
 		private UITextField _newBookmarkNameTxt;
@@ -45,50 +45,52 @@ namespace mTouchPDFReader.Library.Views.Management
 		#endregion
 
 		#region UIViewController members
-		public BookmarksVC(int docId, List<DocumentBookmark> bookmarks, int currentPageNumber, Action<object> callbackAction) : base(null, null, callbackAction)
+		public BookmarksVC(int docId, List<DocumentBookmark> bookmarks, int currentPageNumber, Action<object> callbackAction) : base(null, null)
 		{
 			_documentId = docId;
 			_bookmarks = bookmarks;
 			_currentPageNumber = currentPageNumber;
+			_callbackAction = callbackAction;
 			_editMode = UITableViewCellEditingStyle.None;
 		}
 
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			
-			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
-			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
-			toolBar.BarStyle = UIBarStyle.Black;
+
+			var btnAddBookmark = new UIBarButtonItem();
+			btnAddBookmark.Image = UIImage.FromFile("add.png");
+			btnAddBookmark.Clicked += delegate {
+				setEditMode(UITableViewCellEditingStyle.Insert);
+			};
+			var btnDeleteBookmark = new UIBarButtonItem();
+			btnDeleteBookmark.Image = UIImage.FromFile("delete.png");
+			btnDeleteBookmark.Clicked += delegate {
+				setEditMode(UITableViewCellEditingStyle.Delete); 
+			};
+			var btnClose = new UIBarButtonItem();
+			btnClose.Image = UIImage.FromFile("close.png");
+			btnClose.Clicked += delegate { 
+				DismissViewController(true, null);
+			};
+			var space = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
 
 			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 			toolBarTitle.BackgroundColor = UIColor.Clear;
-			toolBarTitle.TextAlignment = UITextAlignment.Center;
 			toolBarTitle.TextColor = UIColor.White;
-			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
+			toolBarTitle.TextAlignment = UITextAlignment.Center;
 			toolBarTitle.Text = "Bookmarks".t();
 
-			var btnAddBookmark = new UIButton(new RectangleF(5, 5, 30, 30));
-			btnAddBookmark.SetImage(UIImage.FromFile("bookmarksList.png"), UIControlState.Normal);
-			btnAddBookmark.TouchUpInside += delegate {
-				setEditMode(UITableViewCellEditingStyle.Insert);
-			};
-
-			var btnDeleteBookmark = new UIButton(new RectangleF(43, 5, 30, 30));
-			btnDeleteBookmark.SetImage(UIImage.FromFile("bookmarksList.png"), UIControlState.Normal);
-			btnDeleteBookmark.TouchUpInside += delegate { 
-				setEditMode(UITableViewCellEditingStyle.Delete); 
-			};
-
+			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBar.BarStyle = UIBarStyle.Black;
+			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleBottomMargin |UIViewAutoresizing.FlexibleWidth;
+			toolBar.SetItems(new [] { btnAddBookmark, btnDeleteBookmark, space, btnClose }, false);
 			toolBar.AddSubview(toolBarTitle);
-			toolBar.AddSubview(btnAddBookmark);
-			toolBar.AddSubview(btnDeleteBookmark);
 			View.AddSubview(toolBar);
 			
 			_bookmarksTable = new UITableView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height), UITableViewStyle.Plain);
-			_bookmarksTable.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight;
-			_bookmarksTable.RowHeight = 55;
+			_bookmarksTable.AutoresizingMask = UIViewAutoresizing.FlexibleHeight;
 			_bookmarksTable.Source = new DataSource(this);
 			View.AddSubview(_bookmarksTable);
 			
@@ -100,11 +102,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			_newBookmarkNameTxt.BorderStyle = UITextBorderStyle.RoundedRect;
 			_newBookmarkNameTxt.Font = UIFont.SystemFontOfSize(16.0f);
 			_newBookmarkCell.AddSubview(_newBookmarkNameTxt);
-		}
-		
-		protected override SizeF getPopoverSize()
-		{
-			return new SizeF(400, 400);
 		}
 
 		private void setEditMode(UITableViewCellEditingStyle mode)
@@ -223,8 +220,8 @@ namespace mTouchPDFReader.Library.Views.Management
 					addNewRow(tableView, indexPath);
 				} else {
 					int pageNumber = _vc._bookmarks [getCorrectRowIndex(indexPath.Row)].PageNumber;
-					_vc.CallbackAction(pageNumber);
-					_vc._popoverController.Dismiss(true);
+					_vc._callbackAction(pageNumber);
+					_vc.DismissViewController(true, null);
 				}
 			}
 		}

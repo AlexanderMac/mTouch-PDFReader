@@ -26,11 +26,10 @@ using System.Drawing;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Data.Objects;
 using mTouchPDFReader.Library.Managers;
-using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management
 {
-	public class NoteVC : UIViewControllerWithPopover
+	public class NoteVC : UIViewController
 	{				
 		#region Data		
 		private DocumentNote _note;
@@ -38,7 +37,7 @@ namespace mTouchPDFReader.Library.Views.Management
 		#endregion
 
 		#region logic
-		public NoteVC(DocumentNote note, Action<object> callbackAction) : base(null, null, callbackAction) 
+		public NoteVC(DocumentNote note) : base(null, null) 
 		{
 			_note = note;
 		}
@@ -46,29 +45,33 @@ namespace mTouchPDFReader.Library.Views.Management
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			
-			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
-			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
-			toolBar.BarStyle = UIBarStyle.Black;
+
+			var btnApply = new UIBarButtonItem();
+			btnApply.Image = UIImage.FromFile("apply.png");
+			btnApply.Clicked += delegate {
+				_note.Note = _txtNote.Text;
+				MgrAccessor.DocumentNoteMgr.Save(_note);
+				DismissViewController(true, null);
+			};
+			var space = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+			var btnClose = new UIBarButtonItem();
+			btnClose.Image = UIImage.FromFile("close.png");
+			btnClose.Clicked += delegate { 
+				DismissViewController(true, null);
+			};
 
 			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
 			toolBarTitle.BackgroundColor = UIColor.Clear;
-			toolBarTitle.TextAlignment = UITextAlignment.Center;
 			toolBarTitle.TextColor = UIColor.White;
-			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
+			toolBarTitle.TextAlignment = UITextAlignment.Center;
 			toolBarTitle.Text = "Note".t();
 
-			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
-			btnNavigate.SetImage(UIImage.FromFile("Images/Toolbar/Save32.png"), UIControlState.Normal);
-			btnNavigate.TouchUpInside += delegate {
-				_note.Note = _txtNote.Text;
-				MgrAccessor.DocumentNoteMgr.Save(_note);
-				_popoverController.Dismiss(true);
-			};
-
+			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBar.BarStyle = UIBarStyle.Black;
+			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			toolBar.SetItems(new [] { btnApply, space, btnClose }, false);
 			toolBar.AddSubview(toolBarTitle);
-			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
 			_txtNote = new UITextView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height));
@@ -76,11 +79,6 @@ namespace mTouchPDFReader.Library.Views.Management
 			_txtNote.Font = UIFont.SystemFontOfSize(17.0f);
 			_txtNote.Text = _note.Note;
 			View.AddSubview(_txtNote);
-		}
-		
-		protected override SizeF getPopoverSize()
-		{
-			return new SizeF(400, 400);
 		}
 		#endregion
 	}

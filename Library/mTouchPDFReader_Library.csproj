@@ -65,7 +65,6 @@
     <Compile Include="Views\Core\PDFDocument.cs" />
     <Compile Include="Views\Core\ThumbView.cs" />
     <Compile Include="Views\Core\ThumbWithPageNumberView.cs" />
-    <Compile Include="Views\XViews\UIViewControllerWithPopover.cs" />
     <Compile Include="Views\Management\BookmarksVC.cs" />
     <Compile Include="Views\Management\GotoPageVC.cs" />
     <Compile Include="Views\Management\NoteVC.cs" />
@@ -128,5 +127,17 @@
     <BundleResource Include="Resources\autoWidth_Selected.png" />
     <BundleResource Include="Resources\autoWidth_Selected%402x.png" />
     <BundleResource Include="Resources\autoWidth_Selected%403x.png" />
+    <BundleResource Include="Resources\add.png" />
+    <BundleResource Include="Resources\add%402x.png" />
+    <BundleResource Include="Resources\add%403x.png" />
+    <BundleResource Include="Resources\apply.png" />
+    <BundleResource Include="Resources\apply%402x.png" />
+    <BundleResource Include="Resources\apply%403x.png" />
+    <BundleResource Include="Resources\close.png" />
+    <BundleResource Include="Resources\close%402x.png" />
+    <BundleResource Include="Resources\close%403x.png" />
+    <BundleResource Include="Resources\delete.png" />
+    <BundleResource Include="Resources\delete%402x.png" />
+    <BundleResource Include="Resources\delete%403x.png" />
   </ItemGroup>
 </Project>

@@ -25,12 +25,11 @@ using System;
 using System.Collections.Generic;
 using System.Drawing;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.XViews;
 using mTouchPDFReader.Library.Managers;
 
 namespace mTouchPDFReader.Library.Views.Core
 {
-	public class ThumbsVC : UIViewControllerWithPopover
+	public class ThumbsVC : UIViewController
 	{		
 		#if DEBUG
 		private static void WriteMessageToDebugLog(string method, string message)
@@ -42,7 +41,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		#region Data			
 		private const int ThumbPadding = 20;		
 
-		private bool _isInitializing;
+		private bool _initializing;
 		private readonly float _parentViewWidth;
 		private readonly Action<object> _openPageCallback;
 		private UIScrollView _scrollView;
@@ -51,28 +50,45 @@ namespace mTouchPDFReader.Library.Views.Core
 		private int _maxVisibleThumbsCount;
 		private int _firstVisibleThumbNumber;
 		private float _currentContentOffsetX;
-		private int _scrollDirection;		
+		private int _scrollDirection;
 		#endregion
 			
 		#region UIViewController members		
-		public ThumbsVC(float parentViewWidth, Action<object> callbackAction) 
-			: base(null, null, callbackAction)
+		public ThumbsVC(float parentViewWidth, Action<object> callbackAction) : base(null, null)
 		{
-			_isInitializing = false;
+			_initializing = false;
 			_parentViewWidth = parentViewWidth;
 			_openPageCallback = callbackAction; 
 			_thumbViews = new List<ThumbWithPageNumberView>();
-			_thumbViews.Capacity = MgrAccessor.SettingsMgr.Settings.ThumbsBufferSize;					
+			_thumbViews.Capacity = MgrAccessor.SettingsMgr.Settings.ThumbsBufferSize;
 		}				
 
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
+
+			var space = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+			var btnClose = new UIBarButtonItem();
+			btnClose.Image = UIImage.FromFile("close.png");
+			btnClose.Clicked += delegate { 
+				DismissViewController(true, null);
+			};
+
+			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			toolBarTitle.BackgroundColor = UIColor.Clear;
+			toolBarTitle.TextColor = UIColor.White;
+			toolBarTitle.TextAlignment = UITextAlignment.Center;
+			toolBarTitle.Text = "Thumbs".t(); // TODO: rename
+
+			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBar.BarStyle = UIBarStyle.Black;
+			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			toolBar.SetItems(new [] { space, btnClose }, false);
+			toolBar.AddSubview(toolBarTitle);
+			View.AddSubview(toolBar);
 			
-			View.Frame = new RectangleF(View.Frame.Left, View.Frame.Top, _parentViewWidth, View.Frame.Height);
-			View.BackgroundColor = UIColor.Clear;
-			
-			_scrollView = new UIScrollView(View.Bounds) 
+			_scrollView = new UIScrollView(new RectangleF(0, 44, View.Bounds.Width, 44)) 
 				{
 					ScrollsToTop = false, 
 					DelaysContentTouches = false, 
@@ -84,21 +100,20 @@ namespace mTouchPDFReader.Library.Views.Core
 					UserInteractionEnabled = true, 
 					AutosizesSubviews = false
 				};
-			_scrollView.Scrolled += ScrollViewScrolled;
-			
+			_scrollView.Scrolled += ScrollViewScrolled;			
 			View.AddSubview(_scrollView);
+
+			var pageCtrl = new UIPageControl(new RectangleF(0, View.Bounds.Height - 30, View.Bounds.Width, 20));
+			pageCtrl.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin; 
+			pageCtrl.Pages = 10;
+			View.AddSubview(pageCtrl);
 		}
-		
-		protected override SizeF getPopoverSize()
-		{
-			return new SizeF(_parentViewWidth - 20, ThumbPadding * 2 + MgrAccessor.SettingsMgr.Settings.ThumbSize);
-		}			
 		#endregion
 		
 		#region UIScrollViewDelegate members		
 		private void ScrollViewScrolled(object sender, EventArgs args)
 		{
-			if (_isInitializing) {
+			if (_initializing) {
 				return;
 			}
 			
@@ -229,7 +244,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		
 		private void calcParameters()
 		{
-			_isInitializing = true;
+			_initializing = true;
 			
 			_maxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)MgrAccessor.SettingsMgr.Settings.ThumbSize);
 			if (_maxVisibleThumbsCount > PDFDocument.PageCount) {
@@ -261,7 +276,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			
 			createThumbs();
 			
-			_isInitializing = false;
+			_initializing = false;
 		}
 				
 		private void thumbSelected(ThumbWithPageNumberView thumbView)

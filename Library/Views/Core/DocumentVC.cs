@@ -27,7 +27,6 @@ using System.Linq;
 using System.Collections.Generic;
 using MonoTouch.CoreGraphics;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.XViews;
 using mTouchPDFReader.Library.Views.Management;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Library.Data.Enums;
@@ -198,13 +197,6 @@ namespace mTouchPDFReader.Library.Views.Core
 
 			return rect;
 		}
-
-		private void presentPopover(UIViewControllerWithPopover viewCtrl, RectangleF frame)
-		{
-			var popoverController = new UIPopoverController(viewCtrl);
-			viewCtrl.PopoverController = popoverController;
-			popoverController.PresentFromRect(frame, View, UIPopoverArrowDirection.Any, true);
-		}
 		
 		private UIInterfaceOrientation getDeviceOrientation()
 		{
@@ -242,23 +234,26 @@ namespace mTouchPDFReader.Library.Views.Core
 
 			createToolbarButton(toolBar, DocumentActionTypes.Note, "note.png", () => {
 				var note = MgrAccessor.DocumentNoteMgr.Load(_documentId);
-				var vc = new NoteVC(note, null);
-				presentPopover(vc, toolBar.Frame);
+				var vc = new NoteVC(note);
+				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+				PresentViewController(vc, true, null);
 			});
 			createToolbarButton(toolBar, DocumentActionTypes.Bookmarks, "bookmarksList.png", () => {
 				var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_documentId);
 				var vc = new BookmarksVC(_documentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
-				presentPopover(vc, toolBar.Frame);
+				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+				PresentViewController(vc, true, null);
 			});
 			createToolbarButton(toolBar, DocumentActionTypes.Thumbs, "thumbs.png", () => {
 				var vc = new ThumbsVC(View.Bounds.Width, p => OpenDocumentPage((int)p));
-				presentPopover(vc, toolBar.Frame);
+				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+				PresentViewController(vc, true, null);
 				vc.InitThumbs();
 			});
 			createToolbarSeparator(toolBar);
 
-			_btnAutoWidth = createToolbarButton(toolBar, DocumentActionTypes.AutoWidth, getImagePathForButton(DocumentActionTypes.AutoWidth), () => setAutoWidth());
-			_btnAutoHeight = createToolbarButton(toolBar, DocumentActionTypes.AutoHeight, getImagePathForButton(DocumentActionTypes.AutoHeight), () => setAutoHeight());
+			_btnAutoWidth = createToolbarButton(toolBar, DocumentActionTypes.AutoWidth, getImagePathForButton(DocumentActionTypes.AutoWidth), setAutoWidth);
+			_btnAutoHeight = createToolbarButton(toolBar, DocumentActionTypes.AutoHeight, getImagePathForButton(DocumentActionTypes.AutoHeight), setAutoHeight);
 			createToolbarSeparator(toolBar);
 
 			createUserDefinedToolbarItems(toolBar);
@@ -279,7 +274,8 @@ namespace mTouchPDFReader.Library.Views.Core
 			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToPriorPage, "navigateToPrior.png", openPriorPage);
 			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToPage, "navigateToPage.png", () => {
 				var vc = new GotoPageVC(p => OpenDocumentPage((int)p));
-				presentPopover(vc, bottomBar.Frame);
+				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
+				PresentViewController(vc, true, null);
 			});
 			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToNextPage, "navigateToNext.png", openNextPage);
 			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToLastPage, "navigateToLast.png", openLastPage);

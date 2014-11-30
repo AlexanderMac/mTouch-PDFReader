@@ -26,35 +26,29 @@ using System.Drawing;
 using MonoTouch.UIKit;
 using mTouchPDFReader.Library.Views.Core;
 using mTouchPDFReader.Library.Managers;
-using mTouchPDFReader.Library.XViews;
 
 namespace mTouchPDFReader.Library.Views.Management
 {
-	public class GotoPageVC : UIViewControllerWithPopover
-	{			
-		private UITextField _txtPageNumber;		
+	public class GotoPageVC : UIViewController
+	{
+		#region Data
+		private UITextField _txtPageNumber;
+		private Action<object> _callbackAction;
+		#endregion
 
-		public GotoPageVC(Action<object> callbackAction) : base(null, null, callbackAction)	{}
+		#region GotoPageVC members
+		public GotoPageVC(Action<object> callbackAction) : base(null, null)	
+		{
+			_callbackAction = callbackAction;
+		}
 		
 		public override void ViewDidLoad()
 		{
 			base.ViewDidLoad();
-			
-			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
-			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleBottomMargin;
-			toolBar.BarStyle = UIBarStyle.Black;
 
-			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
-			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
-			toolBarTitle.BackgroundColor = UIColor.Clear;
-			toolBarTitle.TextAlignment = UITextAlignment.Center;
-			toolBarTitle.TextColor = UIColor.White;
-			toolBarTitle.Font = UIFont.SystemFontOfSize(18.0f);
-			toolBarTitle.Text = "Go...".t();
-
-			var btnNavigate = new UIButton(new RectangleF(5, 5, 30, 30));
-			btnNavigate.SetImage(UIImage.FromFile("NavigateToPage.png"), UIControlState.Normal);
-			btnNavigate.TouchUpInside += delegate {
+			var btnApply = new UIBarButtonItem();
+			btnApply.Image = UIImage.FromFile("apply.png");
+			btnApply.Clicked += delegate { 
 				int pageNumber;
 				int.TryParse(_txtPageNumber.Text, out pageNumber);
 				if ((pageNumber <= 0) || (pageNumber > PDFDocument.PageCount)) {
@@ -62,13 +56,29 @@ namespace mTouchPDFReader.Library.Views.Management
 						alert.Show();
 					}
 				} else {
-					CallbackAction(pageNumber);
+					_callbackAction(pageNumber);
 				}
-				_popoverController.Dismiss(true);
+				DismissViewController(true, null);
+			};
+			var space = new UIBarButtonItem(UIBarButtonSystemItem.FlexibleSpace);
+			var btnClose = new UIBarButtonItem();
+			btnClose.Image = UIImage.FromFile("close.png");
+			btnClose.Clicked += delegate { 
+				DismissViewController(true, null);
 			};
 
+			var toolBarTitle = new UILabel(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBarTitle.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			toolBarTitle.BackgroundColor = UIColor.Clear;
+			toolBarTitle.TextColor = UIColor.White;
+			toolBarTitle.TextAlignment = UITextAlignment.Center;
+			toolBarTitle.Text = "Go...".t(); // TODO: rename
+
+			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
+			toolBar.BarStyle = UIBarStyle.Black;
+			toolBar.AutoresizingMask = UIViewAutoresizing.FlexibleWidth;
+			toolBar.SetItems(new [] { btnApply, space, btnClose }, false);
 			toolBar.AddSubview(toolBarTitle);
-			toolBar.AddSubview(btnNavigate);
 			View.AddSubview(toolBar);
 			
 			_txtPageNumber = new UITextField(new RectangleF(20, 58, View.Bounds.Width - 40, 31));
@@ -76,14 +86,10 @@ namespace mTouchPDFReader.Library.Views.Management
 			_txtPageNumber.BorderStyle = UITextBorderStyle.RoundedRect;
 			_txtPageNumber.KeyboardType = UIKeyboardType.NumberPad;
 			_txtPageNumber.Font = UIFont.SystemFontOfSize(17.0f);
-			_txtPageNumber.Text = PDFDocument.CurrentPageNumber.ToString();
+			_txtPageNumber.Placeholder = "Enter page number"; // TODO
 			View.AddSubview(_txtPageNumber);
 		}
-		
-		protected override SizeF getPopoverSize()
-		{
-			return new SizeF(200, 100);
-		}
+		#endregion
 	}
 }
 
