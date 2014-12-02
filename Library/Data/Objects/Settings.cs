@@ -44,8 +44,6 @@ namespace mTouchPDFReader.Library.Data.Objects
 	
 		public const int MinZoomScaleLevels = 2;
 		public const int MaxZoomScaleLevels = 10;
-		public const int MinThumbsBufferSize = 15;
-		public const int MaxThumbsBufferSize = 100;
 		public const int MinThumbSize = 100;
 		public const int MaxThumbSize = 200;	
 		#endregion
@@ -76,24 +74,6 @@ namespace mTouchPDFReader.Library.Data.Objects
 		private int _zoomScaleLevels;
 		
 		public bool AllowZoomByDoubleTouch { get; set; }
-
-		public int ThumbsBufferSize {
-			get {
-				return _thumbsBufferSize;
-			}
-			set {
-				if (_thumbsBufferSize != value) {
-					_thumbsBufferSize = value;
-					if (_thumbsBufferSize < MinThumbsBufferSize) {
-						_thumbsBufferSize = MinThumbsBufferSize;
-					}
-					if (_thumbsBufferSize > MaxThumbsBufferSize) {
-						_thumbsBufferSize = MaxThumbsBufferSize;
-					}
-				}
-			}
-		}
-		private int _thumbsBufferSize;
 
 		public int ThumbSize {
 			get {
@@ -136,7 +116,6 @@ namespace mTouchPDFReader.Library.Data.Objects
 			AutoScaleMode = DefaultAutoScaleMode;
 			ZoomScaleLevels = DefaultZoomScaleLevels;
 			AllowZoomByDoubleTouch = DefaultAllowZoomByDoubleTouch;
-			_thumbsBufferSize = DefaultThumbsBufferSize;
 			_thumbSize = DefaultThumbSize;
 		}
 		#endregion

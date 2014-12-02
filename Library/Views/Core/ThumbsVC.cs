@@ -31,36 +31,30 @@ namespace mTouchPDFReader.Library.Views.Core
 {
 	public class ThumbsVC : UIViewController
 	{		
-		#if DEBUG
-		private static void WriteMessageToDebugLog(string method, string message)
-		{
-			Console.WriteLine(string.Format("{0} {1}", method, message));
-		}		
-		#endif
-		
 		#region Data			
-		private const int ThumbPadding = 20;		
+		private const int ThumbMargin = 5;
+		private const int ThumbCols = 3;
 
-		private bool _initializing;
-		private readonly float _parentViewWidth;
 		private readonly Action<object> _openPageCallback;
-		private UIScrollView _scrollView;
-		private readonly List<ThumbWithPageNumberView> _thumbViews;
-		private ThumbWithPageNumberView _currentThumbView;
-		private int _maxVisibleThumbsCount;
-		private int _firstVisibleThumbNumber;
-		private float _currentContentOffsetX;
-		private int _scrollDirection;
+		private UIView _thumbsViewContainer;
+		private UIPageControl _thumbsPageControl;
+
+		private class ThumbsPageInfo
+		{
+			public int ThumbSize { get; set; }
+			public int ThumbRows { get; set; }
+			public int ThumbsCountPerPage {
+				get {
+					return ThumbCols * ThumbRows;
+				}
+			}
+		}
 		#endregion
 			
 		#region UIViewController members		
-		public ThumbsVC(float parentViewWidth, Action<object> callbackAction) : base(null, null)
+		public ThumbsVC(Action<object> callbackAction) : base(null, null)
 		{
-			_initializing = false;
-			_parentViewWidth = parentViewWidth;
 			_openPageCallback = callbackAction; 
-			_thumbViews = new List<ThumbWithPageNumberView>();
-			_thumbViews.Capacity = MgrAccessor.SettingsMgr.Settings.ThumbsBufferSize;
 		}				
 
 		public override void ViewDidLoad()
@@ -79,7 +73,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			toolBarTitle.BackgroundColor = UIColor.Clear;
 			toolBarTitle.TextColor = UIColor.White;
 			toolBarTitle.TextAlignment = UITextAlignment.Center;
-			toolBarTitle.Text = "Thumbs".t(); // TODO: rename
+			toolBarTitle.Text = "Thumbs".t();
 
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.BarStyle = UIBarStyle.Black;
@@ -87,211 +81,82 @@ namespace mTouchPDFReader.Library.Views.Core
 			toolBar.SetItems(new [] { space, btnClose }, false);
 			toolBar.AddSubview(toolBarTitle);
 			View.AddSubview(toolBar);
-			
-			_scrollView = new UIScrollView(new RectangleF(0, 44, View.Bounds.Width, 44)) 
-				{
-					ScrollsToTop = false, 
-					DelaysContentTouches = false, 
-					ShowsVerticalScrollIndicator = false, 
-					ShowsHorizontalScrollIndicator = true, 
-					AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight, 
-					ContentMode = UIViewContentMode.Redraw, 
-					BackgroundColor = UIColor.Clear, 
-					UserInteractionEnabled = true, 
-					AutosizesSubviews = false
-				};
-			_scrollView.Scrolled += ScrollViewScrolled;			
-			View.AddSubview(_scrollView);
 
-			var pageCtrl = new UIPageControl(new RectangleF(0, View.Bounds.Height - 30, View.Bounds.Width, 20));
-			pageCtrl.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin; 
-			pageCtrl.Pages = 10;
-			View.AddSubview(pageCtrl);
+			_thumbsViewContainer = new UIView(new RectangleF(0, 44, View.Bounds.Width, View.Bounds.Height - 85)); 
+			_thumbsViewContainer.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleHeight; 
+			_thumbsViewContainer.BackgroundColor = UIColor.Gray;
+			View.AddSubview(_thumbsViewContainer);
+
+			_thumbsPageControl = new UIPageControl(new RectangleF(0, View.Bounds.Height - 30, View.Bounds.Width, 20));
+			_thumbsPageControl.AutoresizingMask = UIViewAutoresizing.FlexibleWidth | UIViewAutoresizing.FlexibleTopMargin;
+			_thumbsPageControl.ValueChanged += delegate {
+				createThumbsPage(_thumbsPageControl.CurrentPage);
+			};
+			View.AddSubview(_thumbsPageControl);
+		}
+
+		public override void ViewWillLayoutSubviews()
+		{
+			base.ViewWillLayoutSubviews();
+
+			createThumbsPage(0);
+			var thumbsPageInfo = getThumbsPageInfo();
+			_thumbsPageControl.Pages = (int)Math.Ceiling(PDFDocument.PageCount / (float)thumbsPageInfo.ThumbsCountPerPage);
 		}
 		#endregion
-		
-		#region UIScrollViewDelegate members		
-		private void ScrollViewScrolled(object sender, EventArgs args)
-		{
-			if (_initializing) {
-				return;
-			}
-			
-			#if DEBUG
-			WriteMessageToDebugLog("ScrollViewScrolled", 
-				string.Format("mScrollView [ContentOffset={0}, Bounds={1}, ContentSize={2}]", _scrollView.ContentOffset.X, _scrollView.Bounds, _scrollView.ContentSize));
-			#endif
-			if (_scrollView.ContentOffset.X == _currentContentOffsetX) {
-				#if DEBUG
-				WriteMessageToDebugLog("ScrollViewScrolled", "1");
-				#endif
-				return;
-			}
-			if ((_scrollView.ContentOffset.X < 0) || (_scrollView.ContentOffset.X > _scrollView.ContentSize.Width - _scrollView.Bounds.Width + 2)) {
-				#if DEBUG
-				WriteMessageToDebugLog("ScrollViewScrolled", "2");
-				#endif
-				return;
-			}
-
-			int newThumbNumber = getThumbNumberByX(_scrollView.ContentOffset.X);
-			#if DEBUG
-			WriteMessageToDebugLog("ScrollViewScrolled", string.Format("mFirstVisibleThumbNumber={0}, newThumbNumber={1}", _firstVisibleThumbNumber, newThumbNumber));
-			#endif
-			if (newThumbNumber == -1) {
-				return;
-			}
-			if (_firstVisibleThumbNumber == newThumbNumber) {
-				return;
-			}			
-			
-			_scrollDirection = (newThumbNumber < _firstVisibleThumbNumber) ? -1 : 1;
-			_currentContentOffsetX = _scrollView.ContentOffset.X;
-			_firstVisibleThumbNumber = newThumbNumber;
-			
-			createThumbs();
-		}				
-		#endregion
 				
-		#region Logic		
-		private int getThumbNumberByX(float x)
+		#region Logic
+		private void createThumbsPage(int thumbsPageNumber)
 		{
-			if ((x < 0) || (x > _scrollView.ContentSize.Width - ThumbPadding)) {
-				return -1;
-			}
-			int retValue = (int)(x / (float)(MgrAccessor.SettingsMgr.Settings.ThumbSize + ThumbPadding)) + 1;
-			#if DEBUG
-			WriteMessageToDebugLog("GetThumbNumberByX", string.Format("x = {0}, pageNumber={1}", x, retValue));
-			#endif
+			var thumbsPageInfo = getThumbsPageInfo();
 
-			return retValue;
-		}
-		
-		private RectangleF getThumbFrameByPage(int pageNumber)
-		{
-			float left = (pageNumber - 1) * (ThumbPadding + MgrAccessor.SettingsMgr.Settings.ThumbSize) + ThumbPadding;
-			var retValue = new RectangleF(left, ThumbPadding, MgrAccessor.SettingsMgr.Settings.ThumbSize, MgrAccessor.SettingsMgr.Settings.ThumbSize);
-			#if DEBUG
-			WriteMessageToDebugLog("GetThumbFrameByPage", string.Format("frame = {0}", retValue));
-			#endif
-			return retValue;
-		}
-		
-		private void createThumbs()
-		{
-			for (int i = _firstVisibleThumbNumber; i <= _firstVisibleThumbNumber + _maxVisibleThumbsCount; i++) {
-				createThumbForPageIfNotExists(i);
-			}
-		}
-		
-		private ThumbWithPageNumberView createThumbForPageIfNotExists(int pageNumber)
-		{
-			if ((pageNumber <= 0) || (pageNumber > PDFDocument.PageCount)) {
-				return null;
-			}
-			
-			foreach (var thumbView in _thumbViews) {
-				if (thumbView.PageNumber == pageNumber) {
-					return thumbView;
+			var thumbViews = new List<UIView>();
+			var pageNumber = ThumbCols * thumbsPageInfo.ThumbRows * thumbsPageNumber + 1;
+			var top = ThumbMargin;
+			for (var r = 0; r < thumbsPageInfo.ThumbRows; r++) {
+				var left = ThumbMargin;
+				for (var c = 0; c < ThumbCols; c++) {
+					var thumbRect = new RectangleF(left, top, thumbsPageInfo.ThumbSize, thumbsPageInfo.ThumbSize);
+					var thumbView = new ThumbWithPageNumberView(thumbRect, pageNumber, thumbSelected);
+					if (pageNumber == PDFDocument.CurrentPageNumber) {
+						thumbView.SetAsSelected();
+					}
+					thumbViews.Add(thumbView);
+
+					left += thumbsPageInfo.ThumbSize + ThumbMargin;
+					pageNumber++;
+					if (pageNumber > PDFDocument.PageCount) {
+						break;
+					}
+				}
+				top += thumbsPageInfo.ThumbSize + ThumbMargin;
+				if (pageNumber > PDFDocument.PageCount) {
+					break;
 				}
 			}
-			
-			RectangleF viewRect = getThumbFrameByPage(pageNumber);
-			var newThumbView = new ThumbWithPageNumberView(viewRect, pageNumber, thumbSelected);
-			if (pageNumber == PDFDocument.CurrentPageNumber) {
-				_currentThumbView = newThumbView;
-				newThumbView.SetAsSelected();
-			}
-
-			_scrollView.AddSubview(newThumbView);
-			if (_scrollDirection > 0) {
-				_thumbViews.Add(newThumbView);
-			} else {
-				_thumbViews.Insert(0, newThumbView);
-			}
-			#if DEBUG
-			WriteMessageToDebugLog("CreateThumb", string.Format("page={0}, viewRect={1}", pageNumber, viewRect));
-			#endif
-			
-			if (_thumbViews.Count > MgrAccessor.SettingsMgr.Settings.ThumbsBufferSize) {
-				if (_scrollDirection > 0) {
-					_thumbViews [0].RemoveFromSuperview();
-					_thumbViews.RemoveAt(0);
-				} else {
-					_thumbViews [_thumbViews.Count - 1].RemoveFromSuperview();
-					_thumbViews.RemoveAt(_thumbViews.Count - 1);
-				}
-			}
-			#if DEBUG
-			WriteMessageToDebugLog("CreateThumb", string.Format("currentBufferSize={0}", _thumbViews.Count));
-			#endif
-
-			return newThumbView;
-		}
-		
-		private void updateScrollViewContentSize()
-		{
-			float contentWidth = (ThumbPadding + MgrAccessor.SettingsMgr.Settings.ThumbSize) * PDFDocument.PageCount + ThumbPadding;
-			float contentHeight = _scrollView.Frame.Size.Height;
-			_scrollView.ContentSize = new SizeF(contentWidth, contentHeight);
-		}
-
-		public virtual void InitThumbs()
-		{
-			updateScrollViewContentSize();
-			calcParameters();
-		}
-		
-		private void calcParameters()
-		{
-			_initializing = true;
-			
-			_maxVisibleThumbsCount = (int)Math.Ceiling(View.Bounds.Width / (float)MgrAccessor.SettingsMgr.Settings.ThumbSize);
-			if (_maxVisibleThumbsCount > PDFDocument.PageCount) {
-				_maxVisibleThumbsCount = PDFDocument.PageCount;
-			}
-			
-			if (_maxVisibleThumbsCount == PDFDocument.PageCount) {
-				_firstVisibleThumbNumber = 1;
-			} else {
-				int maxThumb = PDFDocument.CurrentPageNumber + _maxVisibleThumbsCount - 1;
-				if (maxThumb <= PDFDocument.PageCount) {
-					_firstVisibleThumbNumber = PDFDocument.CurrentPageNumber;
-				} else {
-					_firstVisibleThumbNumber = PDFDocument.PageCount - _maxVisibleThumbsCount + 2;
-				}
-			}
-			#if DEBUG
-			WriteMessageToDebugLog("CalcParameters", string.Format("mVisibleThumbsMaxCount={0}, mFirstVisibleThumbNumber={1}", _maxVisibleThumbsCount, _firstVisibleThumbNumber));
-			#endif
-			
-			_scrollDirection = 1;
-			
-			RectangleF viewRect = getThumbFrameByPage(_firstVisibleThumbNumber);
-			_scrollView.ContentOffset = new PointF(viewRect.X - ThumbPadding, _scrollView.ContentOffset.Y);
-			_currentContentOffsetX = _scrollView.ContentOffset.X;
-			#if DEBUG
-			WriteMessageToDebugLog("CalcParameters", string.Format("mScrollView.ContentOffset.X={0}", _scrollView.ContentOffset.X));
-			#endif
-			
-			createThumbs();
-			
-			_initializing = false;
-		}
 				
+			foreach (var view in _thumbsViewContainer.Subviews) {
+				view.RemoveFromSuperview();
+			}
+			_thumbsViewContainer.AddSubviews(thumbViews.ToArray());
+		}
+
+		private ThumbsPageInfo getThumbsPageInfo()
+		{
+			var ret = new ThumbsPageInfo();
+			ret.ThumbSize = (int)((_thumbsViewContainer.Bounds.Width - ThumbMargin) / ThumbCols) - ThumbMargin;
+			ret.ThumbRows = (int)((_thumbsViewContainer.Bounds.Height - ThumbMargin) / ret.ThumbSize);
+
+			return ret;
+		}
+
 		private void thumbSelected(ThumbWithPageNumberView thumbView)
 		{
-			if (thumbView != _currentThumbView) {
-				if (_currentThumbView != null) {
-					_currentThumbView.SetAsUnselected();
-				}
+			thumbView.SetAsSelected();
+			_openPageCallback(thumbView.PageNumber);
 
-				_currentThumbView = thumbView;
-				_currentThumbView.SetAsSelected();
-
-				_openPageCallback(_currentThumbView.PageNumber);
-			}
-		}			
+			DismissViewController(true, null);
+		}		
 		#endregion
 	}
 }

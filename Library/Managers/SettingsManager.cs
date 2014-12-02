@@ -34,7 +34,7 @@ namespace mTouchPDFReader.Library.Managers
 	public class SettingsManager : ISettingsManager
 	{		
 		#region Data		
-		private const string SettingsFileName = "mTouchPDFReader.Settings.xml";		
+		private const string SettingsFileName = "mTouchPDFReader.Settings.v30.xml";		
 					
 		public Settings Settings {
 			get {
@@ -93,10 +93,6 @@ namespace mTouchPDFReader.Library.Managers
 				if (val != null) {
 					_settings.ZoomScaleLevels = Convert.ToInt32(val);	
 				}
-				val = getNodeValue(settingsXmlDoc, "/Settings/ThumbsBufferSize", typeof(int));
-				if (val != null) {
-					_settings.ThumbsBufferSize = Convert.ToInt32(val);
-				}
 				val = getNodeValue(settingsXmlDoc, "/Settings/ThumbSize", typeof(int));
 				if (val != null) {
 					_settings.ThumbSize = Convert.ToInt32(val);
@@ -123,7 +119,6 @@ namespace mTouchPDFReader.Library.Managers
 					"	<AllowZoomByDoubleTouch>" + _settings.AllowZoomByDoubleTouch + "</AllowZoomByDoubleTouch>" +
 					"	<ZoomScaleLevels>" + _settings.ZoomScaleLevels + "</ZoomScaleLevels>" +
 					"	<AutoScaleMode>" + (int)_settings.AutoScaleMode + "</AutoScaleMode>" +
-					"	<ThumbsBufferSize>" + _settings.ThumbsBufferSize + "</ThumbsBufferSize>" +
 					"	<ThumbSize>" + _settings.ThumbSize + "</ThumbSize>" +
 					"</Settings>";
 

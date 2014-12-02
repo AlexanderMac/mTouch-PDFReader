@@ -37,7 +37,7 @@ namespace mTouchPDFReader.Library.Views.Core
 	{			
 		#region Data
 		private const float DefaultToolbarHeight = 44.0f;
-		private const float DefaultSpaceWidth = 5.0f;
+		private const float DefaultMargin = 5.0f;
 		private const float SliderLeft = 170.0f;
 		private const float SliderHeight = 30.0f;
 		private const float PageNumberWidth = 60.0f;
@@ -245,10 +245,9 @@ namespace mTouchPDFReader.Library.Views.Core
 				PresentViewController(vc, true, null);
 			});
 			createToolbarButton(toolBar, DocumentActionTypes.Thumbs, "thumbs.png", () => {
-				var vc = new ThumbsVC(View.Bounds.Width, p => OpenDocumentPage((int)p));
+				var vc = new ThumbsVC(p => OpenDocumentPage((int)p));
 				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
 				PresentViewController(vc, true, null);
-				vc.InitThumbs();
 			});
 			createToolbarSeparator(toolBar);
 
@@ -281,7 +280,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			createToolbarButton(bottomBar, DocumentActionTypes.NavigateToLastPage, "navigateToLast.png", openLastPage);
 			createToolbarSeparator(bottomBar);
 
-			var pageNumberLeft = bottomBarFrame.Width - PageNumberWidth - DefaultSpaceWidth;
+			var pageNumberLeft = bottomBarFrame.Width - PageNumberWidth - DefaultMargin;
 			var pageNumberLabelFrame = new RectangleF(pageNumberLeft, (bottomBarFrame.Height - PageNumberHeight) / 2, PageNumberWidth, PageNumberHeight);
 			_pageNumberLabel = new UILabel(pageNumberLabelFrame);
 			_pageNumberLabel.AutoresizingMask = UIViewAutoresizing.FlexibleLeftMargin;
@@ -290,7 +289,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			_pageNumberLabel.TextColor = UIColor.Gray;
 			bottomBar.AddSubview(_pageNumberLabel);
 
-			var sliderWidth = pageNumberLeft - SliderLeft - DefaultSpaceWidth;
+			var sliderWidth = pageNumberLeft - SliderLeft - DefaultMargin;
 			var sliderFrame = new RectangleF(SliderLeft, (bottomBarFrame.Height - SliderHeight) / 2, sliderWidth, SliderHeight);
 			_slider = new UISlider(sliderFrame);
 			_slider.MinValue = 1;
