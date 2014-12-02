@@ -30,18 +30,8 @@ namespace mTouchPDFReader.Demo.Managers
 {
 	public class MyDocumentNoteManager : DocumentNoteManager
 	{
-		#region Data		
-		private static readonly List<DocumentNote> _allNotes;		
-		#endregion
-		
-		#region Logic
-		protected MyDocumentNoteManager() {}
+		private static readonly List<DocumentNote> _allNotes = new List<DocumentNote>();		
 
-		static MyDocumentNoteManager()
-		{
-			_allNotes = new List<DocumentNote>();
-		}
-		
 		public override DocumentNote Load(int docId)
 		{
 			var note = _allNotes.FirstOrDefault(n => n.DocId == docId);
@@ -57,7 +47,6 @@ namespace mTouchPDFReader.Demo.Managers
 				note.Id = _allNotes.Count + 1;
 				_allNotes.Add(note);
 			}
-		}		
-		#endregion
+		}
 	}
 }

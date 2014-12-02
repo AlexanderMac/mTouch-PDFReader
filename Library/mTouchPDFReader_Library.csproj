@@ -40,6 +40,9 @@
     <Reference Include="System.Xml" />
     <Reference Include="System.Core" />
     <Reference Include="monotouch" />
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\portable-net4+sl5+netcore45+wpa81+wp8+MonoAndroid1+MonoTouch1\Autofac.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Resources\" />
@@ -57,7 +60,6 @@
     <Compile Include="Data\Objects\DocumentNote.cs" />
     <Compile Include="Data\Objects\SystemInfo.cs" />
     <Compile Include="Interfaces\IDocumentNoteManager.cs" />
-    <Compile Include="Utils\RC.cs" />
     <Compile Include="Views\Management\SettingsTableVC.cs" />
     <Compile Include="Views\Core\PageContentTile.cs" />
     <Compile Include="Views\Core\PageContentView.cs" />
@@ -139,5 +141,8 @@
     <BundleResource Include="Resources\delete.png" />
     <BundleResource Include="Resources\delete%402x.png" />
     <BundleResource Include="Resources\delete%403x.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
 </Project>

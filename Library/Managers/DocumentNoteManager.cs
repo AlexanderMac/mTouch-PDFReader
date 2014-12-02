@@ -28,9 +28,6 @@ namespace mTouchPDFReader.Library.Managers
 {
 	public class DocumentNoteManager : IDocumentNoteManager
 	{
-		protected DocumentNoteManager()	{}
-
-		#region IDocumentNoteManager members
 		public virtual DocumentNote GetNew(int docId, string note)
 		{
 			return new DocumentNote {
@@ -50,7 +47,6 @@ namespace mTouchPDFReader.Library.Managers
 		public virtual void Save(DocumentNote note)
 		{
 			// Noting
-		}		
-		#endregion
+		}
 	}
 }

@@ -21,27 +21,30 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using Autofac;
 using mTouchPDFReader.Library.Interfaces;
-using mTouchPDFReader.Library.Utils;
 
 namespace mTouchPDFReader.Library.Managers
 {
 	public static class MgrAccessor
 	{
-		public static IDocumentNoteManager DocumentNoteMgr {
-			get { return _documentNoteMgr ?? (_documentNoteMgr = RC.Get<IDocumentNoteManager>()); }
-		}
-		private static IDocumentNoteManager _documentNoteMgr; 
+		private static IContainer _container;
 
+		public static IDocumentNoteManager DocumentNoteMgr {
+			get { return _container.Resolve<IDocumentNoteManager>(); }
+		}
 	
 		public static IDocumentBookmarksManager DocumentBookmarkMgr {
-			get { return _documentBookmarkMgr ?? (_documentBookmarkMgr = RC.Get<IDocumentBookmarksManager>()); }
+			get { return _container.Resolve<IDocumentBookmarksManager>(); }
 		}
-		private static IDocumentBookmarksManager _documentBookmarkMgr;
 
 		public static ISettingsManager SettingsMgr {
-			get { return _settingsMgr ?? (_settingsMgr = RC.Get<ISettingsManager>()); }
+			get { return _container.Resolve<ISettingsManager>(); }
 		}
-		private static ISettingsManager _settingsMgr;
+
+		public static void Initialize(ContainerBuilder builder)
+		{
+			_container = builder.Build();
+		}
 	}
 }

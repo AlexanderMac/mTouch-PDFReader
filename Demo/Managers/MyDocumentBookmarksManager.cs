@@ -30,18 +30,8 @@ namespace mTouchPDFReader.Demo.Managers
 {
 	public class MyDocumentBookmarksManager : DocumentBookmarksManager
 	{
-		#region Data
-		private static readonly List<DocumentBookmark> _allBookmarks;		
-		#endregion
-		
-		#region Logic	
-		protected MyDocumentBookmarksManager() {}
+		private static readonly List<DocumentBookmark> _allBookmarks = new List<DocumentBookmark>();		
 
-		static MyDocumentBookmarksManager()
-		{
-			_allBookmarks = new List<DocumentBookmark>();
-		}
-		
 		public override List<DocumentBookmark> LoadList(int docId)
 		{
 			var retValue = _allBookmarks.Where(d => d.DocId == docId).ToList();
@@ -62,7 +52,6 @@ namespace mTouchPDFReader.Demo.Managers
 			if (bookmark != null) {
 				_allBookmarks.Remove(bookmark);
 			}
-		}		
-		#endregion
+		}
 	}
 }

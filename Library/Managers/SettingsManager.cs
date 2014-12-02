@@ -51,8 +51,6 @@ namespace mTouchPDFReader.Library.Managers
 		#endregion
 		
 		#region Logic
-		protected SettingsManager()	{}
-
 		public virtual void Load()
 		{
 			if (_initialized) {

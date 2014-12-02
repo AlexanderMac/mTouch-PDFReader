@@ -29,9 +29,6 @@ namespace mTouchPDFReader.Library.Managers
 {
 	public class DocumentBookmarksManager : IDocumentBookmarksManager
 	{
-		protected DocumentBookmarksManager()	{}
-
-		#region IDocumentBookmarkManager members
 		public virtual DocumentBookmark GetNew(int docId, string name, int pageNumber)
 		{
 			return new DocumentBookmark {
@@ -55,7 +52,6 @@ namespace mTouchPDFReader.Library.Managers
 		public virtual void Delete(int bookmarkId)
 		{
 			// Nothing
-		}		
-		#endregion
+		}
 	}
 }

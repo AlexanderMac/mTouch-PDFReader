@@ -21,12 +21,12 @@
 //  along with this program.  If not, see <http://www.gnu.org/licenses/>.
 //
 
+using Autofac;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using MonoTouch.Foundation;
 using MonoTouch.UIKit;
-using mTouchPDFReader.Library.Utils;
 using mTouchPDFReader.Library.Interfaces;
 using mTouchPDFReader.Library.Managers;
 using mTouchPDFReader.Demo.Managers;
@@ -40,9 +40,12 @@ namespace mTouchPDFReader.Demo
 
 		public AppDelegate()
 		{
-			RC.RegisterReference<IDocumentBookmarksManager, MyDocumentBookmarksManager>();
-			RC.RegisterReference<IDocumentNoteManager, MyDocumentNoteManager>();
-			RC.RegisterReference<ISettingsManager, SettingsManager>();
+			var builder = new ContainerBuilder();
+			builder.RegisterType<MyDocumentBookmarksManager>().As<IDocumentBookmarksManager>().SingleInstance();
+			builder.RegisterType<MyDocumentNoteManager>().As<IDocumentNoteManager>().SingleInstance();
+			builder.RegisterType<SettingsManager>().As<ISettingsManager>().SingleInstance();
+
+			MgrAccessor.Initialize(builder);
 		}
 
 		// This method is invoked when the application is about to move from active to inactive state.
