@@ -1,6 +1,6 @@
 <img src="https://github.com/AlexanderMac/mTouch-PDFReader/blob/master/Images/header-logo.gif"/>
 
-mTouch-PDFReader is a Xamarin iOS library to display PDF documents on iPad and iPhone. With this library you can develop complete applications for displaying PDF documents, such as: e-book readers, e-magazines, document browsers, etc. The library is written on Xamarin iOS with use of Cocoa Touch classes for reading and displaying the PDF documents, without the use of third-party libraries. mTouch-PDFReader can be easily integrated to your project as a library or Xamarin component.
+mTouch-PDFReader is a Xamarin iOS library to display PDF documents on iPad and iPhone. With this library you can to develop complete applications for displaying PDF documents, such as: e-book readers, e-magazines, document browsers, etc. The library is written on Xamarin iOS with use of Cocoa Touch classes for reading and displaying the PDF documents, without the use of third-party libraries. mTouch-PDFReader can be easily integrated to your project as a library or Xamarin component.
 
 **The library tested on the latest iOS version 8.1.
 The current library version is 3.0.0.**
