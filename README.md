@@ -32,28 +32,28 @@ To use the library in your project, you should to do a few simple steps:
 1. Add a reference to mTouch-PDFReader library in your project. Or install mThouch-PDFReader component from Xamarin Component Store.
 2. Register global managers in *AppDelegate* class:
 <pre><code>
-public partial class AppDelegate : UIApplicationDelegate 
-{   
-  public AppDelegate()
-  {
-    var builder = new ContainerBuilder();
-    builder.RegisterType<MyDocumentBookmarksManager>().As<IDocumentBookmarksManager>().SingleInstance();
-    builder.RegisterType<MyDocumentNoteManager>().As<IDocumentNoteManager>().SingleInstance();
-    builder.RegisterType<SettingsManager>().As<ISettingsManager>().SingleInstance();
-    MgrAccessor.Initialize(builder);
+  public partial class AppDelegate : UIApplicationDelegate 
+  {   
+    public AppDelegate()
+    {
+      var builder = new ContainerBuilder();
+      builder.RegisterType<MyDocumentBookmarksManager>().As<IDocumentBookmarksManager>().SingleInstance();
+      builder.RegisterType<MyDocumentNoteManager>().As<IDocumentNoteManager>().SingleInstance();
+      builder.RegisterType<SettingsManager>().As<ISettingsManager>().SingleInstance();
+      MgrAccessor.Initialize(builder);
+    }
   }
-}
 </pre></code>
 3. To open PDF document, use the following code:
 <pre><code>
-// Set unique document id, document name (will be used as title) and document full file path
-var docId = 1;
-var docName = "My book";
-var docPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "MyBook.pdf");
-
-// Create Document View controller and pust it in Navigation controller, for example 
-var docVC = new DocumentVC();   
-NavigationController.PushViewController(docVC, true);
+  // Set unique document id, document name (will be used as title) and document full file path
+  var docId = 1;
+  var docName = "My book";
+  var docPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.Personal), "MyBook.pdf");
+    
+  // Create Document View controller and pust it in Navigation controller, for example 
+  var docVC = new DocumentVC();   
+  NavigationController.PushViewController(docVC, true);
 </pre></code>
 
 > That's it! The PDF document will be opened with default settings:)
@@ -98,11 +98,12 @@ settingsVC.View.Frame = View.Bounds;
 View.AddSubview(settingsVC.View);
 </pre></code>
 
+## History of changes
+
 ## Questions and issues
 If you have any questions or issues, please write me at: [support@mtouch-pdfreader.com](mailto:support@mtouch-pdfreader.com) or create issue on github.
 
-
-## Licensing
+## License
 See License.md for details.  
 
 ## Authors
