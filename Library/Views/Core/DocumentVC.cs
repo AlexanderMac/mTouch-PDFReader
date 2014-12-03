@@ -239,7 +239,7 @@ namespace mTouchPDFReader.Library.Views.Core
 				PresentViewController(vc, true, null);
 			});
 			createToolbarButton(toolBar, DocumentActionTypes.Bookmarks, "bookmarksList.png", () => {
-				var bookmarks = MgrAccessor.DocumentBookmarkMgr.LoadList(_documentId);
+				var bookmarks = MgrAccessor.DocumentBookmarkMgr.GetAllForDocument(_documentId);
 				var vc = new BookmarksVC(_documentId, bookmarks, PDFDocument.CurrentPageNumber, p => OpenDocumentPage((int)p));
 				vc.ModalPresentationStyle = UIModalPresentationStyle.FormSheet;
 				PresentViewController(vc, true, null);

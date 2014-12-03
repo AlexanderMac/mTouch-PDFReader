@@ -39,7 +39,7 @@ namespace mTouchPDFReader.Library.Managers
 			};
 		}
 
-		public virtual List<DocumentBookmark> LoadList(int docId)
+		public virtual List<DocumentBookmark> GetAllForDocument(int docId)
 		{
 			return new List<DocumentBookmark>();
 		}

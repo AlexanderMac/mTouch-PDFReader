@@ -84,7 +84,7 @@ namespace mTouchPDFReader.Library.Views.Core
 		#region Logic		
 		public void SetAsSelected()
 		{
-			BackgroundColor = UIColor.Blue; // ToDo: Use gradient color or view
+			BackgroundColor = UIColor.Blue;
 		}
 		
 		public void SetAsUnselected()

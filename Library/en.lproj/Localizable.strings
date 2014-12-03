@@ -1,48 +1,32 @@
 "Auto scale mode"="Auto scale mode";
 "Auto width"="Auto width";
 "Auto height"="Auto height";
-
-"Background"="Background";
 "Bookmarks"="Bookmarks";
 "Bookmark {0}"="Bookmark {0}";
-
-"Color"="Color";
+"Bottom toolbar"="Bottom toolbar";
 "Curl"="Curl";
-
 "Delete bookmark?"="Delete bookmark?";
-
+"Enter page number"="Enter page number";
 "Error"="Error";
-
-"Go..."="Go...";
-
+"Go to page"="Go to page";
 "Horizontal"="Horizontal";
-
 "Invalid page number"="Invalid page number";
-
 "Library information"="Library information";
-
 "Navigation orientation"="Navigation orientation";
 "No"="No";
 "Note"="Note";
-
 "Page {0}"="Page {0}";
 "Page number"="Page number";
-
 "Release date"="Release date";
-
 "Scale"="Scale";
 "Scale by double click"="Scale by double click";
 "Scroll"="Scroll";
-"Slider"="Slider";
 "Status"="Status";
-
 "Thumbs"="Thumbs";
+"Top toolbar"="Top toolbar";
 "Transition style"="Transition style ";
-
 "Version"="Version";
 "Vertical"="Vertical";
 "Visibility"="Visibility";
-
 "Yes"="Yes";
-
 "Zoom scale levels"="Zoom scale levels";

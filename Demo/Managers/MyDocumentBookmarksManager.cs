@@ -32,7 +32,7 @@ namespace mTouchPDFReader.Demo.Managers
 	{
 		private static readonly List<DocumentBookmark> _allBookmarks = new List<DocumentBookmark>();		
 
-		public override List<DocumentBookmark> LoadList(int docId)
+		public override List<DocumentBookmark> GetAllForDocument(int docId)
 		{
 			var retValue = _allBookmarks.Where(d => d.DocId == docId).ToList();
 			return retValue;

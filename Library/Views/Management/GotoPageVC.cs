@@ -72,7 +72,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			toolBarTitle.BackgroundColor = UIColor.Clear;
 			toolBarTitle.TextColor = UIColor.White;
 			toolBarTitle.TextAlignment = UITextAlignment.Center;
-			toolBarTitle.Text = "Go...".t(); // TODO: rename
+			toolBarTitle.Text = "Go to page".t();
 
 			var toolBar = new UIToolbar(new RectangleF(0, 0, View.Bounds.Width, 44));
 			toolBar.BarStyle = UIBarStyle.Black;
@@ -86,7 +86,7 @@ namespace mTouchPDFReader.Library.Views.Management
 			_txtPageNumber.BorderStyle = UITextBorderStyle.RoundedRect;
 			_txtPageNumber.KeyboardType = UIKeyboardType.NumberPad;
 			_txtPageNumber.Font = UIFont.SystemFontOfSize(17.0f);
-			_txtPageNumber.Placeholder = "Enter page number"; // TODO
+			_txtPageNumber.Placeholder = "Enter page number".t();
 			View.AddSubview(_txtPageNumber);
 		}
 		#endregion

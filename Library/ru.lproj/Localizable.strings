@@ -1,48 +1,32 @@
 "Auto scale mode"="Режим автомасштабирования";
 "Auto width"="Автоширина";
 "Auto height"="Автовысота";
-
-"Background"="Фон";
 "Bookmarks"="Закладки";
 "Bookmark {0}"="Закладка {0}";
-
-"Color"="Цвет";
+"Bottom toolbar"="Нижняя панель";
 "Curl"="Естественное";
-
 "Delete bookmark?"="Удалить закладку?";
-
+"Enter page number"="Введите номер страницы";
 "Error"="Ошибка";
-
-"Go..."="Перейти...";
-
+"Go to page"="Перейти к странице";
 "Horizontal"="Гориз.";
-
 "Invalid page number"="Неверный номер страницы";
-
 "Library information"="Информация о библиотеке";
-
 "Navigation orientation"="Ориентация навигации";
 "No"="Нет";
 "Note"="Заметка";
-
 "Page {0}"="Страница {0}";
 "Page number"="Номер страницы";
-
 "Release date"="Дата релиза";
-
 "Scale"="Масштабирование";
 "Scale by double click"="Масштабирование по двойному клику";
 "Scroll"="Прокрутка";
-"Slider"="Слайдер";
 "Status"="Статус";
-
 "Thumbs"="Миниатюры";
+"Top toolbar"="Верхняя панель";
 "Transition style"="Стиль перелистывание";
-
 "Version"="Версия";
 "Vertical"="Верт.";
 "Visibility"="Видимость";
-
 "Yes"="Да";
-
 "Zoom scale levels"="Количество уровней масшт.";
