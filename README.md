@@ -149,6 +149,7 @@ View.AddSubview(settingsVC.View);
 If you have any questions or issues, please write me at: [support@mtouch-pdfreader.com](mailto:support@mtouch-pdfreader.com) or create issue on github.
 
 ## License
+This code has been made available under the MIT License.
 See License.md for details.  
 
 ## Authors
