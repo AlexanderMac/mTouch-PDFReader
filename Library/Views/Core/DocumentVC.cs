@@ -255,8 +255,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			_btnAutoHeight = createToolbarButton(toolBar, DocumentActionTypes.AutoHeight, getImagePathForButton(DocumentActionTypes.AutoHeight), setAutoHeight);
 			createToolbarSeparator(toolBar);
 
-			createUserDefinedToolbarItems(toolBar);
-
 			return toolBar;
 		}
 
@@ -321,7 +319,7 @@ namespace mTouchPDFReader.Library.Views.Core
 			addButtonToToolbarBar(toolbar, item);
 		}
 
-		protected virtual UIBarButtonItem createToolbarButton(UIToolbar toolbar, DocumentActionTypes actionType, string imagePath, Action action)
+		private UIBarButtonItem createToolbarButton(UIToolbar toolbar, DocumentActionTypes actionType, string imagePath, Action action)
 		{
 			var btn = new UIBarButtonItem();
 			btn.Image = UIImage.FromFile(imagePath);
@@ -332,11 +330,6 @@ namespace mTouchPDFReader.Library.Views.Core
 			addButtonToToolbarBar(toolbar, btn);
 
 			return btn;
-		}
-
-		protected virtual void createUserDefinedToolbarItems(UIToolbar toolbar)
-		{
-			// Nothing. Should be overrided in child class.
 		}
 		#endregion
 
