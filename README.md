@@ -99,6 +99,51 @@ View.AddSubview(settingsVC.View);
 </pre></code>
 
 ## History of changes
+- 2014-12-03 (v3.0.0)
+  - Projects upgraded to support iOS 8.1.
+  - Fixed displaying bookmarks, note, goto, thumbs views on iPhone. Updated icons for buttons in these views.
+  - Refactored and improved Thumbs view.
+  - Fixed settings view layout.
+  - Changed toolbars icons.
+  - Custom toolbar replaced to standard UIToolbar. Fixed bug with displaing toolbars on iPhones. 
+  - Fixed localization issues.
+  - Handmade depedency resolver replaced to cool library - Autofac.
+  - Fixed toolbar and statusbar sizes and positions.
+- 2013-04-20 (v2.1.0)
+  - Added autofit page width and height.
+  - Updated toolbar icons.
+  - Refactored buttons creation logic.
+  - Deleted a few settings.
+- 2012-11-10 (v2.0.0)
+  - Major refactoring of the library core logic.
+  - Added UIPageViewController, instead self implementation.
+  - Added Resource manager.
+  - Refactored Note manager.
+  - Refactored Bookmarks manager.
+  - Changed the navigation buttons logic.
+  - Fixed some major bugs.
+- 2012-07-15 (v1.0.4)
+  - Fixed bug with shadow copy of the page (reproduced on iPad 3).
+- 2012-04-27 (v1.0.3)
+  - Fixed some bugs.
+- 2012-03-09 (v1.0.2)
+  - Added page thumbnails.
+  - Added new settings for the library customization.
+- 2012-02-22 (v1.0.1)
+  - Added localization support for the library string resources.
+  - Translated the library interface to Russian and English.
+- 2012-02-12 (v1.0.0)
+  - The first public version of the library!
+- 2012-01-28 (v0.9.2)
+  - Added Settings view.
+  - Added Options manager.
+  - Implemented detailed page view.
+  - Finished Note and Bookmarks managers.
+  - Optimized the library core.
+  - Fixed some bugs.
+- 2012-01-15 (v0.9.1)
+  - Finished the library core.
+
 
 ## Questions and issues
 If you have any questions or issues, please write me at: [support@mtouch-pdfreader.com](mailto:support@mtouch-pdfreader.com) or create issue on github.
