@@ -29,9 +29,7 @@ The current library version is 3.0.0.**
 ## How to integrate
 To use the library in your project, you should to do a few simple steps:
 
-1a. Add mThouchPDF-Reader library to your project:
-  a. Add a reference to mTouch-PDFReader library in your project.
-  b. Or install mThouch-PDFReader component from Xamarin Component Store.
+1. Add a reference to mTouch-PDFReader library in your project. Or install mThouch-PDFReader component from Xamarin Component Store.
 2. Register global managers in *AppDelegate* class:
 <pre><code>
 public partial class AppDelegate : UIApplicationDelegate 
@@ -69,12 +67,10 @@ public class MyDocumentBookmarksManager : DocumentBookmarksManager
   {
     // This method must return all bookmarks objects for the document with id=docId
   }
-  
   public override void Save(DocumentBookmark bookmark)
   {
     // This method for saving bookmark object
   }
-  
   public override void Delete(int bookmarkId)
   {
     // This method for deleting bookmark by id
@@ -87,7 +83,6 @@ public class MyDocumentNoteManager : DocumentNoteManager
   {
     // This method for loading note for document, by docId
   }
-  
   public override void Save(DocumentNote note)
   {
     // This method for saving note object
