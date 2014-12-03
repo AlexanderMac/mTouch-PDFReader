@@ -34,14 +34,14 @@ To use the library in your project, you should to do a few simple steps:
 <pre><code>
 public partial class AppDelegate : UIApplicationDelegate 
 {   
-  public AppDelegate()
-  {
-    var builder = new ContainerBuilder();
-    builder.RegisterType<MyDocumentBookmarksManager>().As<IDocumentBookmarksManager>().SingleInstance();
-    builder.RegisterType<MyDocumentNoteManager>().As<IDocumentNoteManager>().SingleInstance();
-    builder.RegisterType<SettingsManager>().As<ISettingsManager>().SingleInstance();
-    MgrAccessor.Initialize(builder);
-  }
+ public AppDelegate()
+ {
+  var builder = new ContainerBuilder();
+  builder.RegisterType<MyDocumentBookmarksManager>().As<IDocumentBookmarksManager>().SingleInstance();
+  builder.RegisterType<MyDocumentNoteManager>().As<IDocumentNoteManager>().SingleInstance();
+  builder.RegisterType<SettingsManager>().As<ISettingsManager>().SingleInstance();
+  MgrAccessor.Initialize(builder);
+ }
 }
 </pre></code>
 3. To open PDF document, use the following code:
