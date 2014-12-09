@@ -8,9 +8,9 @@
     <SchemaVersion>2.0</SchemaVersion>
     <ProjectGuid>{9DAD0158-D923-48BF-BC35-1014C00B7C95}</ProjectGuid>
     <OutputType>Library</OutputType>
-    <RootNamespace>mTouchPDFReader_Library</RootNamespace>
+    <RootNamespace>mTouchPDFReaderLibrary</RootNamespace>
     <IPhoneResourcePrefix>Resources</IPhoneResourcePrefix>
-    <AssemblyName>mTouchPDFReader_Library</AssemblyName>
+    <AssemblyName>mTouchPDFReaderLibrary</AssemblyName>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

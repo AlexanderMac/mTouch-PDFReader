@@ -1,9 +1,9 @@
-﻿
+
 Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Library", "Library\mTouchPDFReader_Library.csproj", "{9DAD0158-D923-48BF-BC35-1014C00B7C95}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReaderLibrary", "Library\mTouchPDFReaderLibrary.csproj", "{9DAD0158-D923-48BF-BC35-1014C00B7C95}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReader_Demo", "Demo\mTouchPDFReader_Demo.csproj", "{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "mTouchPDFReaderDemo", "Demo\mTouchPDFReaderDemo.csproj", "{107BAA2B-C5E7-4E8D-B497-173A12D5CB54}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -41,7 +41,7 @@ Global
 		{9DAD0158-D923-48BF-BC35-1014C00B7C95}.Release|iPhoneSimulator.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(MonoDevelopProperties) = preSolution
-		StartupItem = Demo\mTouchPDFReader_Demo.csproj
+		StartupItem = Demo\mTouchPDFReaderDemo.csproj
 		Policies = $0
 		$0.DotNetNamingPolicy = $1
 		$1.DirectoryNamespaceAssociation = None
