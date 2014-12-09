@@ -1,0 +1,27 @@
+%YAML 1.2
+---
+name: mTouch-PDFReader
+id: mtouch-pdfreader
+publisher: AlexanderMac
+license: License.md
+icons: 
+  - ../icons/mtouch-pdfreader_128x128.png
+  - ../icons/mtouch-pdfreader_512x512.png
+publisher-url: https://github.com/AlexanderMac/mTouch-PDFReader
+libraries: 
+  ios: ../lib/ios/mTouchPDFReaderLibrary.dll
+summary: A library to display PDF documents on iPad and iPhone. 
+details: Details.md
+screenshots: 
+  - ../screenshots/s1.png
+  - ../screenshots/s2.png
+  - ../screenshots/s3.png
+  - ../screenshots/s4.png
+  - ../screenshots/s5.png
+getting-started: GettingStarted.md
+version: 3.0.0
+samples:
+  - name: "iOS Sample"
+    path: ../samples/ios/mTouchPDFReaderDemo.sln
+    configuration: "Release|iPhoneSimulator"
+    nobuild: false
