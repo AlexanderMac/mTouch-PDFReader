@@ -9,7 +9,9 @@ icons:
   - ../icons/mtouch-pdfreader_512x512.png
 publisher-url: https://github.com/AlexanderMac/mTouch-PDFReader
 libraries: 
-  ios: ../lib/ios/mTouchPDFReaderLibrary.dll
+  ios:
+    - ../lib/ios/autofac.dll
+    - ../lib/ios/mTouchPDFReaderLibrary.dll
 summary: A library to display PDF documents on iPad and iPhone. 
 details: Details.md
 screenshots: 
@@ -24,4 +26,4 @@ samples:
   - name: "iOS Sample"
     path: ../samples/ios/mTouchPDFReaderDemo.sln
     configuration: "Release|iPhoneSimulator"
-    nobuild: false
+    nobuild: true
