@@ -2,7 +2,7 @@
 // mTouch-PDFReader library
 // SettingsManager.cs
 //
-// Copyright (c) 2012-2014 Alexander Matsibarov (amatsibarov@gmail.com)
+// Copyright (c) 2012-2014 AlexanderMac(amatsibarov@gmail.com)
 // 
 // Permission is hereby granted, free of charge, to any person obtaining 
 // a copy of this software and associated documentation files (the 

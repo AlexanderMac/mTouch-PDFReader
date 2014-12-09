@@ -154,5 +154,5 @@ See License.md for details.
 
 ## Authors
 
-**Alexander Mac** ([amatsibarov@gmail.com](mailto:amatsibarov@gmail.com))
+**AlexanderMac** ([amatsibarov@gmail.com](mailto:amatsibarov@gmail.com))
 

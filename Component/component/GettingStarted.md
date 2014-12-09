@@ -3,7 +3,7 @@ To use the library in your project, you should to do a few simple steps:
 
 1. Add a reference to mTouch-PDFReader library in your project. Or install mThouch-PDFReader component from Xamarin Component Store.
 2. Register global managers in *AppDelegate* class:
-```c#
+<pre><code>
 public partial class AppDelegate : UIApplicationDelegate 
 {   
   public AppDelegate()
@@ -15,9 +15,9 @@ public partial class AppDelegate : UIApplicationDelegate
     MgrAccessor.Initialize(builder);
   }
 }
-```
-3.To open PDF document, use the following code:
-```c#
+</code></pre>
+3. To open PDF document, use the following code:
+<pre><code>
 // Set unique document id, document name (will be used as title) and document full file path
 var docId = 1;
 var docName = "My book";
@@ -26,13 +26,13 @@ var docPath = Path.Combine(Environment.GetFolderPath(Environment.SpecialFolder.P
 // Create Document View controller and pust it in Navigation controller, for example 
 var docVC = new DocumentVC();   
 NavigationController.PushViewController(docVC, true);
-```
+</code></pre>
 
 > That's it! The PDF document will be opened with default settings:)
 
 ## How to use Bookmarks and Note manager
 The library contains the simple versions of Bookmarks and Note manager. In demo application the all data stored in the memory, and after closing application is losing. But you can inherit these managers and store data in a file or Sqlite db. To do it, you should inherit DocumentBookmarksManager (for bookmarks) and DocumentNoteManager (for notes) managers:
-```c#
+<pre><code>
 public class MyDocumentBookmarksManager : DocumentBookmarksManager
 {
   public override List<DocumentBookmark> GetAllForDocument(int docId)
@@ -60,11 +60,12 @@ public class MyDocumentNoteManager : DocumentNoteManager
     // This method for saving note object
   }
 }
-```
+</code></pre>
 
 ## How to use Settings
 To use Settings View Controller, just create a SettingsVC object and add it as subview to your View Controller:
-```c#
+<pre><code>
 var settingsVC = new SettingsTableVC();
 settingsVC.View.Frame = View.Bounds;
 View.AddSubview(settingsVC.View);
+</code></pre>
