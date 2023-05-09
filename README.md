@@ -1,13 +1,13 @@
 ![mTouch-PDFReader](https://github.com/AlexanderMac/mTouch-PDFReader/blob/master/Images/header-logo.gif)
 
+## WARNING :warning:: This repo is not maintained anymore.
+
 mTouch-PDFReader is a Xamarin iOS library to display PDF documents on iPad and iPhone. With this library you can to develop complete applications for displaying PDF documents, such as: e-book readers, e-magazines, document browsers, etc. The library is written on Xamarin iOS with use of Cocoa Touch classes for reading and displaying the PDF documents, without the use of third-party libraries. mTouch-PDFReader can be easily integrated to your project as a library or Xamarin component.
 
 **The library tested on the latest iOS version 8.1.
 The current library version is 3.0.0.**
 
-
-## Features
-
+### Features
 * iPad and iPhone support
 * Two transition styles:
   * Curl
@@ -26,9 +26,8 @@ The current library version is 3.0.0.**
 * Options view
 * No third-party code, only C# and Xamarin iOS
 
-## How to integrate
+### How to integrate
 To use the library in your project, you should to do a few simple steps:
-
 1. Add a reference to mTouch-PDFReader library in your project. Or install mThouch-PDFReader component from Xamarin Component Store.
 2. Register global managers in *AppDelegate* class:
 ```c#
@@ -58,7 +57,7 @@ NavigationController.PushViewController(docVC, true);
 
 > That's it! The PDF document will be opened with default settings:)
 
-## How to use Bookmarks and Note manager
+### How to use Bookmarks and Note manager
 The library contains the simple versions of Bookmarks and Note manager. In demo application the all data stored in the memory, and after closing application is losing. But you can inherit these managers and store data in a file or Sqlite db. To do it, you should inherit DocumentBookmarksManager (for bookmarks) and DocumentNoteManager (for notes) managers:
 ```c#
 public class MyDocumentBookmarksManager : DocumentBookmarksManager
@@ -90,7 +89,7 @@ public class MyDocumentNoteManager : DocumentNoteManager
 }
 ```
 
-## How to use Settings
+### How to use Settings
 To use Settings View Controller, just create a SettingsVC object and add it as subview to your View Controller:
 ```c#
 var settingsVC = new SettingsTableVC();
@@ -98,7 +97,7 @@ settingsVC.View.Frame = View.Bounds;
 View.AddSubview(settingsVC.View);
 ```
 
-## History of changes
+### History of changes
 - 2014-12-03 (v3.0.0)
   - Projects upgraded to support iOS 8.1.
   - Fixed displaying bookmarks, note, goto, thumbs views on iPhone. Updated icons for buttons in these views.
@@ -144,15 +143,8 @@ View.AddSubview(settingsVC.View);
 - 2012-01-15 (v0.9.1)
   - Finished the library core.
 
-
-## Questions and issues
-If you have any questions or issues, please write me at: [support@mtouch-pdfreader.com](mailto:support@mtouch-pdfreader.com) or create issue on github.
-
-
 ### Author
 Alexander Mac
 
-
 ### License
 [MIT License](license.md)
-
